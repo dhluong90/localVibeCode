@@ -1,0 +1,49 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (Local Pinned Base Model)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen2.5:7b": {
+          "name": "Qwen 2.5 7B (Local Fast)"
+        },
+        "gemma4:latest": {
+          "name": "Gemma 4 (Local Reasoning)"
+        }
+      }
+    }
+  },
+  "model": "ollama/qwen2.5:7b",
+  "mcp": {
+    "localvibecode": {
+      "type": "local",
+      "command": [
+        "python3",
+        "-m",
+        "localvibecode.mcp_server"
+      ],
+      "environment": {
+        "PYTHONPATH": "src"
+      },
+      "enabled": true
+    }
+  },
+  "command": {
+    "pev": {
+      "description": "Chạy quy trình Enterprise Local Vibe Coding (Graphify AST + Plan-Execute-Verify)",
+      "template": "Hãy gọi MCP tool `localvibecode_pev_run` với requirement sau: $ARGUMENTS"
+    },
+    "impact": {
+      "description": "Phân tích Blast-Radius 1-hop (< 4K tokens) cho 1 file bằng Graphify AST",
+      "template": "Hãy gọi MCP tool `localvibecode_blast_radius` cho file `$ARGUMENTS`."
+    },
+    "graph": {
+      "description": "Quét cấu trúc dự án bằng Graphify AST (0 LLM tokens) và tìm God Nodes",
+      "template": "Hãy gọi MCP tool `localvibecode_build_graph` và hiển thị báo cáo kiến trúc GRAPH_REPORT.md."
+    }
+  }
+}

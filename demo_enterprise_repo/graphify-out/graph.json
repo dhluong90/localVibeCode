@@ -1,0 +1,477 @@
+{
+  "repo_root": "/Users/luongdh/Mylab/AISDLC Solution/demo_enterprise_repo",
+  "god_nodes": [
+    {
+      "file": "models.py",
+      "centrality_score": 8
+    },
+    {
+      "file": "gateways/payment_gateway.py",
+      "centrality_score": 5
+    },
+    {
+      "file": "services/order_service.py",
+      "centrality_score": 5
+    },
+    {
+      "file": "tests/test_orders.py",
+      "centrality_score": 3
+    },
+    {
+      "file": "validators.py",
+      "centrality_score": 3
+    }
+  ],
+  "file_imports": {
+    "gateways/payment_gateway.py": [
+      "models.py"
+    ],
+    "models.py": [],
+    "services/order_service.py": [
+      "gateways/payment_gateway.py",
+      "models.py",
+      "validators.py"
+    ],
+    "tests/test_orders.py": [
+      "gateways/payment_gateway.py",
+      "models.py",
+      "services/order_service.py"
+    ],
+    "validators.py": [
+      "models.py"
+    ]
+  },
+  "inbound_files": {
+    "gateways/payment_gateway.py": [
+      "services/order_service.py",
+      "tests/test_orders.py"
+    ],
+    "models.py": [
+      "gateways/payment_gateway.py",
+      "services/order_service.py",
+      "tests/test_orders.py",
+      "validators.py"
+    ],
+    "services/order_service.py": [
+      "tests/test_orders.py"
+    ],
+    "tests/test_orders.py": [],
+    "validators.py": [
+      "services/order_service.py"
+    ]
+  },
+  "nodes": {
+    "gateways/payment_gateway.py": {
+      "id": "gateways/payment_gateway.py",
+      "name": "payment_gateway.py",
+      "kind": "file",
+      "file_path": "gateways/payment_gateway.py",
+      "line_start": 1,
+      "line_end": 20,
+      "signature": "file gateways/payment_gateway.py",
+      "docstring": "Internal Enterprise Payment Gateway Adapter."
+    },
+    "models.py": {
+      "id": "models.py",
+      "name": "models.py",
+      "kind": "file",
+      "file_path": "models.py",
+      "line_start": 1,
+      "line_end": 17,
+      "signature": "file models.py",
+      "docstring": "Enterprise Domain Models for Order & Payment Processing."
+    },
+    "services/order_service.py": {
+      "id": "services/order_service.py",
+      "name": "order_service.py",
+      "kind": "file",
+      "file_path": "services/order_service.py",
+      "line_start": 1,
+      "line_end": 33,
+      "signature": "file services/order_service.py",
+      "docstring": "Enterprise Order Service orchestrating validation, pricing, and payment."
+    },
+    "tests/test_orders.py": {
+      "id": "tests/test_orders.py",
+      "name": "test_orders.py",
+      "kind": "file",
+      "file_path": "tests/test_orders.py",
+      "line_start": 1,
+      "line_end": 54,
+      "signature": "file tests/test_orders.py",
+      "docstring": "Unit tests for the Enterprise Order & Payment microservice."
+    },
+    "validators.py": {
+      "id": "validators.py",
+      "name": "validators.py",
+      "kind": "file",
+      "file_path": "validators.py",
+      "line_start": 1,
+      "line_end": 18,
+      "signature": "file validators.py",
+      "docstring": "Domain Validation Rules for Enterprise Orders."
+    },
+    "gateways/payment_gateway.py::PaymentGateway": {
+      "id": "gateways/payment_gateway.py::PaymentGateway",
+      "name": "PaymentGateway",
+      "kind": "class",
+      "file_path": "gateways/payment_gateway.py",
+      "line_start": 8,
+      "line_end": 20,
+      "signature": "class PaymentGateway:",
+      "docstring": "Handles charging and refunding customer orders against the enterprise ledger."
+    },
+    "gateways/payment_gateway.py::PaymentGateway.__init__": {
+      "id": "gateways/payment_gateway.py::PaymentGateway.__init__",
+      "name": "PaymentGateway.__init__",
+      "kind": "method",
+      "file_path": "gateways/payment_gateway.py",
+      "line_start": 11,
+      "line_end": 12,
+      "signature": "def __init__(self) -> None:",
+      "docstring": ""
+    },
+    "gateways/payment_gateway.py::PaymentGateway.charge": {
+      "id": "gateways/payment_gateway.py::PaymentGateway.charge",
+      "name": "PaymentGateway.charge",
+      "kind": "method",
+      "file_path": "gateways/payment_gateway.py",
+      "line_start": 14,
+      "line_end": 20,
+      "signature": "def charge(self, order: Order, final_amount: float) -> str:",
+      "docstring": "Charges the specified final_amount for the order and records it in the ledger."
+    },
+    "models.py::Order": {
+      "id": "models.py::Order",
+      "name": "Order",
+      "kind": "class",
+      "file_path": "models.py",
+      "line_start": 9,
+      "line_end": 17,
+      "signature": "class Order:\n    order_id: str\n    customer_id: str\n    amount: float\n    currency: str = 'USD'\n    status: str = 'PENDING'\n    customer_tier: str = 'STANDARD'",
+      "docstring": "Represents a customer purchase order."
+    },
+    "services/order_service.py::OrderService": {
+      "id": "services/order_service.py::OrderService",
+      "name": "OrderService",
+      "kind": "class",
+      "file_path": "services/order_service.py",
+      "line_start": 8,
+      "line_end": 33,
+      "signature": "class OrderService:",
+      "docstring": "Core business service for processing enterprise customer orders."
+    },
+    "services/order_service.py::OrderService.__init__": {
+      "id": "services/order_service.py::OrderService.__init__",
+      "name": "OrderService.__init__",
+      "kind": "method",
+      "file_path": "services/order_service.py",
+      "line_start": 10,
+      "line_end": 11,
+      "signature": "def __init__(self, gateway: PaymentGateway) -> None:",
+      "docstring": ""
+    },
+    "services/order_service.py::OrderService.calculate_payable_amount": {
+      "id": "services/order_service.py::OrderService.calculate_payable_amount",
+      "name": "OrderService.calculate_payable_amount",
+      "kind": "method",
+      "file_path": "services/order_service.py",
+      "line_start": 13,
+      "line_end": 21,
+      "signature": "def calculate_payable_amount(self, order: Order) -> float:",
+      "docstring": "Calculates the final payable amount for an order based on customer_tier."
+    },
+    "services/order_service.py::OrderService.checkout": {
+      "id": "services/order_service.py::OrderService.checkout",
+      "name": "OrderService.checkout",
+      "kind": "method",
+      "file_path": "services/order_service.py",
+      "line_start": 23,
+      "line_end": 33,
+      "signature": "def checkout(self, order: Order) -> dict[str, str | float]:",
+      "docstring": "Validates the order, calculates payable amount, and executes payment."
+    },
+    "tests/test_orders.py::TestEnterpriseOrderService": {
+      "id": "tests/test_orders.py::TestEnterpriseOrderService",
+      "name": "TestEnterpriseOrderService",
+      "kind": "class",
+      "file_path": "tests/test_orders.py",
+      "line_start": 12,
+      "line_end": 50,
+      "signature": "class TestEnterpriseOrderService(unittest.TestCase):",
+      "docstring": ""
+    },
+    "tests/test_orders.py::TestEnterpriseOrderService.setUp": {
+      "id": "tests/test_orders.py::TestEnterpriseOrderService.setUp",
+      "name": "TestEnterpriseOrderService.setUp",
+      "kind": "method",
+      "file_path": "tests/test_orders.py",
+      "line_start": 13,
+      "line_end": 15,
+      "signature": "def setUp(self) -> None:",
+      "docstring": ""
+    },
+    "tests/test_orders.py::TestEnterpriseOrderService.test_standard_order_checkout": {
+      "id": "tests/test_orders.py::TestEnterpriseOrderService.test_standard_order_checkout",
+      "name": "TestEnterpriseOrderService.test_standard_order_checkout",
+      "kind": "method",
+      "file_path": "tests/test_orders.py",
+      "line_start": 17,
+      "line_end": 21,
+      "signature": "def test_standard_order_checkout(self) -> None:",
+      "docstring": ""
+    },
+    "tests/test_orders.py::TestEnterpriseOrderService.test_vip_order_discount": {
+      "id": "tests/test_orders.py::TestEnterpriseOrderService.test_vip_order_discount",
+      "name": "TestEnterpriseOrderService.test_vip_order_discount",
+      "kind": "method",
+      "file_path": "tests/test_orders.py",
+      "line_start": 23,
+      "line_end": 33,
+      "signature": "def test_vip_order_discount(self) -> None:",
+      "docstring": ""
+    },
+    "tests/test_orders.py::TestEnterpriseOrderService.test_invalid_amount_raises": {
+      "id": "tests/test_orders.py::TestEnterpriseOrderService.test_invalid_amount_raises",
+      "name": "TestEnterpriseOrderService.test_invalid_amount_raises",
+      "kind": "method",
+      "file_path": "tests/test_orders.py",
+      "line_start": 35,
+      "line_end": 38,
+      "signature": "def test_invalid_amount_raises(self) -> None:",
+      "docstring": ""
+    },
+    "tests/test_orders.py::TestEnterpriseOrderService.test_enterprise_order_discount": {
+      "id": "tests/test_orders.py::TestEnterpriseOrderService.test_enterprise_order_discount",
+      "name": "TestEnterpriseOrderService.test_enterprise_order_discount",
+      "kind": "method",
+      "file_path": "tests/test_orders.py",
+      "line_start": 40,
+      "line_end": 50,
+      "signature": "def test_enterprise_order_discount(self) -> None:",
+      "docstring": ""
+    },
+    "validators.py::validate_order": {
+      "id": "validators.py::validate_order",
+      "name": "validate_order",
+      "kind": "function",
+      "file_path": "validators.py",
+      "line_start": 10,
+      "line_end": 18,
+      "signature": "def validate_order(order: Order) -> bool:",
+      "docstring": "Validates order amount and currency compliance."
+    }
+  },
+  "edges": [
+    {
+      "source": "gateways/payment_gateway.py",
+      "target": "gateways/payment_gateway.py::PaymentGateway",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "gateways/payment_gateway.py::PaymentGateway",
+      "target": "gateways/payment_gateway.py::PaymentGateway.__init__",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "gateways/payment_gateway.py::PaymentGateway",
+      "target": "gateways/payment_gateway.py::PaymentGateway.charge",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "models.py",
+      "target": "models.py::Order",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "services/order_service.py",
+      "target": "services/order_service.py::OrderService",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "services/order_service.py::OrderService",
+      "target": "services/order_service.py::OrderService.__init__",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "services/order_service.py::OrderService",
+      "target": "services/order_service.py::OrderService.calculate_payable_amount",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "services/order_service.py::OrderService",
+      "target": "services/order_service.py::OrderService.checkout",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "tests/test_orders.py::TestEnterpriseOrderService",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tests/test_orders.py::TestEnterpriseOrderService",
+      "target": "tests/test_orders.py::TestEnterpriseOrderService.setUp",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tests/test_orders.py::TestEnterpriseOrderService",
+      "target": "tests/test_orders.py::TestEnterpriseOrderService.test_standard_order_checkout",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tests/test_orders.py::TestEnterpriseOrderService",
+      "target": "tests/test_orders.py::TestEnterpriseOrderService.test_vip_order_discount",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tests/test_orders.py::TestEnterpriseOrderService",
+      "target": "tests/test_orders.py::TestEnterpriseOrderService.test_invalid_amount_raises",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tests/test_orders.py::TestEnterpriseOrderService",
+      "target": "tests/test_orders.py::TestEnterpriseOrderService.test_enterprise_order_discount",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "validators.py",
+      "target": "validators.py::validate_order",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "gateways/payment_gateway.py",
+      "target": "models.py",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "services/order_service.py",
+      "target": "validators.py::validate_order",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "services/order_service.py",
+      "target": "gateways/payment_gateway.py::charge",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "services/order_service.py",
+      "target": "gateways/payment_gateway.py",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "services/order_service.py",
+      "target": "models.py",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "services/order_service.py",
+      "target": "validators.py",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "gateways/payment_gateway.py::PaymentGateway",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "services/order_service.py::OrderService",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "models.py::Order",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "services/order_service.py::checkout",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "models.py::Order",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "services/order_service.py::checkout",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "models.py::Order",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "models.py::Order",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "services/order_service.py::checkout",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "services/order_service.py::checkout",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "gateways/payment_gateway.py",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "models.py",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tests/test_orders.py",
+      "target": "services/order_service.py",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "validators.py",
+      "target": "models.py",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    }
+  ]
+}

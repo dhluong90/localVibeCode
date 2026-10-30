@@ -1,0 +1,25 @@
+{
+  "ollama_base_url": "http://localhost:11434",
+  "primary_model": "qwen2.5:7b",
+  "fallback_model": "gemma4:latest",
+  "keep_alive": "-1m",
+  "num_ctx": 8192,
+  "temperature_plan": 0.1,
+  "temperature_execute": 0.0,
+  "temperature_verify": 0.1,
+  "max_surgical_context_chars": 14000,
+  "max_self_healing_retries": 3,
+  "target_repo_path": "demo_enterprise_repo",
+  "graph_output_dir": "graphify-out",
+  "enterprise_rules_dir": "enterprise_rules",
+  "test_command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_*.py"
+  ]
+}
