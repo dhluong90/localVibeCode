@@ -39,7 +39,12 @@ htmlcov/
 *.swp
 *.swo
 
-# Output artifacts that can be regenerated
+# Java & Node build artifacts
+target/
+node_modules/
+dist/
+.vite/
+
 demo_enterprise_repo/graphify-out/last_plan.json
 graphify-out/last_plan.json
 benchmarks/isolated_workspace/
