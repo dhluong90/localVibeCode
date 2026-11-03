@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import ast
 import json
+import re
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
@@ -76,11 +77,17 @@ class DeterministicGraphBuilder:
             for p in sorted(self.repo_root.rglob("*.py"))
             if not any(part in self.IGNORE_DIRS for part in p.parts)
         ]
+        java_files = [
+            p
+            for p in sorted(self.repo_root.rglob("*.java"))
+            if not any(part in self.IGNORE_DIRS for part in p.parts)
+        ]
 
         # Map module dotted names to relative file paths for deterministic import resolution
         module_to_file: Dict[str, str] = {}
         symbol_to_file: Dict[str, str] = {}
 
+        # 1. Index Python Files
         for py_file in py_files:
             rel_path = py_file.relative_to(self.repo_root).as_posix()
             mod_name = rel_path[:-3].replace("/", ".")
@@ -96,8 +103,40 @@ class DeterministicGraphBuilder:
                 kind="file",
                 file_path=rel_path,
                 line_start=1,
-                line_end=len(py_file.read_text(encoding="utf-8").splitlines()),
+                line_end=len(py_file.read_text(encoding="utf-8", errors="ignore").splitlines()),
                 signature=f"file {rel_path}",
+            )
+            graph.file_imports[rel_path] = []
+            graph.inbound_files.setdefault(rel_path, [])
+
+        # 2. Index Java Files
+        for j_file in java_files:
+            rel_path = j_file.relative_to(self.repo_root).as_posix()
+            class_name = j_file.stem
+            symbol_to_file[class_name] = rel_path
+            try:
+                j_content = j_file.read_text(encoding="utf-8", errors="ignore")
+            except Exception:
+                j_content = ""
+            lines = j_content.splitlines()
+            pkg_name = ""
+            for l in lines:
+                l_str = l.strip()
+                if l_str.startswith("package ") and l_str.endswith(";"):
+                    pkg_name = l_str[8:-1].strip()
+                    break
+            full_fqcn = f"{pkg_name}.{class_name}" if pkg_name else class_name
+            module_to_file[full_fqcn] = rel_path
+            module_to_file.setdefault(class_name, rel_path)
+
+            graph.nodes[rel_path] = SymbolNode(
+                id=rel_path,
+                name=j_file.name,
+                kind="file",
+                file_path=rel_path,
+                line_start=1,
+                line_end=len(lines),
+                signature=f"class {full_fqcn}",
             )
             graph.file_imports[rel_path] = []
             graph.inbound_files.setdefault(rel_path, [])
@@ -232,6 +271,15 @@ class DeterministicGraphBuilder:
                     )
                 )
 
+        # Pass 3: Extract Java Classes, Interfaces, Methods, and IMPORTS/CALLS
+        for j_file in java_files:
+            rel_path = j_file.relative_to(self.repo_root).as_posix()
+            try:
+                j_source = j_file.read_text(encoding="utf-8", errors="ignore")
+            except Exception:
+                continue
+            self._parse_java_file(rel_path, j_source, graph, module_to_file, symbol_to_file)
+
         # Compute God Nodes (Files ranked by total Inbound + Outbound structural degree)
         degrees: List[Tuple[str, int]] = []
         for rel_path in graph.file_imports:
@@ -243,6 +291,120 @@ class DeterministicGraphBuilder:
 
         self._write_artifacts(graph)
         return graph
+
+    @staticmethod
+    def _parse_java_file(
+        rel_path: str,
+        content: str,
+        graph: CodeKnowledgeGraph,
+        module_to_file: Dict[str, str],
+        symbol_to_file: Dict[str, str],
+    ) -> None:
+        lines = content.splitlines()
+        imported_files: Set[str] = set()
+
+        # 1. Imports
+        for line in lines:
+            trimmed = line.strip()
+            if trimmed.startswith("import ") and trimmed.endswith(";"):
+                imported = trimmed[7:-1].strip()
+                # Resolve package.Class to relative file path
+                if imported in module_to_file:
+                    target_file = module_to_file[imported]
+                    if target_file != rel_path:
+                        imported_files.add(target_file)
+                else:
+                    short_cls = imported.split(".")[-1]
+                    if short_cls in symbol_to_file:
+                        target_file = symbol_to_file[short_cls]
+                        if target_file != rel_path:
+                            imported_files.add(target_file)
+
+        # 2. Classes / Interfaces / Records
+        class_regex = re.compile(
+            r"^\s*(public|protected|private)?\s*(abstract|final|static)?\s*(class|interface|record|enum)\s+([A-Za-z0-9_]+)(?:<[^>]+>)?(?:\s+extends\s+[A-Za-z0-9_<,>\s]+)?(?:\s+implements\s+[A-Za-z0-9_<,>\s]+)?"
+        )
+        # 3. Methods
+        method_regex = re.compile(
+            r"^\s*(?:@\w+(?:\([^)]*\))?\s*)*(public|protected|private)\s+(?:(static|final|synchronized|abstract)\s+)*([A-Za-z0-9_<>,\[\]\s]+)\s+([A-Za-z0-9_]+)\s*\(([^)]*)\)"
+        )
+
+        current_class_id = None
+        for idx, line in enumerate(lines, start=1):
+            cl_match = class_regex.match(line)
+            if cl_match:
+                cls_name = cl_match.group(4)
+                cls_id = f"{rel_path}::{cls_name}"
+                current_class_id = cls_id
+                sig = line.strip().rstrip("{").strip()
+                graph.nodes[cls_id] = SymbolNode(
+                    id=cls_id,
+                    name=cls_name,
+                    kind="class",
+                    file_path=rel_path,
+                    line_start=idx,
+                    line_end=idx,
+                    signature=sig,
+                    docstring="",
+                )
+                graph.edges.append(
+                    GraphEdge(source=rel_path, target=cls_id, relation="CONTAINS", confidence="EXTRACTED")
+                )
+                continue
+
+            m_match = method_regex.match(line)
+            if m_match and current_class_id:
+                m_name = m_match.group(4)
+                # Ignore control flow keywords that look like methods
+                if m_name in ("if", "for", "while", "switch", "catch"):
+                    continue
+                m_id = f"{current_class_id}.{m_name}"
+                m_sig = line.strip().rstrip("{").strip()
+                graph.nodes[m_id] = SymbolNode(
+                    id=m_id,
+                    name=m_name,
+                    kind="method",
+                    file_path=rel_path,
+                    line_start=idx,
+                    line_end=idx,
+                    signature=m_sig,
+                    docstring="",
+                )
+                graph.edges.append(
+                    GraphEdge(
+                        source=current_class_id,
+                        target=m_id,
+                        relation="CONTAINS",
+                        confidence="EXTRACTED",
+                    )
+                )
+
+        # 4. Check for Calls across files
+        for other_sym, other_file in symbol_to_file.items():
+            if other_file != rel_path and re.search(r"\b" + re.escape(other_sym) + r"\b", content):
+                imported_files.add(other_file)
+                graph.edges.append(
+                    GraphEdge(
+                        source=rel_path,
+                        target=other_file,
+                        relation="CALLS",
+                        confidence="INFERRED",
+                    )
+                )
+
+        for target_file in sorted(imported_files):
+            if target_file not in graph.file_imports.setdefault(rel_path, []):
+                graph.file_imports[rel_path].append(target_file)
+            if rel_path not in graph.inbound_files.setdefault(target_file, []):
+                graph.inbound_files[target_file].append(rel_path)
+            graph.edges.append(
+                GraphEdge(
+                    source=rel_path,
+                    target=target_file,
+                    relation="IMPORTS",
+                    confidence="EXTRACTED",
+                )
+            )
 
     @staticmethod
     def _resolve_module(mod_name: str, module_to_file: Dict[str, str]) -> str | None:

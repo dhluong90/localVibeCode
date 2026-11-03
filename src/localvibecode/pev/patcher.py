@@ -23,7 +23,7 @@ class SurgicalPatcher:
         r"<<<<<<<\s*SEARCH\s*\n(.*?)\n=======\s*\n(.*?)\n>>>>>>>\s*REPLACE",
         re.DOTALL,
     )
-    CODE_FENCE_PATTERN = re.compile(r"```(?:python|py)?\s*\n(.*?)```", re.DOTALL)
+    CODE_FENCE_PATTERN = re.compile(r"```(?:python|py|java)?\s*\n(.*?)```", re.DOTALL)
 
     @classmethod
     def apply_llm_output(cls, file_path: Path, llm_text: str) -> PatchOutcome:

@@ -54,8 +54,29 @@ class LocalVibeCodeConfig:
     def resolve_repo_path(self, custom_repo: str | Path | None = None) -> Path:
         if custom_repo:
             p = Path(custom_repo)
-            return p.resolve() if p.is_absolute() else (self.workspace_root / p).resolve()
-        return (self.workspace_root / self.target_repo_path).resolve()
+            if p.is_absolute():
+                resolved = p.resolve()
+            elif (Path.cwd() / p).exists():
+                resolved = (Path.cwd() / p).resolve()
+            else:
+                resolved = (self.workspace_root / p).resolve()
+        else:
+            resolved = (self.workspace_root / self.target_repo_path).resolve()
+
+        # Auto-detect test runner for resolved repository if default python test_command is set
+        if (resolved / "pom.xml").exists() and self.test_command == [
+            "python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_*.py",
+        ]:
+            self.test_command = ["mvn", "test"]
+
+        return resolved
 
     def load_enterprise_rules(self) -> str:
         rules_dir = self.workspace_root / self.enterprise_rules_dir

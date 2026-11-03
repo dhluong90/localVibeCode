@@ -136,7 +136,8 @@ Examples:
         sys.exit(0)
 
     factory_root = Path(__file__).resolve().parents[2]
-    config = LocalVibeCodeConfig.load(Path.cwd())
+    repo_hint = Path(args.repo).resolve() if getattr(args, "repo", None) else Path.cwd()
+    config = LocalVibeCodeConfig.load(repo_hint if (repo_hint / "localvibecode.json").exists() else Path.cwd())
     if args.model:
         config.primary_model = args.model
 
@@ -305,7 +306,9 @@ def _onboard_project(factory_root: Path, target_proj: Path, base_config: LocalVi
     info(f"Target Directory: {target_proj}")
 
     # Detect test command
-    if (target_proj / "package.json").exists():
+    if (target_proj / "pom.xml").exists():
+        test_cmd = ["mvn", "test"]
+    elif (target_proj / "package.json").exists():
         test_cmd = ["npm", "test", "--", "--watchAll=false"]
     elif (target_proj / "pytest.ini").exists() or (target_proj / "pyproject.toml").exists():
         test_cmd = ["python3", "-m", "unittest", "discover"]
