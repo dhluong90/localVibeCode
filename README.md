@@ -133,6 +133,34 @@ Verify your local environment, RAM budget, Ollama daemon, and models:
 
 ---
 
+## 📊 Automated Acceptance Benchmarking Suite
+
+localVibeCode comes with a formal, reproducible benchmark harness designed for technical evaluation and acceptance sign-offs (**Nghiệm thu dự án**):
+
+```bash
+# Run all 5 enterprise benchmark use cases in isolated workspaces:
+./localvibecode benchmark
+
+# Run a specific test case (e.g., Case 1: Ideas to Code):
+./localvibecode benchmark --case 1
+```
+
+### The 5 Standard Benchmark Use Cases
+
+| Case | Category | Real-World Scenario | Acceptance Criteria |
+| :---: | :--- | :--- | :--- |
+| **#1** | **Ideas to Code** | Implement cross-layer bulk purchase discounts across service and tests | 100% test pass rate; zero code regression |
+| **#2** | **Unit Test Gen** | Generate boundary tests (currency validation, negative amounts) | Covers edge-cases with exact mock signatures |
+| **#3** | **Self-Healing** | Injected VIP calculation defect triggers automated self-healing loop | Identifies failure trace and self-heals $\le 2$ retries |
+| **#4** | **Blast Radius** | Modify central God Node (`models.py`) with optional fields | Zero breaking changes across 1-hop inbound callers |
+| **#5** | **Zero-Token SAST** | Injected `eval()` triggers zero-token security blocker (0 tokens, 0.01s) | Immediate blocker + safe enterprise rewrite |
+
+> 📖 **Full Acceptance Specification & Protocol:** See [docs/BENCHMARK_AND_ACCEPTANCE_GUIDE.md](docs/BENCHMARK_AND_ACCEPTANCE_GUIDE.md) for detailed pass/fail thresholds, KPI metrics, and formal sign-off templates.
+> 
+> 📄 **Live Generated Report:** Each run produces a complete Markdown evaluation report in `benchmarks/BENCHMARK_REPORT.md`.
+
+---
+
 ## 🛠️ Onboarding an Existing Project
 
 You can apply localVibeCode to any existing repository in one command:
@@ -200,6 +228,7 @@ Exposed MCP Tools:
 | `localvibecode slice <file>` | Extract 1-hop surgical context (< 4K tokens) for a specific file |
 | `localvibecode verify` | Run zero-token AST check, offline security SAST, and unit tests |
 | `localvibecode mcp` | Launch stdio MCP server for IDE agents |
+| `localvibecode benchmark` | Run automated 5-case acceptance benchmark suite in isolated workspaces |
 
 Options:
 - `--repo <path>`: Specify target project path (overrides config).

@@ -42,3 +42,5 @@ htmlcov/
 # Output artifacts that can be regenerated
 demo_enterprise_repo/graphify-out/last_plan.json
 graphify-out/last_plan.json
+benchmarks/isolated_workspace/
+

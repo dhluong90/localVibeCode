@@ -114,6 +114,18 @@ Examples:
         help="Launch stdio MCP server for IDE agents (OpenCode, VS Code, Cursor, Claude Code)",
     )
 
+    # 8. `benchmark`
+    bench_parser = subparsers.add_parser(
+        "benchmark",
+        help="Run automated enterprise acceptance benchmark suite (5 isolated use cases)",
+    )
+    bench_parser.add_argument(
+        "--case",
+        type=int,
+        default=None,
+        help="Run specific benchmark case ID (1 to 5, defaults to all)",
+    )
+
     args = parser.parse_args()
 
     if not args.no_banner and args.command != "mcp":
@@ -151,6 +163,21 @@ Examples:
         server = LocalVibeCodeStdioMCPServer()
         server.serve_forever()
         return
+
+    # Command: benchmark
+    if args.command == "benchmark":
+        from localvibecode.benchmark.runner import BenchmarkRunner
+
+        doc = PreflightDoctor(config.ollama_base_url)
+        active_model = args.model or config.primary_model
+        if not doc.ensure_model_ready(active_model):
+            error(f"Cannot execute benchmark suite without model '{active_model}'. Aborting.")
+            sys.exit(1)
+
+        runner = BenchmarkRunner(config, workspace_root=factory_root)
+        results = runner.run_suite(case_id=args.case)
+        all_passed = all(r.passed for r in results) if results else False
+        sys.exit(0 if all_passed else 1)
 
     repo_path = config.resolve_repo_path(args.repo)
 
