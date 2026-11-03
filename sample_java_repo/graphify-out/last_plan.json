@@ -1,23 +1,23 @@
 {
-  "architectural_summary": "The requirement is to add a `getVersion` method to the `ExampleService` interface and implement it in `ExampleController`. Additionally, a unit test for this method needs to be added.",
+  "architectural_summary": "The requirement involves adding a new method to check the system status. This requires changes in the service interface and its implementation in the controller, as well as adding a test case for this functionality.",
   "atomic_tasks": [
     {
       "step_id": 1,
       "target_file": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
-      "instruction": "Add the following method signature to `ExampleService` interface:\n```java\npublic String getVersion();\n```\nEnsure that this change does not affect existing inbound callers and maintains backward compatibility as per guardrails.",
-      "verification_criteria": "The `getVersion` method should be added to the `ExampleService` interface without affecting existing code."
+      "instruction": "Add 'String getSystemStatus();' to the ExampleService interface.",
+      "verification_criteria": "The method signature is correctly added without affecting existing methods."
     },
     {
       "step_id": 2,
       "target_file": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
-      "instruction": "Implement the `getVersion` method in `ExampleController` as follows:\n```java\npublic String getVersion() {\n    return \"1.0.0\";\n}\n```\nEnsure that this change does not affect existing inbound callers and maintains backward compatibility as per guardrails.",
-      "verification_criteria": "The `getVersion` method should be implemented in `ExampleController` to return the version string '1.0.0'."
+      "instruction": "Implement 'public String getSystemStatus() { return \"SYSTEM_OPERATIONAL\"; }' in the ExampleController class.",
+      "verification_criteria": "The method is correctly implemented and returns the expected string."
     },
     {
       "step_id": 3,
       "target_file": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
-      "instruction": "Add a test method `testGetVersion` to verify that the `getVersion` method returns '1.0.0'. The implementation should be as follows:\n```java\n@Test\npublic void testGetVersion() {\n    ExampleController controller = new ExampleController();\n    assertEquals(\"1.0.0\", controller.getVersion());\n}\n```\nEnsure that this change does not affect existing inbound callers and maintains backward compatibility as per guardrails.",
-      "verification_criteria": "The `testGetVersion` method should be added to the `ExampleControllerTest` class, and it should pass when run."
+      "instruction": "Add a test method 'testSystemStatus' using AssertJ assertThat to verify that getSystemStatus returns SYSTEM_OPERATIONAL.",
+      "verification_criteria": "The test case is correctly implemented and passes when the system status is operational."
     }
   ]
 }

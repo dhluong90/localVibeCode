@@ -161,6 +161,24 @@ localVibeCode comes with a formal, reproducible benchmark harness designed for t
 
 ---
 
+## ☕ Real-World Enterprise Java Evaluation (7B vs. 14B Benchmark)
+
+To validate localVibeCode on real-world enterprise architectures, we stress-tested a multi-module Java Clean Architecture repository (`clean-architecture-java`, 5 Maven modules, Spring Boot, JUnit 5, AssertJ, Checkstyle) comparing **`qwen2.5:7b`** vs **`qwen2.5-coder:14b`**:
+
+| Capability Metric | Model 7B (`qwen2.5:7b`) | Model 14B (`qwen2.5-coder:14b`) |
+| :--- | :--- | :--- |
+| **VRAM Footprint** | 4.7 GB (Ultra-lightweight) | 9.5 GB (100% GPU on Apple M5, 0 swap) |
+| **Inference Speed** | ~42 tokens / sec | ~35 tokens / sec |
+| **QA Scorecard** | 82 / 100 | **100 / 100 (Flawless PASS)** |
+| **Spring Context Runner Pattern** | ❌ Fails (invokes naive `new()`) | ✅ **Native Mastery (`ApplicationContextRunner`)** |
+| **AssertJ & JUnit 5 Syntax** | ⚠️ Uses legacy `assertEquals` | ✅ **Idiomatic `assertThat(...).isEqualTo(...)`** |
+| **Zero-Human Intervention Pass@1**| ~60% | **~95%** |
+| **Maven Reactor Multi-Module Build**| ✅ PASS (1.8s) | ✅ **PASS (1.75s)** |
+
+> 📖 **Comprehensive Evaluation Document:** Read the complete 6-Phase SDLC report at [docs/JAVA_ENTERPRISE_SDLC_EVALUATION.md](docs/JAVA_ENTERPRISE_SDLC_EVALUATION.md).
+
+---
+
 ## 🛠️ Onboarding an Existing Project
 
 You can apply localVibeCode to any existing repository in one command:

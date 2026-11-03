@@ -333,7 +333,7 @@
       "kind": "file",
       "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
       "line_start": 1,
-      "line_end": 6,
+      "line_end": 7,
       "signature": "class com.example.clean.architecture.domain.services.ExampleService",
       "docstring": ""
     },
@@ -353,7 +353,7 @@
       "kind": "file",
       "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
       "line_start": 1,
-      "line_end": 44,
+      "line_end": 49,
       "signature": "class com.example.clean.architecture.infrastructure.controller.ExampleController",
       "docstring": ""
     },
@@ -363,7 +363,7 @@
       "kind": "file",
       "file_path": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
       "line_start": 1,
-      "line_end": 50,
+      "line_end": 63,
       "signature": "class com.example.clean.architecture.infrastructure.controller.ExampleControllerTest",
       "docstring": ""
     },
@@ -967,24 +967,24 @@
       "signature": "private ExampleUseCaseParams toParams(final String message)",
       "docstring": ""
     },
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.getSystemStatus": {
+      "id": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.getSystemStatus",
+      "name": "getSystemStatus",
+      "kind": "method",
+      "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "line_start": 46,
+      "line_end": 46,
+      "signature": "public String getSystemStatus()",
+      "docstring": ""
+    },
     "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest": {
       "id": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest",
       "name": "ExampleControllerTest",
       "kind": "class",
       "file_path": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
-      "line_start": 8,
-      "line_end": 8,
-      "signature": "public class ExampleControllerTest",
-      "docstring": ""
-    },
-    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest.testGetVersion": {
-      "id": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest.testGetVersion",
-      "name": "testGetVersion",
-      "kind": "method",
-      "file_path": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
-      "line_start": 46,
-      "line_end": 46,
-      "signature": "public void testGetVersion()",
+      "line_start": 9,
+      "line_end": 9,
+      "signature": "class ExampleControllerTest",
       "docstring": ""
     },
     "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java::ExampleControllerConfig": {
@@ -1790,6 +1790,12 @@
       "confidence": "EXTRACTED"
     },
     {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.getSystemStatus",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
       "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
       "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
       "relation": "CALLS",
@@ -1864,12 +1870,6 @@
     {
       "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
       "target": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest",
-      "relation": "CONTAINS",
-      "confidence": "EXTRACTED"
-    },
-    {
-      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest",
-      "target": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest.testGetVersion",
       "relation": "CONTAINS",
       "confidence": "EXTRACTED"
     },

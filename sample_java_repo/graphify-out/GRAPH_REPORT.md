@@ -91,10 +91,10 @@
     - `public String execute(final String message)`
     - `public String getVersion()`
     - `private ExampleUseCaseParams toParams(final String message)`
+    - `public String getSystemStatus()`
 
 ### File: `clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java`
-  - `public class ExampleControllerTest`
-    - `public void testGetVersion()`
+  - `class ExampleControllerTest`
 
 ### File: `clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java`
   - `public class ExampleControllerConfig extends BeanInitializer`

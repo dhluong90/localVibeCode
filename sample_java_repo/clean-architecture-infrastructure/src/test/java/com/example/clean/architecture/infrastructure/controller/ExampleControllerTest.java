@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
-public class ExampleControllerTest {
+class ExampleControllerTest {
   private ApplicationContextRunner runner;
 
   @BeforeEach
@@ -38,7 +38,7 @@ public class ExampleControllerTest {
     this.runner
         .run(context -> {
           final ExampleController notificationController = context.getBean(ExampleController.class);
-          final String result = notificationController.execute("".trim());
+          final String result = notificationController.execute("").trim();
           assertThat(result).isEqualTo("ERROR");
         });
   }
@@ -49,6 +49,15 @@ public class ExampleControllerTest {
         .run(context -> {
           final ExampleController controller = context.getBean(ExampleController.class);
           assertThat(controller.getVersion()).isEqualTo("1.0.0");
+        });
+  }
+
+  @Test
+  void testSystemStatus() {
+    this.runner
+        .run(context -> {
+          final ExampleController controller = context.getBean(ExampleController.class);
+          assertThat(controller.getSystemStatus()).isEqualTo("SYSTEM_OPERATIONAL");
         });
   }
 }

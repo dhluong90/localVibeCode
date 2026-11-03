@@ -41,4 +41,9 @@ public class ExampleController implements ExampleService {
   private ExampleUseCaseParams toParams(final String message) {
     return new ExampleUseCaseParams(message);
   }
+
+  @Override
+  public String getSystemStatus() {
+    return "SYSTEM_OPERATIONAL";
+  }
 }
