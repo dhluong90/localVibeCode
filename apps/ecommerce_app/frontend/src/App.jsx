@@ -75,26 +75,28 @@ const App = () => {
   return (
     <div className="App">
       <Navbar 
-        selectedCategory={selectedCategory} 
-        setSelectedCategory={setSelectedCategory} 
+        onSelectCategory={setSelectedCategory} 
         cartCount={cart.reduce((total, item) => total + item.quantity, 0)}
-        onCartToggle={() => setIsCartOpen(!isCartOpen)}
-        onCheckoutToggle={() => setIsCheckoutOpen(!isCheckoutOpen)}
+        onOpenCart={() => setIsCartOpen(!isCartOpen)}
       />
-      <ProductGrid products={products} loading={loading} addToCart={addToCart} />
+      <ProductGrid products={products} onAddToCart={addToCart} />
       <CartDrawer 
         isOpen={isCartOpen} 
         onClose={() => setIsCartOpen(false)} 
-        cart={cart} 
-        updateQuantity={updateQuantity} 
-        removeFromCart={removeFromCart} 
-        onCheckout={() => setIsCheckoutOpen(true)}
+        cartItems={cart} 
+        onUpdateQuantity={updateQuantity} 
+        onRemoveItem={removeFromCart} 
+        onProceedToCheckout={() => {
+          setIsCartOpen(false);
+          setIsCheckoutOpen(true);
+        }}
       />
       <CheckoutModal 
         isOpen={isCheckoutOpen} 
         onClose={() => setIsCheckoutOpen(false)} 
-        onSubmit={handleCheckoutSubmit} 
-        orderSuccess={orderSuccess}
+        cartItems={cart}
+        totalAmount={cart.reduce((total, item) => total + item.product.price * item.quantity, 0)}
+        onSubmitOrder={handleCheckoutSubmit}
       />
     </div>
   );
