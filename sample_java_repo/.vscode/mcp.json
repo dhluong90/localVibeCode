@@ -1,0 +1,15 @@
+{
+  "servers": {
+    "localvibecode": {
+      "type": "stdio",
+      "command": "python3",
+      "args": [
+        "-m",
+        "localvibecode.mcp_server"
+      ],
+      "env": {
+        "PYTHONPATH": "/Users/luongdh/Mylab/AISDLC Solution/src"
+      }
+    }
+  }
+}

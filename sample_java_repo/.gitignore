@@ -1,0 +1,4 @@
+.mvn
+.git
+.idea
+**/target/

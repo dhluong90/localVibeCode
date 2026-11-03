@@ -1,0 +1,49 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (Local Pinned Base Model)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen2.5:7b": {
+          "name": "Primary (qwen2.5:7b)"
+        },
+        "gemma4:latest": {
+          "name": "Fallback (gemma4:latest)"
+        }
+      }
+    }
+  },
+  "model": "ollama/qwen2.5:7b",
+  "mcp": {
+    "localvibecode": {
+      "type": "local",
+      "command": [
+        "python3",
+        "-m",
+        "localvibecode.mcp_server"
+      ],
+      "environment": {
+        "PYTHONPATH": "/Users/luongdh/Mylab/AISDLC Solution/src"
+      },
+      "enabled": true
+    }
+  },
+  "command": {
+    "pev": {
+      "description": "Run offline Enterprise Local Vibe Coding (Graphify AST + PEV)",
+      "template": "Call MCP tool `localvibecode_pev_run` with requirement: $ARGUMENTS"
+    },
+    "impact": {
+      "description": "Analyze Blast-Radius 1-hop context (< 4K tokens) for a file",
+      "template": "Call MCP tool `localvibecode_blast_radius` for file: $ARGUMENTS"
+    },
+    "graph": {
+      "description": "Scan project AST and display architectural God Nodes",
+      "template": "Call MCP tool `localvibecode_build_graph` and display GRAPH_REPORT.md"
+    }
+  }
+}

@@ -1,0 +1,2405 @@
+{
+  "repo_root": "/Users/luongdh/Mylab/AISDLC Solution/sample_java_repo",
+  "god_nodes": [
+    {
+      "file": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "centrality_score": 16
+    },
+    {
+      "file": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "centrality_score": 15
+    },
+    {
+      "file": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "centrality_score": 13
+    },
+    {
+      "file": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "centrality_score": 12
+    },
+    {
+      "file": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "centrality_score": 12
+    },
+    {
+      "file": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "centrality_score": 10
+    },
+    {
+      "file": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "centrality_score": 10
+    },
+    {
+      "file": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "centrality_score": 9
+    },
+    {
+      "file": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "centrality_score": 7
+    },
+    {
+      "file": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "centrality_score": 7
+    },
+    {
+      "file": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "centrality_score": 6
+    },
+    {
+      "file": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "centrality_score": 6
+    },
+    {
+      "file": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "centrality_score": 5
+    },
+    {
+      "file": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "centrality_score": 5
+    },
+    {
+      "file": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "centrality_score": 5
+    },
+    {
+      "file": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "centrality_score": 4
+    },
+    {
+      "file": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "centrality_score": 4
+    },
+    {
+      "file": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "centrality_score": 3
+    },
+    {
+      "file": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "centrality_score": 2
+    },
+    {
+      "file": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "centrality_score": 2
+    },
+    {
+      "file": "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java",
+      "centrality_score": 0
+    }
+  ],
+  "file_imports": {
+    "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java": [],
+    "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java": [],
+    "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java": [
+      "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java"
+    ],
+    "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java": [
+      "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java"
+    ],
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java": [],
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java": [
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java"
+    ],
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java": [],
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java"
+    ],
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java": [
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java"
+    ],
+    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java": [
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java"
+    ],
+    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java": [
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java": [
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java": [
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java": [
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java": [
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java": [],
+    "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java": [
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java"
+    ]
+  },
+  "inbound_files": {
+    "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java": [
+      "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java"
+    ],
+    "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java": [],
+    "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java": [],
+    "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java": [],
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java": [
+      "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java"
+    ],
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java": [
+      "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java"
+    ],
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java": [
+      "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java"
+    ],
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java": [
+      "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java"
+    ],
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java": [
+      "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java"
+    ],
+    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java": [],
+    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java": [
+      "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java": [
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java": [
+      "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java": [
+      "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java": [
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java"
+    ],
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java": [
+      "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java"
+    ],
+    "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java": []
+  },
+  "nodes": {
+    "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java": {
+      "id": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "name": "Application.java",
+      "kind": "file",
+      "file_path": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "line_start": 1,
+      "line_end": 13,
+      "signature": "class com.example.clean.architecture.Application",
+      "docstring": ""
+    },
+    "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java": {
+      "id": "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java",
+      "name": "AppConfiguration.java",
+      "kind": "file",
+      "file_path": "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java",
+      "line_start": 1,
+      "line_end": 11,
+      "signature": "class com.example.clean.architecture.config.AppConfiguration",
+      "docstring": ""
+    },
+    "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java": {
+      "id": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "name": "DummyTestITCase.java",
+      "kind": "file",
+      "file_path": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "line_start": 1,
+      "line_end": 51,
+      "signature": "class com.example.clean.architecture.e2e.DummyTestITCase",
+      "docstring": ""
+    },
+    "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java": {
+      "id": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "name": "DummyTestIT.java",
+      "kind": "file",
+      "file_path": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "line_start": 1,
+      "line_end": 66,
+      "signature": "class com.example.clean.architecture.it.DummyTestIT",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "name": "Either.java",
+      "kind": "file",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 1,
+      "line_end": 727,
+      "signature": "class com.example.clean.architecture.domain.core.Either",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "name": "Validation.java",
+      "kind": "file",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 1,
+      "line_end": 79,
+      "signature": "class com.example.clean.architecture.domain.core.Validation",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "name": "ExampleService.java",
+      "kind": "file",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "line_start": 1,
+      "line_end": 6,
+      "signature": "class com.example.clean.architecture.domain.services.ExampleService",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java": {
+      "id": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "name": "BeanInitializer.java",
+      "kind": "file",
+      "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "line_start": 1,
+      "line_end": 17,
+      "signature": "class com.example.clean.architecture.infrastructure.bean.management.BeanInitializer",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java": {
+      "id": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "name": "ExampleController.java",
+      "kind": "file",
+      "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "line_start": 1,
+      "line_end": 44,
+      "signature": "class com.example.clean.architecture.infrastructure.controller.ExampleController",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java": {
+      "id": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "name": "ExampleControllerTest.java",
+      "kind": "file",
+      "file_path": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "line_start": 1,
+      "line_end": 50,
+      "signature": "class com.example.clean.architecture.infrastructure.controller.ExampleControllerTest",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java": {
+      "id": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "name": "ExampleControllerConfig.java",
+      "kind": "file",
+      "file_path": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "line_start": 1,
+      "line_end": 20,
+      "signature": "class com.example.clean.architecture.infrastructure.controller.config.ExampleControllerConfig",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "name": "ExampleUseCase.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "line_start": 1,
+      "line_end": 27,
+      "signature": "class com.example.clean.architecture.usecase.audiolib.ExampleUseCase",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "name": "ExampleUseCaseParams.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "line_start": 1,
+      "line_end": 51,
+      "signature": "class com.example.clean.architecture.usecase.audiolib.params.ExampleUseCaseParams",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "name": "UseCaseParamsValidation.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "line_start": 1,
+      "line_end": 30,
+      "signature": "class com.example.clean.architecture.usecase.audiolib.params.validate.UseCaseParamsValidation",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "name": "UseCase.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "line_start": 1,
+      "line_end": 9,
+      "signature": "class com.example.clean.architecture.usecase.core.UseCase",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "name": "UseCaseParams.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "line_start": 1,
+      "line_end": 9,
+      "signature": "class com.example.clean.architecture.usecase.core.UseCaseParams",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "name": "Invalid.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "line_start": 1,
+      "line_end": 26,
+      "signature": "class com.example.clean.architecture.usecase.core.validation.Invalid",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "name": "ValidationResult.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "line_start": 1,
+      "line_end": 30,
+      "signature": "class com.example.clean.architecture.usecase.core.validation.ValidationResult",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "name": "ValidationSupport.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "line_start": 1,
+      "line_end": 46,
+      "signature": "class com.example.clean.architecture.usecase.core.validation.ValidationSupport",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "name": "VoidResponse.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "line_start": 1,
+      "line_end": 26,
+      "signature": "class com.example.clean.architecture.usecase.response.VoidResponse",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java": {
+      "id": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "name": "ExampleUseCaseTest.java",
+      "kind": "file",
+      "file_path": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "line_start": 1,
+      "line_end": 58,
+      "signature": "class com.example.clean.architecture.ExampleUseCaseTest",
+      "docstring": ""
+    },
+    "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java::Application": {
+      "id": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java::Application",
+      "name": "Application",
+      "kind": "class",
+      "file_path": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "line_start": 7,
+      "line_end": 7,
+      "signature": "public class Application",
+      "docstring": ""
+    },
+    "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java::Application.main": {
+      "id": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java::Application.main",
+      "name": "main",
+      "kind": "method",
+      "file_path": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "line_start": 9,
+      "line_end": 9,
+      "signature": "public static void main(String[] args)",
+      "docstring": ""
+    },
+    "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java::AppConfiguration": {
+      "id": "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java::AppConfiguration",
+      "name": "AppConfiguration",
+      "kind": "class",
+      "file_path": "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java",
+      "line_start": 9,
+      "line_end": 9,
+      "signature": "public class AppConfiguration",
+      "docstring": ""
+    },
+    "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java::DummyTestITCase": {
+      "id": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java::DummyTestITCase",
+      "name": "DummyTestITCase",
+      "kind": "class",
+      "file_path": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "line_start": 18,
+      "line_end": 18,
+      "signature": "class DummyTestITCase",
+      "docstring": ""
+    },
+    "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java::DummyTestIT": {
+      "id": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java::DummyTestIT",
+      "name": "DummyTestIT",
+      "kind": "class",
+      "file_path": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "line_start": 25,
+      "line_end": 25,
+      "signature": "class DummyTestIT",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "name": "Either",
+      "kind": "class",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 39,
+      "line_end": 39,
+      "signature": "public abstract class Either<L, R> implements Iterable<R>, Serializable",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.right": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.right",
+      "name": "right",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 64,
+      "line_end": 64,
+      "signature": "public static <L, R> Either<L, R> right(final R right)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.left": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.left",
+      "name": "left",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 85,
+      "line_end": 85,
+      "signature": "public static <L, R> Either<L, R> left(final L left)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.narrow": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.narrow",
+      "name": "narrow",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 111,
+      "line_end": 111,
+      "signature": "public static <L, R> Either<L, R> narrow(final Either<? extends L, ? extends R> either)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getLeft": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getLeft",
+      "name": "getLeft",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 693,
+      "line_end": 693,
+      "signature": "public L getLeft()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isLeft": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isLeft",
+      "name": "isLeft",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 698,
+      "line_end": 698,
+      "signature": "public boolean isLeft()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isRight": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isRight",
+      "name": "isRight",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 703,
+      "line_end": 703,
+      "signature": "public boolean isRight()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.transform": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.transform",
+      "name": "transform",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 243,
+      "line_end": 243,
+      "signature": "public final <U> U transform(final Function<? super Either<L, R>, ? extends U> f)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getOrElseGet": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getOrElseGet",
+      "name": "getOrElseGet",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 264,
+      "line_end": 264,
+      "signature": "public final R getOrElseGet(final Function<? super L, ? extends R> other)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getOrElse": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getOrElse",
+      "name": "getOrElse",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 279,
+      "line_end": 279,
+      "signature": "public final R getOrElse(final R other)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.orElseRun": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.orElseRun",
+      "name": "orElseRun",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 295,
+      "line_end": 295,
+      "signature": "public final void orElseRun(final Consumer<? super L> action)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.swap": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.swap",
+      "name": "swap",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 347,
+      "line_end": 347,
+      "signature": "public final Either<R, L> swap()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.recover": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.recover",
+      "name": "recover",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 402,
+      "line_end": 402,
+      "signature": "public final Either<L, R> recover(final Function<? super L, ? extends R> recoveryFunction)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.map": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.map",
+      "name": "map",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 459,
+      "line_end": 459,
+      "signature": "public final <U> Either<L, U> map(final Function<? super R, ? extends U> mapper)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.mapLeft": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.mapLeft",
+      "name": "mapLeft",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 486,
+      "line_end": 486,
+      "signature": "public final <U> Either<U, R> mapLeft(final Function<? super L, ? extends U> leftMapper)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.filter": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.filter",
+      "name": "filter",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 504,
+      "line_end": 504,
+      "signature": "public final Optional<Either<L, R>> filter(final Predicate<? super R> predicate)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.filterNot": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.filterNot",
+      "name": "filterNot",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 517,
+      "line_end": 517,
+      "signature": "public final Optional<Either<L, R>> filterNot(final Predicate<? super R> predicate)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.get": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.get",
+      "name": "get",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 688,
+      "line_end": 688,
+      "signature": "public R get()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isEmpty": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isEmpty",
+      "name": "isEmpty",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 562,
+      "line_end": 562,
+      "signature": "public final boolean isEmpty()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.orElse": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.orElse",
+      "name": "orElse",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 567,
+      "line_end": 567,
+      "signature": "public final Either<L, R> orElse(final Either<? extends L, ? extends R> other)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.iterator": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.iterator",
+      "name": "iterator",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 580,
+      "line_end": 580,
+      "signature": "public final Iterator<R> iterator()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.peek": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.peek",
+      "name": "peek",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 588,
+      "line_end": 588,
+      "signature": "public final Either<L, R> peek(final Consumer<? super R> action)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.peekLeft": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.peekLeft",
+      "name": "peekLeft",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 596,
+      "line_end": 596,
+      "signature": "public final Either<L, R> peekLeft(final Consumer<? super L> action)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.equals": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.equals",
+      "name": "equals",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 708,
+      "line_end": 708,
+      "signature": "public boolean equals(final Object obj)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.hashCode": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.hashCode",
+      "name": "hashCode",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 714,
+      "line_end": 714,
+      "signature": "public int hashCode()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.stringPrefix": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.stringPrefix",
+      "name": "stringPrefix",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 718,
+      "line_end": 718,
+      "signature": "public String stringPrefix()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.toString": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.toString",
+      "name": "toString",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "line_start": 723,
+      "line_end": 723,
+      "signature": "public String toString()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "name": "Validation",
+      "kind": "class",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 15,
+      "line_end": 15,
+      "signature": "public final class Validation",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.empty": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.empty",
+      "name": "empty",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 23,
+      "line_end": 23,
+      "signature": "public static Validation empty()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.of": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.of",
+      "name": "of",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 33,
+      "line_end": 33,
+      "signature": "public static Validation of(final String error)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.getErrors": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.getErrors",
+      "name": "getErrors",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 39,
+      "line_end": 39,
+      "signature": "public List<String> getErrors()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.addError": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.addError",
+      "name": "addError",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 43,
+      "line_end": 43,
+      "signature": "public void addError(final String error)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.addErrors": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.addErrors",
+      "name": "addErrors",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 47,
+      "line_end": 47,
+      "signature": "public void addErrors(final List<String> error)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.hasErrors": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.hasErrors",
+      "name": "hasErrors",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 51,
+      "line_end": 51,
+      "signature": "public boolean hasErrors()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.as": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.as",
+      "name": "as",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 55,
+      "line_end": 55,
+      "signature": "public <T extends RuntimeException> T as(final Function<List<String>, T> supplier)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.or": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.or",
+      "name": "or",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 59,
+      "line_end": 59,
+      "signature": "public Validation or(final Supplier<Validation> s)",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.asEither": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.asEither",
+      "name": "asEither",
+      "kind": "method",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "line_start": 76,
+      "line_end": 76,
+      "signature": "public <T> Either<Validation, T> asEither()",
+      "docstring": ""
+    },
+    "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java::ExampleService": {
+      "id": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java::ExampleService",
+      "name": "ExampleService",
+      "kind": "class",
+      "file_path": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "line_start": 3,
+      "line_end": 3,
+      "signature": "public interface ExampleService",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java::BeanInitializer": {
+      "id": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java::BeanInitializer",
+      "name": "BeanInitializer",
+      "kind": "class",
+      "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "line_start": 11,
+      "line_end": 11,
+      "signature": "public class BeanInitializer",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java::BeanInitializer.sendEventMessage": {
+      "id": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java::BeanInitializer.sendEventMessage",
+      "name": "sendEventMessage",
+      "kind": "method",
+      "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "line_start": 14,
+      "line_end": 14,
+      "signature": "public UseCase<ExampleUseCaseParams, VoidResponse> sendEventMessage()",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController": {
+      "id": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController",
+      "name": "ExampleController",
+      "kind": "class",
+      "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "line_start": 14,
+      "line_end": 14,
+      "signature": "public class ExampleController implements ExampleService",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.execute": {
+      "id": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.execute",
+      "name": "execute",
+      "kind": "method",
+      "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "line_start": 25,
+      "line_end": 25,
+      "signature": "public String execute(final String message)",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.getVersion": {
+      "id": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.getVersion",
+      "name": "getVersion",
+      "kind": "method",
+      "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "line_start": 37,
+      "line_end": 37,
+      "signature": "public String getVersion()",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.toParams": {
+      "id": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.toParams",
+      "name": "toParams",
+      "kind": "method",
+      "file_path": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "line_start": 41,
+      "line_end": 41,
+      "signature": "private ExampleUseCaseParams toParams(final String message)",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest": {
+      "id": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest",
+      "name": "ExampleControllerTest",
+      "kind": "class",
+      "file_path": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "line_start": 8,
+      "line_end": 8,
+      "signature": "public class ExampleControllerTest",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest.testGetVersion": {
+      "id": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest.testGetVersion",
+      "name": "testGetVersion",
+      "kind": "method",
+      "file_path": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "line_start": 46,
+      "line_end": 46,
+      "signature": "public void testGetVersion()",
+      "docstring": ""
+    },
+    "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java::ExampleControllerConfig": {
+      "id": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java::ExampleControllerConfig",
+      "name": "ExampleControllerConfig",
+      "kind": "class",
+      "file_path": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "line_start": 12,
+      "line_end": 12,
+      "signature": "public class ExampleControllerConfig extends BeanInitializer",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase",
+      "name": "ExampleUseCase",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "line_start": 12,
+      "line_end": 12,
+      "signature": "public class ExampleUseCase implements UseCase<ExampleUseCaseParams, VoidResponse>",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase.execute": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase.execute",
+      "name": "execute",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "line_start": 15,
+      "line_end": 15,
+      "signature": "public Either<Validation, VoidResponse> execute(final ExampleUseCaseParams params)",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase.doAction": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase.doAction",
+      "name": "doAction",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "line_start": 24,
+      "line_end": 24,
+      "signature": "private VoidResponse doAction()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams",
+      "name": "ExampleUseCaseParams",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "line_start": 11,
+      "line_end": 11,
+      "signature": "public class ExampleUseCaseParams implements UseCaseParams",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.validate": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.validate",
+      "name": "validate",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "line_start": 20,
+      "line_end": 20,
+      "signature": "public Validation validate()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.equals": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.equals",
+      "name": "equals",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "line_start": 29,
+      "line_end": 29,
+      "signature": "public boolean equals(Object o)",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.hashCode": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.hashCode",
+      "name": "hashCode",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "line_start": 41,
+      "line_end": 41,
+      "signature": "public int hashCode()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.toString": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.toString",
+      "name": "toString",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "line_start": 46,
+      "line_end": 46,
+      "signature": "public String toString()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java::UseCaseParamsValidation": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java::UseCaseParamsValidation",
+      "name": "UseCaseParamsValidation",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "line_start": 9,
+      "line_end": 9,
+      "signature": "public interface UseCaseParamsValidation extends Function<String, ValidationResult>",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java::UseCaseParamsValidation.holds": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java::UseCaseParamsValidation.holds",
+      "name": "holds",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "line_start": 23,
+      "line_end": 23,
+      "signature": "private static UseCaseParamsValidation holds(final Predicate<String> p, final String message)",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java::UseCase": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java::UseCase",
+      "name": "UseCase",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "line_start": 6,
+      "line_end": 6,
+      "signature": "public interface UseCase<T extends UseCaseParams, R>",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java::UseCaseParams": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java::UseCaseParams",
+      "name": "UseCaseParams",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "line_start": 5,
+      "line_end": 5,
+      "signature": "public interface UseCaseParams",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid",
+      "name": "Invalid",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "line_start": 9,
+      "line_end": 9,
+      "signature": "public class Invalid implements ValidationResult",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid.isValid": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid.isValid",
+      "name": "isValid",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "line_start": 18,
+      "line_end": 18,
+      "signature": "public boolean isValid()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid.getReasons": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid.getReasons",
+      "name": "getReasons",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "line_start": 23,
+      "line_end": 23,
+      "signature": "public Optional<List<String>> getReasons()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java::ValidationResult": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java::ValidationResult",
+      "name": "ValidationResult",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "line_start": 9,
+      "line_end": 9,
+      "signature": "public interface ValidationResult",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport",
+      "name": "ValidationSupport",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "line_start": 8,
+      "line_end": 8,
+      "signature": "public class ValidationSupport",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.isValid": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.isValid",
+      "name": "isValid",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "line_start": 11,
+      "line_end": 11,
+      "signature": "public boolean isValid()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.getReasons": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.getReasons",
+      "name": "getReasons",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "line_start": 15,
+      "line_end": 15,
+      "signature": "public Optional<List<String>> getReasons()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.zip": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.zip",
+      "name": "zip",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "line_start": 27,
+      "line_end": 27,
+      "signature": "public static ValidationResult zip(final ValidationResult left, final ValidationResult right)",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.toStream": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.toStream",
+      "name": "toStream",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "line_start": 42,
+      "line_end": 42,
+      "signature": "public static <T> Stream<T> toStream(final Optional<T> optional)",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse",
+      "name": "VoidResponse",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "line_start": 6,
+      "line_end": 6,
+      "signature": "public class VoidResponse",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse.ok": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse.ok",
+      "name": "ok",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "line_start": 18,
+      "line_end": 18,
+      "signature": "public static VoidResponse ok()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse.empty": {
+      "id": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse.empty",
+      "name": "empty",
+      "kind": "method",
+      "file_path": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "line_start": 22,
+      "line_end": 22,
+      "signature": "public static VoidResponse empty()",
+      "docstring": ""
+    },
+    "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java::ExampleUseCaseTest": {
+      "id": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java::ExampleUseCaseTest",
+      "name": "ExampleUseCaseTest",
+      "kind": "class",
+      "file_path": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "line_start": 14,
+      "line_end": 14,
+      "signature": "class ExampleUseCaseTest",
+      "docstring": ""
+    }
+  },
+  "edges": [
+    {
+      "source": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "target": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java::Application",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java::Application",
+      "target": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java::Application.main",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java",
+      "target": "clean-architecture-boot/src/main/java/com/example/clean/architecture/config/AppConfiguration.java::AppConfiguration",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "target": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java::DummyTestITCase",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "target": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "target": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/e2e/DummyTestITCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java::DummyTestIT",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-boot/src/main/java/com/example/clean/architecture/Application.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-boot/src/test/java/com/example/clean/architecture/it/DummyTestIT.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.right",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.left",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.narrow",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getLeft",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isLeft",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isRight",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.transform",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getOrElseGet",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getOrElse",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.orElseRun",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.swap",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.recover",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.map",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.mapLeft",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.filter",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.filterNot",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.get",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isEmpty",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.orElse",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.iterator",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.peek",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.peekLeft",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.get",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getLeft",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isLeft",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isRight",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.equals",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.hashCode",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.stringPrefix",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.toString",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.get",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.getLeft",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isLeft",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.isRight",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.equals",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.hashCode",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.stringPrefix",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java::Either.toString",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.empty",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.of",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.of",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.getErrors",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.addError",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.addErrors",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.hasErrors",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.as",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.or",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java::Validation.asEither",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java::ExampleService",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java::BeanInitializer",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java::BeanInitializer",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java::BeanInitializer.sendEventMessage",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.execute",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.getVersion",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java::ExampleController.toParams",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/services/ExampleService.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "target": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest",
+      "target": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java::ExampleControllerTest.testGetVersion",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "target": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/ExampleControllerTest.java",
+      "target": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java::ExampleControllerConfig",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/bean/management/BeanInitializer.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-infrastructure/src/main/java/com/example/clean/architecture/infrastructure/controller/ExampleController.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-infrastructure/src/test/java/com/example/clean/architecture/infrastructure/controller/config/ExampleControllerConfig.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase.execute",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java::ExampleUseCase.doAction",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.validate",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.equals",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.hashCode",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java::ExampleUseCaseParams.toString",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java::UseCaseParamsValidation",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java::UseCaseParamsValidation",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java::UseCaseParamsValidation.holds",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/validate/UseCaseParamsValidation.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java::UseCase",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCase.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java::UseCaseParams",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/UseCaseParams.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid.isValid",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java::Invalid.getReasons",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java::ValidationResult",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/Invalid.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.isValid",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.getReasons",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.zip",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java::ValidationSupport.toStream",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationSupport.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/core/validation/ValidationResult.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse.ok",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java::VoidResponse.empty",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java::ExampleUseCaseTest",
+      "relation": "CONTAINS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "CALLS",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Either.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-domain/src/main/java/com/example/clean/architecture/domain/core/Validation.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/ExampleUseCase.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/audiolib/params/ExampleUseCaseParams.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "clean-architecture-usecases/src/test/java/com/example/clean/architecture/ExampleUseCaseTest.java",
+      "target": "clean-architecture-usecases/src/main/java/com/example/clean/architecture/usecase/response/VoidResponse.java",
+      "relation": "IMPORTS",
+      "confidence": "EXTRACTED"
+    }
+  ]
+}
