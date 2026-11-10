@@ -7,27 +7,6 @@ import time
 import urllib.request
 from typing import Any, Dict, List, Optional
 
-FILES_SCHEMA: Dict[str, Any] = {
-    "type": "object",
-    "properties": {
-        "files": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {"path": {"type": "string"}, "content": {"type": "string"}},
-                "required": ["path", "content"],
-            },
-        }
-    },
-    "required": ["files"],
-}
-
-CONTENT_SCHEMA: Dict[str, Any] = {
-    "type": "object",
-    "properties": {"content": {"type": "string"}},
-    "required": ["content"],
-}
-
 
 class RecordingOllama:
     def __init__(self, base_url: str, model: str, keep_alive: str, calls: List[Dict[str, Any]]) -> None:

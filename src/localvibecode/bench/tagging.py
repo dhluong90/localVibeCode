@@ -60,7 +60,9 @@ def tag_failure(
         tags.append("H4")
     if any(c.get("prompt_tokens", 0) >= 0.98 * c.get("num_ctx", 10 ** 9) for c in calls):
         tags.append("H3")
-    if any(not p.get("applied") for p in trace.get("patches", [])):
+    if any(not p.get("applied") for p in trace.get("patches", [])) or any(
+        e.get("type") in ("no_file_blocks_parsed", "no_code_block") for e in trace.get("events", [])
+    ):
         tags.append("H5")
     if any(s.get("truncated") and s.get("target") in task.gold_files for s in trace.get("slices", [])):
         tags.append("H3")

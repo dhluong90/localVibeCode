@@ -3,17 +3,20 @@
 - B0: raw model, one prompt with the whole repository, full-file answers, no retry.
 - H:  the localVibeCode PEV harness, unchanged, instrumented to record what it does.
 - O:  oracle harness: gold files + gold plan + full context, large output budget, test-feedback retries.
+
+B0 and O ask for plain fenced code blocks (the way people vibe-code in a chat). Code inside JSON
+strings made the 7B model drop Python indentation in the pilot, so it is not used as the oracle's
+edit format. H keeps its own JSON-constrained format: that is the design under test.
 """
 
 from __future__ import annotations
 
-import json
 import re
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from localvibecode.bench.grading import run_cmd
-from localvibecode.bench.llm import CONTENT_SCHEMA, FILES_SCHEMA, RecordingOllama
+from localvibecode.bench.llm import RecordingOllama
 from localvibecode.bench.tasks import Fixture, Task
 from localvibecode.bench.workspace import list_repo_files, safe_write
 
@@ -21,6 +24,13 @@ ORACLE_REPAIR_ROUNDS = 3
 ORACLE_REPAIR_TEMPERATURES = (0.2, 0.5, 0.8)
 MAX_OUTPUT_TOKENS = 8192
 LARGE_CTX = 16384
+
+FILE_BLOCK_FORMAT = (
+    "For EVERY file you create or modify, output a line `FILE: <relative path>` immediately followed by a "
+    "fenced code block containing the COMPLETE new content of that file. Do not output unchanged files."
+)
+_FILE_BLOCK = re.compile(r"FILE:\s*`?([^\s`]+)`?\s*\n+```[A-Za-z0-9_+-]*\n(.*?)\n```", re.DOTALL)
+_CODE_BLOCK = re.compile(r"```[A-Za-z0-9_+-]*\n(.*?)\n```", re.DOTALL)
 
 
 def _fence(rel: str) -> str:
@@ -32,59 +42,61 @@ def _render_files(ws: Path, rels: List[str]) -> str:
     for rel in rels:
         path = ws / rel
         body = path.read_text(encoding="utf-8", errors="ignore") if path.exists() else "(file does not exist yet)"
-        parts.append(f"### {rel}\n```{_fence(rel)}\n{body}\n```")
+        parts.append(f"FILE: {rel}\n```{_fence(rel)}\n{body}\n```")
     return "\n\n".join(parts)
-
-
-def _write_files(ws: Path, content: str, trace: Dict[str, Any], allowed: List[str] = None) -> None:
-    data = json.loads(content)
-    for item in data.get("files", []):
-        rel = str(item.get("path", "")).strip().lstrip("/")
-        if rel.startswith("./"):
-            rel = rel[2:]
-        if allowed is not None and rel not in allowed:
-            trace.setdefault("events", []).append({"type": "write_skipped_not_allowed", "file": rel})
-            continue
-        ok = safe_write(ws, rel, _ensure_newline(item.get("content", "")))
-        trace.setdefault("events", []).append({"type": "write" if ok else "write_rejected_path", "file": rel})
 
 
 def _ensure_newline(text: str) -> str:
     return text if text.endswith("\n") else text + "\n"
 
 
+def _write_file_blocks(
+    ws: Path, text: str, trace: Dict[str, Any], allowed: Optional[List[str]] = None
+) -> int:
+    events = trace.setdefault("events", [])
+    written = 0
+    for rel, body in _FILE_BLOCK.findall(text):
+        rel = rel.strip().lstrip("/")
+        if rel.startswith("./"):
+            rel = rel[2:]
+        if allowed is not None and rel not in allowed:
+            events.append({"type": "write_skipped_not_allowed", "file": rel})
+            continue
+        ok = safe_write(ws, rel, _ensure_newline(body))
+        events.append({"type": "write" if ok else "write_rejected_path", "file": rel})
+        written += int(ok)
+    if written == 0:
+        events.append({"type": "no_file_blocks_parsed", "response_head": text[:300]})
+    return written
+
+
 # ----------------------------------------------------------------------------- B0
 
-B0_SYSTEM = (
-    "You are a senior software engineer. Implement the task by editing the repository below. "
-    "Respond ONLY with JSON of the form {\"files\": [{\"path\": \"<relative path>\", \"content\": \"<complete file content>\"}]} "
-    "listing every file you create or modify, each with its COMPLETE new content."
-)
+B0_SYSTEM = "You are a senior software engineer. Implement the task by editing the repository below. " + FILE_BLOCK_FORMAT
 
 
 def run_b0(task: Task, fixture: Fixture, ws: Path, llm: RecordingOllama, trace: Dict[str, Any]) -> None:
     files = list_repo_files(ws)
     user = f"## Task\n{task.prompt}\n\n## Repository files\n\n{_render_files(ws, files)}"
-    content = llm.chat("b0", B0_SYSTEM, user, schema=FILES_SCHEMA, num_ctx=LARGE_CTX, num_predict=MAX_OUTPUT_TOKENS)
-    _write_files(ws, content, trace)
+    text = llm.chat("b0", B0_SYSTEM, user, num_ctx=LARGE_CTX, num_predict=MAX_OUTPUT_TOKENS)
+    _write_file_blocks(ws, text, trace)
 
 
 # ----------------------------------------------------------------------------- Oracle
 
 ORACLE_SYSTEM = (
     "You are a senior software engineer executing an approved implementation plan step by step. "
-    "Edit ONLY the file named in the current step. Keep everything that the step does not ask to change. "
-    "Respond ONLY with JSON {\"content\": \"<complete new content of the file>\"}."
+    "Edit ONLY the file named in the current step and keep everything the step does not ask to change. "
+    "Respond with the COMPLETE new content of that file in a single fenced code block."
 )
 ORACLE_REPAIR_SYSTEM = (
     "You are a senior software engineer. The implementation below fails the repository's test command. "
-    "Fix it. You may edit only the files listed as editable. Respond ONLY with JSON "
-    "{\"files\": [{\"path\": \"<relative path>\", \"content\": \"<complete file content>\"}]} for the files you change."
+    "Fix it. You may edit only the files listed as editable. " + FILE_BLOCK_FORMAT
 )
 
 
 def _oracle_context(task: Task, fixture: Fixture, ws: Path) -> List[str]:
-    """Perfect retrieval: gold files, plus their 1-hop neighbours (all source files for small repos)."""
+    """Perfect retrieval: gold files plus their 1-hop neighbours (all source files for T1)."""
     files = list_repo_files(ws)
     if task.category == "T1":
         context = [f for f in files if not fixture.is_test_file(f)] + [
@@ -97,7 +109,7 @@ def _oracle_context(task: Task, fixture: Fixture, ws: Path) -> List[str]:
         context = []
         for gold in task.gold_files:
             context += graph.file_imports.get(gold, []) + graph.inbound_files.get(gold, [])
-    ordered = []
+    ordered: List[str] = []
     for rel in list(task.gold_files) + context:
         if rel not in ordered and ((ws / rel).exists() or rel in task.gold_files):
             ordered.append(rel)
@@ -107,6 +119,7 @@ def _oracle_context(task: Task, fixture: Fixture, ws: Path) -> List[str]:
 def run_oracle(task: Task, fixture: Fixture, ws: Path, llm: RecordingOllama, trace: Dict[str, Any]) -> None:
     context = _oracle_context(task, fixture, ws)
     trace["oracle_context"] = context
+    events = trace.setdefault("events", [])
     plan_text = "\n".join(f"{i}. `{s['file']}`: {s['instruction']}" for i, s in enumerate(task.oracle_plan, 1))
     for i, step in enumerate(task.oracle_plan, 1):
         user = (
@@ -114,15 +127,17 @@ def run_oracle(task: Task, fixture: Fixture, ws: Path, llm: RecordingOllama, tra
             f"## Current step {i}: edit `{step['file']}`\n{step['instruction']}\n\n"
             f"## Relevant files (current state)\n\n{_render_files(ws, context)}"
         )
-        content = llm.chat(f"oracle_step_{i}", ORACLE_SYSTEM, user, schema=CONTENT_SCHEMA,
-                           num_ctx=LARGE_CTX, num_predict=MAX_OUTPUT_TOKENS)
-        new_text = json.loads(content).get("content", "")
-        safe_write(ws, step["file"], _ensure_newline(new_text))
-        trace.setdefault("events", []).append({"type": "write", "file": step["file"]})
+        text = llm.chat(f"oracle_step_{i}", ORACLE_SYSTEM, user, num_ctx=LARGE_CTX, num_predict=MAX_OUTPUT_TOKENS)
+        blocks = _CODE_BLOCK.findall(text)
+        if not blocks:
+            events.append({"type": "no_code_block", "file": step["file"], "response_head": text[:300]})
+            continue
+        safe_write(ws, step["file"], _ensure_newline(max(blocks, key=len)))
+        events.append({"type": "write", "file": step["file"]})
 
     for attempt in range(1, ORACLE_REPAIR_ROUNDS + 1):
         rc, out = run_cmd(fixture.test_cmd, ws)
-        trace.setdefault("events", []).append({"type": "oracle_test", "attempt": attempt, "passed": rc == 0})
+        events.append({"type": "oracle_test", "attempt": attempt, "passed": rc == 0})
         if rc == 0:
             return
         user = (
@@ -132,10 +147,9 @@ def run_oracle(task: Task, fixture: Fixture, ws: Path, llm: RecordingOllama, tra
             f"## Relevant files (current state)\n\n{_render_files(ws, context)}"
         )
         # Raise temperature on each retry so repeated attempts are not identical.
-        content = llm.chat(f"oracle_repair_{attempt}", ORACLE_REPAIR_SYSTEM, user, schema=FILES_SCHEMA,
-                           num_ctx=LARGE_CTX, num_predict=MAX_OUTPUT_TOKENS,
-                           temperature=ORACLE_REPAIR_TEMPERATURES[attempt - 1])
-        _write_files(ws, content, trace, allowed=list(task.gold_files))
+        text = llm.chat(f"oracle_repair_{attempt}", ORACLE_REPAIR_SYSTEM, user, num_ctx=LARGE_CTX,
+                        num_predict=MAX_OUTPUT_TOKENS, temperature=ORACLE_REPAIR_TEMPERATURES[attempt - 1])
+        _write_file_blocks(ws, text, trace, allowed=list(task.gold_files))
 
 
 def _tail_relevant(out: str, limit: int = 5000) -> str:
