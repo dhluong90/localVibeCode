@@ -43,8 +43,24 @@ Bộ 14 case (`benchmarks/sast_cases/`), chạy `ZeroTokenVerifier` hiện tại
 
 → Q2 hiện **chưa đạt** mức kỳ vọng L4. Action: A9.
 
-## Kết quả
-_(Điền theo mẫu Mục 9 của tiêu chuẩn sau khi chạy.)_
+## Kết quả giữa kỳ (2026-11-10 17:30 — 28/396 run, chỉ 7B, k1, chỉ task Java)
+
+> Chưa đủ dữ liệu để kết luận level (n = 1–2 mỗi category, CI rất rộng). Chỉ dùng để định hướng.
+
+| Cấu hình (7B, ALL) | resolve@1 (CI95) | Regression | Scope P/R | s/run |
+|---|---|---|---|---|
+| B0 — model trần | 40% (17–69%) | 30% | 0.65/0.65 | 40 |
+| H — localVibeCode | 44% (19–73%) | 33% | 0.63/0.67 | 155 |
+| O — Oracle (trần) | **89%** (56–98%) | 11% | 1.00/1.00 | 52 |
+
+- Harness gap (O − H) **+44 pp**; H − B0 chỉ **+4 pp** trong khi H chậm gấp ~4 lần.
+- **100% thất bại của H là do harness** (H1 ×3, H7 ×2 là nhãn chính).
+- **H7 xuất hiện ở cả 5/5 run H thất bại**: plan luôn thêm file test làm bước cuối, và test self-healing luôn sửa *file cuối cùng* → heal vào file test thay vì file gây lỗi.
+- **H1 ở 3/5**: plan chọn sai file. Với M1 (lỗi gốc ở file khác), plan không bao giờ chọn đúng file gốc (`Product.java`, `CheckoutRequest.java`); D1 plan precision 0.63 / recall 0.67.
+- Critic trả **PASS** cho một run thất bại (java-M1-02) → không tin được critic làm tín hiệu thành công (A10).
+
+## Kết quả cuối
+_(Điền theo mẫu Mục 9 của tiêu chuẩn sau khi chạy xong.)_
 
 | Category | Model | n | resolve@1 (±CI) | pass^5 | Regression | Scope P/R | Level đạt | Level kỳ vọng | Gap tới Oracle | Δ so với B0 |
 |---|---|---|---|---|---|---|---|---|---|---|
