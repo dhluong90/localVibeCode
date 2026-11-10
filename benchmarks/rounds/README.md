@@ -6,7 +6,7 @@ Kết quả từng vòng cải tiến harness. Tiêu chuẩn đo (task, level, m
 
 | Round | Ngày | Harness commit | Model | Action chính | resolve@1 (dev) | Harness gap (Oracle − H) | % lỗi do harness | Trạng thái |
 |---|---|---|---|---|---|---|---|---|
-| [00](round_00/README.md) | — | — | 7B / 14B | A0, A13, A14 — đo baseline | — | — | — | Planned |
+| [00](round_00/README.md) | 2026-11-10 | `5d06d09` | 7B / 14B | A0, A13, A14 — đo baseline | — | — | — | Running |
 
 ## Lộ trình
 
