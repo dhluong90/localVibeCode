@@ -49,3 +49,6 @@ demo_enterprise_repo/graphify-out/last_plan.json
 graphify-out/last_plan.json
 benchmarks/isolated_workspace/
 
+
+# Benchmark raw run logs (only round summaries are tracked)
+benchmarks/rounds/*/runs/

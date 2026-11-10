@@ -185,7 +185,7 @@ human_checkpoints: [plan, final_diff]   # cho L3
 | Cách ly | Mỗi run một git worktree sạch tại `base_commit` |
 | Nhiệt độ / seed | Theo `localvibecode.json`, ghi lại seed từng run |
 | Timeout | 15 phút / run |
-| Log | Lưu toàn bộ prompt, response, diff, verifier output vào `benchmarks/runs/<run_id>/` |
+| Log | Raw log (prompt, response, diff, verifier output) lưu local tại `benchmarks/rounds/round_XX/runs/<run_id>/` — **không commit** (gitignore). Chỉ commit kết quả tổng hợp của vòng (Mục 8) |
 
 ---
 
@@ -288,7 +288,7 @@ Mỗi action gắn với mã lỗi nó nhắm tới. Thứ tự thực hiện do
         └───────────────┬─────────────────────────────────────────┘
                         ▼
         ┌─────────────────────────────────────────────────────────┐
-        │ 6. Ghi HARNESS_CHANGELOG: action, Δ metric, bucket giảm  │
+        │ 6. Ghi vào round_XX/README.md: action, Δ metric, bucket  │
         └───────────────┬─────────────────────────────────────────┘
                         ▼
               Đã chạm trần (Mục 5.2)?  ── Chưa ──► quay lại bước 1
@@ -305,16 +305,20 @@ Mỗi action gắn với mã lỗi nó nhắm tới. Thứ tự thực hiện do
 
 ---
 
-## 8. Lộ trình đề xuất
+## 8. Lưu kết quả theo vòng (Rounds)
 
-| Vòng | Nội dung | Đầu ra |
-|---|---|---|
-| **Vòng 0** | A0 + A13 + A14 tối thiểu; tạo ~30 instance dev (Nhóm A + một phần B); chạy B0, H, O | Số đo baseline thật đầu tiên, harness gap theo category |
-| Vòng 1 | Theo Pareto, dự kiến: A1, A2, A8 (lỗi cơ khí: output cắt, patch hỏng, đường dẫn) | `harness_failure_share` giảm mạnh |
-| Vòng 2 | A3, A4, A5 (verifier thật, heal đúng file, context symbol) | I3, I6, M1 lên L3 |
-| Vòng 3 | A6, A7, A10 (plan checkpoint, spec-first, critic) | Ổn định `pass^k` |
-| Vòng 4 | A11, A12 (best-of-n, prompt profile) | Tiệm cận trần model |
-| Milestone | Đủ ~70 instance, chạy test set, báo cáo nghiệm thu theo Mục 9 | Báo cáo nghiệm thu |
+Tài liệu này là **chuẩn chung**, chỉ thay đổi khi đổi tiêu chuẩn. Kế hoạch và kết quả của từng vòng cải tiến nằm riêng tại `benchmarks/rounds/`:
+
+```
+benchmarks/rounds/
+├── README.md              # Bảng tổng hợp mọi vòng + lộ trình
+└── round_XX/
+    ├── README.md          # Mục tiêu, action, cấu hình, kết quả (theo mẫu Mục 9), Pareto lỗi, kết luận
+    ├── summary.json       # Metric tổng hợp máy đọc được (để so sánh giữa các vòng)
+    └── runs/              # Raw log từng run — local only, không commit
+```
+
+**Commit gì:** `README.md` + `summary.json` của mỗi vòng. **Không commit:** `runs/` (raw log có thể lớn và chứa code nội bộ; giữ local hoặc lưu trữ nội bộ khi cần audit).
 
 ---
 
