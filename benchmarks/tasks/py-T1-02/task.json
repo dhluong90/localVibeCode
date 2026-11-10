@@ -1,0 +1,39 @@
+{
+  "id": "py-T1-02",
+  "category": "T1",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Write unit tests for `PaymentGateway.charge` in gateways/payment_gateway.py. Put them in a new file tests/test_payment_gateway.py using unittest. Cover: rounding the charged amount to 2 decimals, rejecting zero and negative amounts, recording the charge in the ledger, and the transaction id format 'TX-<order_id>'.",
+  "setup": [],
+  "gold_files": [
+    "tests/test_payment_gateway.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "tests/test_payment_gateway.py",
+      "instruction": "Write the unittest test cases listed in the requirement."
+    }
+  ],
+  "t1": {
+    "test_file": "tests/test_payment_gateway.py",
+    "min_mutation_score": 0.67,
+    "mutants": [
+      {
+        "file": "gateways/payment_gateway.py",
+        "find": "        rounded = round(final_amount, 2)",
+        "replace": "        rounded = final_amount"
+      },
+      {
+        "file": "gateways/payment_gateway.py",
+        "find": "        if rounded <= 0:",
+        "replace": "        if rounded < 0:"
+      },
+      {
+        "file": "gateways/payment_gateway.py",
+        "find": "        return f\"TX-{order.order_id}\"",
+        "replace": "        return f\"TX{order.order_id}\""
+      }
+    ]
+  }
+}

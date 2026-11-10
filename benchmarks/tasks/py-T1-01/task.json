@@ -1,0 +1,39 @@
+{
+  "id": "py-T1-01",
+  "category": "T1",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Write unit tests for `validate_order` in validators.py. Put them in a new file tests/test_validators.py using unittest. Cover: missing order_id or customer_id, zero and negative amounts, unsupported currency, and a valid order.",
+  "setup": [],
+  "gold_files": [
+    "tests/test_validators.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "tests/test_validators.py",
+      "instruction": "Write the unittest test cases listed in the requirement."
+    }
+  ],
+  "t1": {
+    "test_file": "tests/test_validators.py",
+    "min_mutation_score": 0.67,
+    "mutants": [
+      {
+        "file": "validators.py",
+        "find": "    if order.amount <= 0:",
+        "replace": "    if order.amount < 0:"
+      },
+      {
+        "file": "validators.py",
+        "find": "    if order.currency not in SUPPORTED_CURRENCIES:",
+        "replace": "    if False:"
+      },
+      {
+        "file": "validators.py",
+        "find": "    if not order.order_id or not order.customer_id:",
+        "replace": "    if not order.customer_id:"
+      }
+    ]
+  }
+}

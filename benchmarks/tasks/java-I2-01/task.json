@@ -1,0 +1,18 @@
+{
+  "id": "java-I2-01",
+  "category": "I2",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Add a method `public List<Product> searchByName(String keyword)` to `ProductRepository`. It returns all products whose name contains the keyword, case-insensitive, sorted by name ascending. A null or blank keyword returns an empty list.",
+  "setup": [],
+  "gold_files": [
+    "src/main/java/com/ecommerce/repository/ProductRepository.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/main/java/com/ecommerce/repository/ProductRepository.java",
+      "instruction": "Add searchByName as described."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "java-T1-01",
+  "category": "T1",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Write JUnit 5 unit tests for `Product.hasStock(int)` and `Product.deductStock(int)` in a new file src/test/java/com/ecommerce/model/ProductTest.java. Cover: enough stock, exactly the available stock, insufficient stock, null stock quantity, and stock reduction after deductStock.",
+  "setup": [],
+  "gold_files": [
+    "src/test/java/com/ecommerce/model/ProductTest.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/test/java/com/ecommerce/model/ProductTest.java",
+      "instruction": "Write the JUnit 5 tests listed in the requirement."
+    }
+  ],
+  "t1": {
+    "test_file": "src/test/java/com/ecommerce/model/ProductTest.java",
+    "min_mutation_score": 0.67,
+    "mutants": [
+      {
+        "file": "src/main/java/com/ecommerce/model/Product.java",
+        "find": "this.stockQuantity >= quantity",
+        "replace": "this.stockQuantity > quantity"
+      },
+      {
+        "file": "src/main/java/com/ecommerce/model/Product.java",
+        "find": "            this.stockQuantity -= quantity;",
+        "replace": "            this.stockQuantity += quantity;"
+      },
+      {
+        "file": "src/main/java/com/ecommerce/model/Product.java",
+        "find": "return this.stockQuantity != null && this.stockQuantity >= quantity;",
+        "replace": "return this.stockQuantity == null || this.stockQuantity >= quantity;"
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "java-I1-01",
+  "category": "I1",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Bug report: when a cart contains more than one item, the order total returned by `OrderService.createOrder` only reflects the last item instead of the sum of all items. Fix the bug.",
+  "setup": [
+    {
+      "file": "src/main/java/com/ecommerce/service/OrderService.java",
+      "find": "            totalAmount += subtotal;",
+      "replace": "            totalAmount = subtotal;"
+    }
+  ],
+  "gold_files": [
+    "src/main/java/com/ecommerce/service/OrderService.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/main/java/com/ecommerce/service/OrderService.java",
+      "instruction": "Accumulate totalAmount over all items."
+    }
+  ]
+}

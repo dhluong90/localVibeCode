@@ -1,0 +1,24 @@
+{
+  "id": "py-I1-01",
+  "category": "I1",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Bug report: `validate_order` in validators.py accepts orders whose amount is exactly 0. Orders with amount 0 must be rejected with a ValueError, just like negative amounts. Fix the bug.",
+  "setup": [
+    {
+      "file": "validators.py",
+      "find": "    if order.amount <= 0:",
+      "replace": "    if order.amount < 0:"
+    }
+  ],
+  "gold_files": [
+    "validators.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "validators.py",
+      "instruction": "Make the amount check reject amount <= 0 with ValueError."
+    }
+  ]
+}

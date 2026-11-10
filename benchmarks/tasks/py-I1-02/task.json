@@ -1,0 +1,24 @@
+{
+  "id": "py-I1-02",
+  "category": "I1",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Bug report: after checkout, `PaymentGateway.ledger` is keyed by the customer id instead of the order id, so two orders from the same customer overwrite each other in the ledger. The ledger must map order_id -> charged amount. Fix the bug.",
+  "setup": [
+    {
+      "file": "gateways/payment_gateway.py",
+      "find": "self.ledger[order.order_id] = rounded",
+      "replace": "self.ledger[order.customer_id] = rounded"
+    }
+  ],
+  "gold_files": [
+    "gateways/payment_gateway.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "gateways/payment_gateway.py",
+      "instruction": "Key the ledger by order.order_id."
+    }
+  ]
+}

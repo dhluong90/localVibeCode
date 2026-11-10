@@ -1,0 +1,39 @@
+{
+  "id": "java-T1-02",
+  "category": "T1",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "M",
+  "prompt": "Write JUnit 5 unit tests for `OrderService.createOrder` in a new file src/test/java/com/ecommerce/service/OrderServiceCreateOrderTest.java. Use a real `ProductRepository` (call `save` to add products). Cover: total amount for a multi-item cart, stock deduction, insufficient stock, unknown product, empty cart, and blank customer fields.",
+  "setup": [],
+  "gold_files": [
+    "src/test/java/com/ecommerce/service/OrderServiceCreateOrderTest.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/test/java/com/ecommerce/service/OrderServiceCreateOrderTest.java",
+      "instruction": "Write the JUnit 5 tests listed in the requirement."
+    }
+  ],
+  "t1": {
+    "test_file": "src/test/java/com/ecommerce/service/OrderServiceCreateOrderTest.java",
+    "min_mutation_score": 0.67,
+    "mutants": [
+      {
+        "file": "src/main/java/com/ecommerce/service/OrderService.java",
+        "find": "            totalAmount += subtotal;",
+        "replace": "            totalAmount = subtotal;"
+      },
+      {
+        "file": "src/main/java/com/ecommerce/service/OrderService.java",
+        "find": "            product.deductStock(item.getQuantity());\n",
+        "replace": ""
+      },
+      {
+        "file": "src/main/java/com/ecommerce/service/OrderService.java",
+        "find": "        if (request.getCustomerName().isBlank() || request.getCustomerEmail().isBlank() || request.getShippingAddress().isBlank()) {",
+        "replace": "        if (false) {"
+      }
+    ]
+  }
+}

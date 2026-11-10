@@ -1,0 +1,23 @@
+{
+  "id": "py-I3-02",
+  "category": "I3",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "M",
+  "prompt": "Report charged amounts in USD. Create a new module services/fx_rates.py with a function `to_usd(amount: float, currency: str) -> float` using these fixed rates to USD: USD 1.0, EUR 1.10, SGD 0.75, VND 0.00004; round the result to 2 decimals and raise ValueError for unknown currencies. Then update `OrderService.checkout` in services/order_service.py to add a `charged_amount_usd` key to its result, computed from the charged amount and the order currency.",
+  "setup": [],
+  "gold_files": [
+    "services/fx_rates.py",
+    "services/order_service.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "services/fx_rates.py",
+      "instruction": "Create the module with RATES_TO_USD and to_usd()."
+    },
+    {
+      "file": "services/order_service.py",
+      "instruction": "Import to_usd and add 'charged_amount_usd' to the checkout result."
+    }
+  ]
+}

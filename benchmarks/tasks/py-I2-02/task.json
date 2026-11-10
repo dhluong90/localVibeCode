@@ -1,0 +1,18 @@
+{
+  "id": "py-I2-02",
+  "category": "I2",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "In validators.py, add a function `validate_customer_tier(tier: str) -> bool` that returns True for the supported tiers STANDARD, VIP and ENTERPRISE and raises ValueError for any other value. `validate_order` must also call it so that orders with an unsupported customer_tier are rejected.",
+  "setup": [],
+  "gold_files": [
+    "validators.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "validators.py",
+      "instruction": "Add validate_customer_tier and call it from validate_order."
+    }
+  ]
+}

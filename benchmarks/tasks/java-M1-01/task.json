@@ -1,0 +1,24 @@
+{
+  "id": "java-M1-01",
+  "category": "M1",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "M",
+  "prompt": "CI is failing on a new integration check: a checkout with two different products (2 x 10.0 and 3 x 5.0, both added with `CheckoutRequest.addItem`) produces an order with only one item and a total of 15.0 instead of 35.0. Find the root cause and fix it.",
+  "setup": [
+    {
+      "file": "src/main/java/com/ecommerce/dto/CheckoutRequest.java",
+      "find": "        if (this.items == null) {\n            this.items = new java.util.ArrayList<>();\n        }\n",
+      "replace": "        this.items = new java.util.ArrayList<>();\n"
+    }
+  ],
+  "gold_files": [
+    "src/main/java/com/ecommerce/dto/CheckoutRequest.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/main/java/com/ecommerce/dto/CheckoutRequest.java",
+      "instruction": "addItem must only create the list when it is null."
+    }
+  ]
+}

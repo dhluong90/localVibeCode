@@ -1,0 +1,27 @@
+{
+  "id": "py-M1-01",
+  "category": "M1",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "CI is failing. `tests/test_orders.py::TestEnterpriseOrderService::test_standard_order_checkout` fails with `AssertionError: 90.0 != 100.0`: a standard order created without an explicit tier is being discounted. Find the root cause and fix it. Do not modify the tests.",
+  "setup": [
+    {
+      "file": "models.py",
+      "find": "customer_tier: str = \"STANDARD\"",
+      "replace": "customer_tier: str = \"VIP\""
+    }
+  ],
+  "gold_files": [
+    "models.py"
+  ],
+  "fail_to_pass_base": [
+    "tests/test_orders.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "models.py",
+      "instruction": "Restore the default customer_tier to 'STANDARD'."
+    }
+  ]
+}

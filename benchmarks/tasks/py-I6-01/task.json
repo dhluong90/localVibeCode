@@ -1,0 +1,23 @@
+{
+  "id": "py-I6-01",
+  "category": "I6",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "M",
+  "prompt": "Change the contract of `PaymentGateway.charge` in gateways/payment_gateway.py: instead of returning the transaction id string, it must return a `ChargeResult` dataclass (defined in the same module) with fields `tx_id: str` and `amount: float` (the rounded charged amount). Update every caller so that `OrderService.checkout` keeps returning exactly the same dictionary as before.",
+  "setup": [],
+  "gold_files": [
+    "gateways/payment_gateway.py",
+    "services/order_service.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "gateways/payment_gateway.py",
+      "instruction": "Add ChargeResult dataclass; charge() returns it."
+    },
+    {
+      "file": "services/order_service.py",
+      "instruction": "Use charge(...).tx_id so the checkout dict is unchanged."
+    }
+  ]
+}

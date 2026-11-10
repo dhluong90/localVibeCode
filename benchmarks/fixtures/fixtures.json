@@ -1,0 +1,14 @@
+{
+  "py_orders": {
+    "language": "python",
+    "test_dir": "tests",
+    "test_cmd": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"],
+    "source": "demo_enterprise_repo"
+  },
+  "java_shop": {
+    "language": "java",
+    "test_dir": "src/test/java",
+    "test_cmd": ["mvn", "-o", "-q", "test"],
+    "source": "apps/ecommerce_app/backend"
+  }
+}

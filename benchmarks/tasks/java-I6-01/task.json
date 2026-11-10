@@ -1,0 +1,23 @@
+{
+  "id": "java-I6-01",
+  "category": "I6",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "M",
+  "prompt": "Simplify the `OrderItem` contract: replace the constructor `OrderItem(Product product, Integer quantity, double subtotal)` with `OrderItem(Product product, Integer quantity)` that computes the subtotal itself (unit price x quantity). Remove the old 3-argument constructor and update every caller. Order totals must not change.",
+  "setup": [],
+  "gold_files": [
+    "src/main/java/com/ecommerce/model/OrderItem.java",
+    "src/main/java/com/ecommerce/service/OrderService.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/main/java/com/ecommerce/model/OrderItem.java",
+      "instruction": "Replace the (Product, Integer, double) constructor with (Product, Integer)."
+    },
+    {
+      "file": "src/main/java/com/ecommerce/service/OrderService.java",
+      "instruction": "Call the new 2-argument OrderItem constructor."
+    }
+  ]
+}

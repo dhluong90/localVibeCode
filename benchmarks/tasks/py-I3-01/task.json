@@ -1,0 +1,28 @@
+{
+  "id": "py-I3-01",
+  "category": "I3",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "M",
+  "prompt": "Add coupon support. Add an optional field `coupon_code: Optional[str] = None` to the `Order` dataclass in models.py. In validators.py, `validate_order` must raise ValueError if coupon_code is set to anything other than a supported coupon; the only supported coupon is 'SAVE10'. In services/order_service.py, `calculate_payable_amount` must subtract a flat 10.0 from the amount after the tier discount when coupon_code is 'SAVE10' (result rounded to 2 decimals). Add a unit test for the new behavior.",
+  "setup": [],
+  "gold_files": [
+    "models.py",
+    "validators.py",
+    "services/order_service.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "models.py",
+      "instruction": "Add `coupon_code: Optional[str] = None` as the last field of Order."
+    },
+    {
+      "file": "validators.py",
+      "instruction": "Reject coupon codes other than None or 'SAVE10' with ValueError."
+    },
+    {
+      "file": "services/order_service.py",
+      "instruction": "Subtract 10.0 after tier discount for 'SAVE10', round to 2 decimals."
+    }
+  ]
+}

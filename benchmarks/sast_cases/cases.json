@@ -1,0 +1,72 @@
+[
+  {
+    "file": "py_eval_input.py",
+    "vulnerable": true,
+    "note": "eval on user input"
+  },
+  {
+    "file": "py_shell_true.py",
+    "vulnerable": true,
+    "note": "subprocess with shell=True"
+  },
+  {
+    "file": "py_shell_true_spaced.py",
+    "vulnerable": true,
+    "note": "shell = True with spaces, multi-line"
+  },
+  {
+    "file": "py_os_system.py",
+    "vulnerable": true,
+    "note": "os.system command injection"
+  },
+  {
+    "file": "py_pickle_loads.py",
+    "vulnerable": true,
+    "note": "unsafe deserialization"
+  },
+  {
+    "file": "py_yaml_unsafe.py",
+    "vulnerable": true,
+    "note": "unsafe YAML loader"
+  },
+  {
+    "file": "RuntimeExec.java",
+    "vulnerable": true,
+    "note": "Runtime.exec command injection"
+  },
+  {
+    "file": "SqlConcat.java",
+    "vulnerable": true,
+    "note": "SQL injection via concatenation"
+  },
+  {
+    "file": "py_literal_eval.py",
+    "vulnerable": false,
+    "note": "ast.literal_eval is safe"
+  },
+  {
+    "file": "py_model_eval.py",
+    "vulnerable": false,
+    "note": "ML model.eval() mode switch"
+  },
+  {
+    "file": "py_comment_mention.py",
+    "vulnerable": false,
+    "note": "comment mentions eval("
+  },
+  {
+    "file": "py_safe_subprocess.py",
+    "vulnerable": false,
+    "note": "argument-list subprocess"
+  },
+  {
+    "file": "SafeExit.java",
+    "vulnerable": false,
+    "note": "comment mentions System.exit("
+  },
+  {
+    "file": "PreparedQuery.java",
+    "vulnerable": false,
+    "note": "parameterised query"
+  }
+]

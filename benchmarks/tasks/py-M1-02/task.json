@@ -1,0 +1,24 @@
+{
+  "id": "py-M1-02",
+  "category": "M1",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Production incident: checking out any EUR order fails. Stack trace:\n  File \"services/order_service.py\", in checkout: payable = self.calculate_payable_amount(order)\n  File \"services/order_service.py\", in calculate_payable_amount: validate_order(order)\nValueError: Unsupported currency: EUR\nEUR is an officially supported currency (together with USD, VND and SGD). Find the root cause and fix it.",
+  "setup": [
+    {
+      "file": "validators.py",
+      "find": "SUPPORTED_CURRENCIES = {\"USD\", \"EUR\", \"VND\", \"SGD\"}",
+      "replace": "SUPPORTED_CURRENCIES = {\"USD\", \"VND\", \"SGD\"}"
+    }
+  ],
+  "gold_files": [
+    "validators.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "validators.py",
+      "instruction": "Add EUR back to SUPPORTED_CURRENCIES."
+    }
+  ]
+}

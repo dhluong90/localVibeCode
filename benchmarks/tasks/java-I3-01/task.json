@@ -1,0 +1,23 @@
+{
+  "id": "java-I3-01",
+  "category": "I3",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "M",
+  "prompt": "Add a product search API. (1) In `ProductRepository` add `public List<Product> searchByName(String keyword)` returning products whose name contains the keyword (case-insensitive), sorted by name ascending; a null or blank keyword returns an empty list. (2) In `ProductController` add `GET /api/products/search?q=<keyword>` that returns 200 with the matching products as JSON, or 400 Bad Request when q is missing or blank.",
+  "setup": [],
+  "gold_files": [
+    "src/main/java/com/ecommerce/repository/ProductRepository.java",
+    "src/main/java/com/ecommerce/controller/ProductController.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/main/java/com/ecommerce/repository/ProductRepository.java",
+      "instruction": "Add searchByName(String keyword)."
+    },
+    {
+      "file": "src/main/java/com/ecommerce/controller/ProductController.java",
+      "instruction": "Add GET /search endpoint delegating to productRepository.searchByName, 400 on blank q."
+    }
+  ]
+}

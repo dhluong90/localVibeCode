@@ -1,0 +1,18 @@
+{
+  "id": "py-I2-01",
+  "category": "I2",
+  "fixture": "py_orders",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Add a method `refund(self, order_id: str) -> float` to `PaymentGateway` in gateways/payment_gateway.py. It removes the order's entry from the ledger and returns the refunded amount. If the order was never charged (it is not in the ledger), raise ValueError.",
+  "setup": [],
+  "gold_files": [
+    "gateways/payment_gateway.py"
+  ],
+  "oracle_plan": [
+    {
+      "file": "gateways/payment_gateway.py",
+      "instruction": "Add refund(order_id) -> float as described."
+    }
+  ]
+}

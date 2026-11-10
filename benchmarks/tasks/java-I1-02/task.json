@@ -1,0 +1,24 @@
+{
+  "id": "java-I1-02",
+  "category": "I1",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Bug report: customers cannot buy the last remaining units of a product. Ordering exactly the quantity that is in stock fails with 'Insufficient stock'. Fix the bug.",
+  "setup": [
+    {
+      "file": "src/main/java/com/ecommerce/model/Product.java",
+      "find": "this.stockQuantity >= quantity",
+      "replace": "this.stockQuantity > quantity"
+    }
+  ],
+  "gold_files": [
+    "src/main/java/com/ecommerce/model/Product.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/main/java/com/ecommerce/model/Product.java",
+      "instruction": "hasStock must return true when stockQuantity >= quantity."
+    }
+  ]
+}

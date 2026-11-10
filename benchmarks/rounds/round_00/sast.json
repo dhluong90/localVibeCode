@@ -1,0 +1,122 @@
+{
+  "vulnerable": 8,
+  "detected": 3,
+  "recall": 0.375,
+  "safe": 6,
+  "false_positives": 4,
+  "fp_rate": 0.667,
+  "cases": [
+    {
+      "file": "py_eval_input.py",
+      "vulnerable": true,
+      "note": "eval on user input",
+      "flagged": true,
+      "syntax_ok": true,
+      "message": "Enterprise Security Violation in `py_eval_input.py` line 2: Forbidden pattern `eval(` detected."
+    },
+    {
+      "file": "py_shell_true.py",
+      "vulnerable": true,
+      "note": "subprocess with shell=True",
+      "flagged": true,
+      "syntax_ok": true,
+      "message": "Enterprise Security Violation in `py_shell_true.py` line 5: Forbidden pattern `shell=True` detected."
+    },
+    {
+      "file": "py_shell_true_spaced.py",
+      "vulnerable": true,
+      "note": "shell = True with spaces, multi-line",
+      "flagged": false,
+      "syntax_ok": true,
+      "message": ""
+    },
+    {
+      "file": "py_os_system.py",
+      "vulnerable": true,
+      "note": "os.system command injection",
+      "flagged": false,
+      "syntax_ok": true,
+      "message": ""
+    },
+    {
+      "file": "py_pickle_loads.py",
+      "vulnerable": true,
+      "note": "unsafe deserialization",
+      "flagged": false,
+      "syntax_ok": true,
+      "message": ""
+    },
+    {
+      "file": "py_yaml_unsafe.py",
+      "vulnerable": true,
+      "note": "unsafe YAML loader",
+      "flagged": false,
+      "syntax_ok": true,
+      "message": ""
+    },
+    {
+      "file": "RuntimeExec.java",
+      "vulnerable": true,
+      "note": "Runtime.exec command injection",
+      "flagged": true,
+      "syntax_ok": true,
+      "message": "Enterprise Security Violation in `RuntimeExec.java` line 3: Forbidden pattern `exec(` detected."
+    },
+    {
+      "file": "SqlConcat.java",
+      "vulnerable": true,
+      "note": "SQL injection via concatenation",
+      "flagged": false,
+      "syntax_ok": true,
+      "message": ""
+    },
+    {
+      "file": "py_literal_eval.py",
+      "vulnerable": false,
+      "note": "ast.literal_eval is safe",
+      "flagged": true,
+      "syntax_ok": true,
+      "message": "Enterprise Security Violation in `py_literal_eval.py` line 5: Forbidden pattern `eval(` detected."
+    },
+    {
+      "file": "py_model_eval.py",
+      "vulnerable": false,
+      "note": "ML model.eval() mode switch",
+      "flagged": true,
+      "syntax_ok": true,
+      "message": "Enterprise Security Violation in `py_model_eval.py` line 2: Forbidden pattern `eval(` detected."
+    },
+    {
+      "file": "py_comment_mention.py",
+      "vulnerable": false,
+      "note": "comment mentions eval(",
+      "flagged": true,
+      "syntax_ok": true,
+      "message": "Enterprise Security Violation in `py_comment_mention.py` line 2: Forbidden pattern `eval(` detected."
+    },
+    {
+      "file": "py_safe_subprocess.py",
+      "vulnerable": false,
+      "note": "argument-list subprocess",
+      "flagged": false,
+      "syntax_ok": true,
+      "message": ""
+    },
+    {
+      "file": "SafeExit.java",
+      "vulnerable": false,
+      "note": "comment mentions System.exit(",
+      "flagged": true,
+      "syntax_ok": true,
+      "message": "Enterprise Security Violation in `SafeExit.java` line 2: Forbidden pattern `System.exit(` detected."
+    },
+    {
+      "file": "PreparedQuery.java",
+      "vulnerable": false,
+      "note": "parameterised query",
+      "flagged": false,
+      "syntax_ok": true,
+      "message": ""
+    }
+  ]
+}

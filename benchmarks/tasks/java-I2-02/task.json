@@ -1,0 +1,18 @@
+{
+  "id": "java-I2-02",
+  "category": "I2",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "S",
+  "prompt": "Add a method `public List<Order> getOrdersByCustomerEmail(String email)` to `OrderService` that returns all orders placed with that customer email (case-insensitive match), sorted by order id ascending. Return an empty list when there are none.",
+  "setup": [],
+  "gold_files": [
+    "src/main/java/com/ecommerce/service/OrderService.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/main/java/com/ecommerce/service/OrderService.java",
+      "instruction": "Add getOrdersByCustomerEmail as described."
+    }
+  ]
+}

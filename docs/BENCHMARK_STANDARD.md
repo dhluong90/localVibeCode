@@ -150,25 +150,31 @@ Mã task: `<Phase><số>`. Cột **Kỳ vọng** là mục tiêu nghiệm thu; c
 
 ### 4.2 Định dạng một task instance
 
-```yaml
-id: I3-java-003
-category: I3
-repo: sample_java_repo
-base_commit: <sha>
-difficulty: M            # S / M / L (theo số file gold & LOC thay đổi)
-split: dev               # dev | test
-prompt: >
-  Thêm trường `loyaltyTier` cho Customer, áp dụng giảm giá 5% cho tier GOLD
-  trong use case tạo đơn, cập nhật REST controller.
-gold_files:              # dùng cho scope precision/recall, KHÔNG đưa cho agent
-  - clean-architecture-domain/src/main/java/.../Customer.java
-  - clean-architecture-usecases/src/main/java/.../CreateOrder.java
-hidden_tests:            # copy vào workspace SAU khi agent chạy xong
-  - path: .../CreateOrderLoyaltyTest.java
-verify_cmd: ["mvn", "-q", "test"]
-expected_level: { "qwen2.5-coder:7b": L2, "qwen2.5-coder:14b": L3 }
-human_checkpoints: [plan, final_diff]   # cho L3
+Mỗi task là một thư mục `benchmarks/tasks/<id>/`:
+
 ```
+task.json        # định nghĩa task (bên dưới)
+hidden/          # hidden tests — copy vào workspace SAU khi agent chạy xong, agent không bao giờ thấy
+reference/       # lời giải tham chiếu — dùng để tự kiểm chứng task (`validate`)
+```
+
+```json
+{
+  "id": "java-I3-02",
+  "category": "I3",
+  "fixture": "java_shop",              // repo nguồn đóng băng trong benchmarks/fixtures/
+  "split": "dev",                      // dev | test
+  "difficulty": "M",                   // S / M / L
+  "prompt": "Add order cancellation ...",
+  "setup": [{"file": "...", "find": "...", "replace": "..."}],   // cài lỗi (I1, M1)
+  "gold_files": ["src/main/java/.../OrderService.java", "..."],  // scope P/R, KHÔNG đưa cho agent (trừ Oracle)
+  "oracle_plan": [{"file": "...", "instruction": "..."}],        // plan chuẩn cho cấu hình Oracle
+  "fail_to_pass_base": ["OrderServiceTest"],                     // test có sẵn đang fail do lỗi cài (M1)
+  "t1": {"test_file": "...", "min_mutation_score": 0.67, "mutants": [{"file": "...", "find": "...", "replace": "..."}]}
+}
+```
+
+**Điều kiện hợp lệ của task** (kiểm tra bằng `python -m localvibecode.bench validate`): hidden tests **fail** ở trạng thái ban đầu và **pass** với lời giải tham chiếu, không regression; với T1, test tham chiếu phải pass trên code gốc và đạt ngưỡng mutation score.
 
 ### 4.3 Quy mô & phân bổ
 
@@ -182,7 +188,7 @@ human_checkpoints: [plan, final_diff]   # cho L3
 | Tham số | Giá trị |
 |---|---|
 | Lặp mỗi instance | `k = 5` |
-| Cách ly | Mỗi run một git worktree sạch tại `base_commit` |
+| Cách ly | Mỗi run một bản sao sạch của fixture (đã áp `setup`), có git riêng để lấy diff; chạy trong subprocess riêng với timeout |
 | Nhiệt độ / seed | Theo `localvibecode.json`, ghi lại seed từng run |
 | Timeout | 15 phút / run |
 | Log | Raw log (prompt, response, diff, verifier output) lưu local tại `benchmarks/rounds/round_XX/runs/<run_id>/` — **không commit** (gitignore). Chỉ commit kết quả tổng hợp của vòng (Mục 8) |

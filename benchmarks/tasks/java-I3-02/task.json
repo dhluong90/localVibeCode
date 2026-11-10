@@ -1,0 +1,23 @@
+{
+  "id": "java-I3-02",
+  "category": "I3",
+  "fixture": "java_shop",
+  "split": "dev",
+  "difficulty": "M",
+  "prompt": "Add order cancellation. (1) In `OrderService` add `public Order cancelOrder(Long id)`: it sets the order status to \"CANCELLED\" and restores the stock of every product in the order (add back each item's quantity). Throw `IllegalArgumentException` if the order does not exist and `IllegalStateException` if it is already cancelled. (2) In `OrderController` add `POST /api/orders/{id}/cancel` returning 200 with the cancelled order, 404 if the order does not exist, and 409 Conflict if it is already cancelled.",
+  "setup": [],
+  "gold_files": [
+    "src/main/java/com/ecommerce/service/OrderService.java",
+    "src/main/java/com/ecommerce/controller/OrderController.java"
+  ],
+  "oracle_plan": [
+    {
+      "file": "src/main/java/com/ecommerce/service/OrderService.java",
+      "instruction": "Add cancelOrder(Long id) restoring stock and setting status CANCELLED."
+    },
+    {
+      "file": "src/main/java/com/ecommerce/controller/OrderController.java",
+      "instruction": "Add POST /{id}/cancel mapping exceptions to 404 / 409."
+    }
+  ]
+}
