@@ -1,101 +1,106 @@
 {
   "k": 1,
-  "total_runs": 11,
-  "task_prefix": "java-",
+  "total_runs": 22,
+  "task_prefix": "",
   "models": {
     "qwen3:14b": {
       "OC": {
         "ALL": {
-          "instances": 11,
-          "runs": 11,
-          "resolve_at_1": 0.636,
+          "instances": 22,
+          "runs": 22,
+          "resolve_at_1": 0.318,
           "resolve_ci95": [
-            0.354,
-            0.848
+            0.164,
+            0.527
           ],
-          "pass_k": 0.636,
-          "pass_k_instances": 11,
-          "regression_rate": 0.091,
-          "scope_precision": 0.967,
-          "scope_recall": 0.909,
+          "pass_k": 0.318,
+          "pass_k_instances": 22,
+          "regression_rate": 0.136,
+          "scope_precision": 0.976,
+          "scope_recall": 0.602,
           "mutation_score": 0.834,
-          "mean_agent_sec": 296.991,
-          "mean_prompt_tokens": 271953.273,
-          "mean_completion_tokens": 1826.545,
+          "mean_agent_sec": 284.859,
+          "mean_prompt_tokens": 254310.318,
+          "mean_completion_tokens": 1721.682,
           "failure_tags": {
-            "M1": 2,
-            "M2": 1,
-            "M4": 1
+            "M4": 7,
+            "M1": 5,
+            "M2": 3
+          },
+          "harness_failure_share": 0.0,
+          "level": "<L2"
+        },
+        "I1": {
+          "instances": 4,
+          "runs": 4,
+          "resolve_at_1": 0.5,
+          "resolve_ci95": [
+            0.15,
+            0.85
+          ],
+          "pass_k": 0.5,
+          "pass_k_instances": 4,
+          "regression_rate": 0.0,
+          "scope_precision": 1.0,
+          "scope_recall": 0.5,
+          "mutation_score": null,
+          "mean_agent_sec": 192.35,
+          "mean_prompt_tokens": 164620.75,
+          "mean_completion_tokens": 934.75,
+          "failure_tags": {
+            "M4": 2
           },
           "harness_failure_share": 0.0,
           "level": "L2"
         },
-        "I1": {
-          "instances": 2,
-          "runs": 2,
-          "resolve_at_1": 1.0,
-          "resolve_ci95": [
-            0.342,
-            1.0
-          ],
-          "pass_k": 1.0,
-          "pass_k_instances": 2,
-          "regression_rate": 0.0,
-          "scope_precision": 1.0,
-          "scope_recall": 1.0,
-          "mutation_score": null,
-          "mean_agent_sec": 179.2,
-          "mean_prompt_tokens": 123453.0,
-          "mean_completion_tokens": 835.5,
-          "failure_tags": {},
-          "harness_failure_share": null,
-          "level": "L4"
-        },
         "I2": {
-          "instances": 2,
-          "runs": 2,
-          "resolve_at_1": 0.5,
+          "instances": 3,
+          "runs": 3,
+          "resolve_at_1": 0.333,
           "resolve_ci95": [
-            0.095,
-            0.905
+            0.061,
+            0.792
           ],
-          "pass_k": 0.5,
-          "pass_k_instances": 2,
-          "regression_rate": 0.5,
+          "pass_k": 0.333,
+          "pass_k_instances": 3,
+          "regression_rate": 0.333,
           "scope_precision": 1.0,
           "scope_recall": 1.0,
           "mutation_score": null,
-          "mean_agent_sec": 215.65,
-          "mean_prompt_tokens": 186979.0,
-          "mean_completion_tokens": 1201.5,
+          "mean_agent_sec": 259.333,
+          "mean_prompt_tokens": 227119.333,
+          "mean_completion_tokens": 1622.333,
           "failure_tags": {
+            "M1": 1,
             "M2": 1
           },
           "harness_failure_share": 0.0,
           "level": "<L2"
         },
         "I3": {
-          "instances": 2,
-          "runs": 2,
-          "resolve_at_1": 0.5,
+          "instances": 6,
+          "runs": 6,
+          "resolve_at_1": 0.167,
           "resolve_ci95": [
-            0.095,
-            0.905
+            0.03,
+            0.564
           ],
-          "pass_k": 0.5,
-          "pass_k_instances": 2,
-          "regression_rate": 0.0,
-          "scope_precision": 0.834,
-          "scope_recall": 1.0,
+          "pass_k": 0.167,
+          "pass_k_instances": 6,
+          "regression_rate": 0.333,
+          "scope_precision": 0.917,
+          "scope_recall": 0.542,
           "mutation_score": null,
-          "mean_agent_sec": 309.45,
-          "mean_prompt_tokens": 246246.0,
-          "mean_completion_tokens": 2072.0,
+          "mean_agent_sec": 359.383,
+          "mean_prompt_tokens": 277100.333,
+          "mean_completion_tokens": 2338.5,
           "failure_tags": {
-            "M1": 1
+            "M2": 2,
+            "M1": 2,
+            "M4": 1
           },
           "harness_failure_share": 0.0,
-          "level": "L2"
+          "level": "<L2"
         },
         "I6": {
           "instances": 1,
@@ -140,6 +145,30 @@
           },
           "harness_failure_share": 0.0,
           "level": "L2"
+        },
+        "Q3": {
+          "instances": 4,
+          "runs": 4,
+          "resolve_at_1": 0.0,
+          "resolve_ci95": [
+            0.0,
+            0.49
+          ],
+          "pass_k": 0.0,
+          "pass_k_instances": 4,
+          "regression_rate": 0.0,
+          "scope_precision": 1.0,
+          "scope_recall": 0.25,
+          "mutation_score": null,
+          "mean_agent_sec": 176.225,
+          "mean_prompt_tokens": 178563.5,
+          "mean_completion_tokens": 841.5,
+          "failure_tags": {
+            "M4": 3,
+            "M1": 1
+          },
+          "harness_failure_share": 0.0,
+          "level": "<L2"
         },
         "T1": {
           "instances": 2,

@@ -7,6 +7,8 @@ Kết quả từng vòng cải tiến harness. Tiêu chuẩn đo (task, level, m
 | Round | Ngày | Harness commit | Model | Action chính | resolve@1 (dev) | Harness gap (Oracle − H) | % lỗi do harness | Trạng thái |
 |---|---|---|---|---|---|---|---|---|
 | [00](round_00/README.md) | 2026-11-10 → 11 | `5d06d09` | 14B (Java) | A0, A13, A14 — đo baseline | H 55% · B0 91% · O 88% | +36 pp | 80% | Done |
+| [01-OC](round_01_opencode/README.md) | 2026-11-11 | `ec474f0` | qwen3:14b | Môi trường mới: OpenCode + proxy | Java 64% · Apollo 0/11 | — | — | Done |
+| [02](round_02_opencode_guided/) | 2026-11-12 | `e24e3d5` | qwen3:14b | OCVG: + vòng kiểm tra + hướng dẫn điều hướng | — | — | — | Running |
 
 ## Lộ trình
 
