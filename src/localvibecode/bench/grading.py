@@ -197,7 +197,8 @@ def _grade_t1(task: Task, fixture: Fixture, ws: Path, base: Path) -> Dict[str, o
             survived, _ = _run_single(fixture, repo, test_rel)
             killed += 0 if survived else 1
             (repo / mutant["file"]).write_text(original, encoding="utf-8")
-        score = killed / len(mutants) if mutants else 0.0
+        # A test file that already fails on correct code "kills" every mutant trivially.
+        score = killed / len(mutants) if mutants and passes else 0.0
         out["mutation_score"] = round(score, 3)
         out["t1_resolved"] = passes and score >= float(spec.get("min_mutation_score", 1.0))
     finally:

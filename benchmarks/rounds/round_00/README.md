@@ -43,21 +43,35 @@ Bộ 14 case (`benchmarks/sast_cases/`), chạy `ZeroTokenVerifier` hiện tại
 
 → Q2 hiện **chưa đạt** mức kỳ vọng L4. Action: A9.
 
-## Kết quả giữa kỳ (2026-11-10 17:30 — 28/396 run, chỉ 7B, k1, chỉ task Java)
+## Kết quả giữa kỳ #2 (2026-11-11 09:20 — 76/396 run)
 
-> Chưa đủ dữ liệu để kết luận level (n = 1–2 mỗi category, CI rất rộng). Chỉ dùng để định hướng.
+**Tiến độ:** 7B đã xong lượt k1 (22 task × 3 cấu hình); 14B mới 10/66 run của k1. Máy khởi động lại lúc 18:16 ngày 10/11 nên runner dừng ~15 h; đã chạy tiếp lúc 09:00 ngày 11/11 (resume, không mất kết quả). Dự kiến xong khoảng 21:00 ngày 11/11.
 
-| Cấu hình (7B, ALL) | resolve@1 (CI95) | Regression | Scope P/R | s/run |
-|---|---|---|---|---|
-| B0 — model trần | 40% (17–69%) | 30% | 0.65/0.65 | 40 |
-| H — localVibeCode | 44% (19–73%) | 33% | 0.63/0.67 | 155 |
-| O — Oracle (trần) | **89%** (56–98%) | 11% | 1.00/1.00 | 52 |
+> k = 1, n = 2–4 mỗi category → CI rất rộng, **chưa kết luận level**. Chỉ dùng để định hướng.
 
-- Harness gap (O − H) **+44 pp**; H − B0 chỉ **+4 pp** trong khi H chậm gấp ~4 lần.
-- **100% thất bại của H là do harness** (H1 ×3, H7 ×2 là nhãn chính).
-- **H7 xuất hiện ở cả 5/5 run H thất bại**: plan luôn thêm file test làm bước cuối, và test self-healing luôn sửa *file cuối cùng* → heal vào file test thay vì file gây lỗi.
-- **H1 ở 3/5**: plan chọn sai file. Với M1 (lỗi gốc ở file khác), plan không bao giờ chọn đúng file gốc (`Product.java`, `CheckoutRequest.java`); D1 plan precision 0.63 / recall 0.67.
-- Critic trả **PASS** cho một run thất bại (java-M1-02) → không tin được critic làm tín hiệu thành công (A10).
+### `qwen2.5-coder:7b`, k1, đủ 22 task
+
+| Category | B0 | H | O (trần) | O − H | H − B0 |
+|---|---|---|---|---|---|
+| I1 sửa bug 1 file | 75% | 75% | 100% | +25 pp | 0 |
+| I2 feature 1 file | 100% | 75% | 100% | +25 pp | −25 pp |
+| I3 xuyên tầng | 50% | 75% | 75% | 0 | +25 pp |
+| I6 đổi contract | 50% | 100% | 100% | 0 | +50 pp |
+| M1 lỗi gốc ở file khác | 25% | 25% | 100% | **+75 pp** | 0 |
+| T1 sinh unit test | 50% | **0%** | 75% | **+75 pp** | −50 pp |
+| **Tất cả** (CI95) | 59% (39–77%) | 55% (35–73%) | **91%** (72–98%) | **+36 pp** | −5 pp |
+| Regression | 14% | 23% | 4% | | |
+| Thời gian / run | 31 s | 144 s | 47 s | | |
+
+**Nhận định:**
+1. **H chưa tạo ra giá trị so với model trần** (55% vs 59%) trong khi chậm gấp ~4.6 lần và gây regression nhiều hơn. Nơi H thắng: I3, I6 (đổi contract nhiều file) — đúng chỗ blast-radius có ích.
+2. **Trần của 7B cao: 91%** khi được cấp đúng file + đúng plan + format code block + retry theo test. Harness gap +36 pp → còn nhiều dư địa cho harness, chưa chạm giới hạn model.
+3. **M1 (+75 pp):** plan của H không bao giờ chọn đúng file gốc (H1 ×3); heal luôn sửa file cuối cùng của plan (thường là file test) — H7.
+4. **T1 (0%) — phát hiện mới:** với yêu cầu "viết test", plan của H tách thành **6–8 bước cùng sửa một file test**; mỗi bước viết lại cả file trong context mới, nên kết quả cuối là file test fail ngay trên code đúng. Auto-tag ghi M1/M2 nhưng thực chất là lỗi plan (H1) — bổ sung luật tag ở Round 01.
+5. Critic trả PASS cho run thất bại (java-M1-02) → không dùng critic làm tín hiệu thành công (A10).
+6. 14B (10 run đầu, chỉ Java I1/I2): B0, H, O đều 100% — chưa đủ để so sánh.
+
+**Sửa bộ chấm trong vòng:** mutation score được tính cả khi test của agent fail trên code đúng (fail thì "giết" mọi mutant) → hiển thị 1.0 sai. Đã sửa (score = 0 khi test không pass trên code gốc) và vá 7 kết quả đã chạy; `resolved` không bị ảnh hưởng.
 
 ## Kết quả cuối
 _(Điền theo mẫu Mục 9 của tiêu chuẩn sau khi chạy xong.)_
