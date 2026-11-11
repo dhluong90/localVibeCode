@@ -6,7 +6,7 @@ set -e
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 MODEL="${LOCAL_AI_MODEL:-qwen3:14b}"
-CONTEXT="${LOCAL_AI_CONTEXT:-32768}"
+CONTEXT="${LOCAL_AI_CONTEXT:-40960}"
 PROXY_PORT="${LOCAL_AI_PROXY_PORT:-11435}"
 SHARE="$HOME/.local/share/local-ai"
 
@@ -58,7 +58,7 @@ cat > "$CONFIG_DIR/opencode.json" <<EOF
       "name": "Ollama (local, via repair proxy)",
       "options": { "baseURL": "http://localhost:${PROXY_PORT}/v1" },
       "models": {
-        "${MODEL}": { "name": "${MODEL} (local)", "tools": true, "limit": { "context": ${CONTEXT}, "output": 8192 } }
+        "${MODEL}": { "name": "${MODEL} (local)", "tools": true, "limit": { "context": ${CONTEXT}, "output": 4096 } }
       }
     }
   },

@@ -172,7 +172,7 @@ def _tail_relevant(out: str, limit: int = 5000) -> str:
 
 # ----------------------------------------------------------------------------- OC (OpenCode agent)
 
-OPENCODE_CONTEXT = 32768
+OPENCODE_CONTEXT = 40960  # Qwen3 native window; with 32k OpenCode compacted at ~24k input (8k reserved for output)
 
 
 def opencode_config(model: str, base_url: str = "http://localhost:11434/v1", context: int = OPENCODE_CONTEXT) -> Dict[str, Any]:
@@ -185,7 +185,7 @@ def opencode_config(model: str, base_url: str = "http://localhost:11434/v1", con
                 "name": "Ollama (local)",
                 "options": {"baseURL": base_url},
                 "models": {model: {"name": f"{model} (local)", "tools": True,
-                                   "limit": {"context": context, "output": 8192},
+                                   "limit": {"context": context, "output": 4096},
                                    # Qwen3 "thinking" cost ~2k output tokens per step (~2.5 min at 13 tok/s);
                                    # Ollama's OpenAI endpoint turns it off with reasoning_effort=none.
                                    "options": {"reasoningEffort": "none"}}},
@@ -236,10 +236,11 @@ def run_opencode(
     import subprocess
     import time as _time
 
-    proxy, port, proxy_log = _start_repair_proxy(ws.parent)
+    run_dir = Path(trace.get("_run_dir") or ws.parent)  # logs live with the run, not in the workspace dir
+    proxy, port, proxy_log = _start_repair_proxy(run_dir)
     # Config lives outside the workspace (OPENCODE_CONFIG): it stays out of the graded diff, and OpenCode
     # ignored an opencode.json that the VCS excluded.
-    config_file = ws.parent / "opencode.json"
+    config_file = run_dir / "opencode.json"
     config_file.write_text(
         _json.dumps(opencode_config(model, base_url=f"http://127.0.0.1:{port}/v1"), indent=2), encoding="utf-8")
     # OpenCode resolves its project from PWD, not the process cwd: pin both to the workspace.
@@ -258,7 +259,7 @@ def run_opencode(
         "Implement this in the repository. When you are done, make sure the code compiles and the relevant "
         f"tests pass. The relevant test command is: `{shlex.join(test_cmd)}`"  # quoted: zsh expands ** in -Dtest
     )
-    events_file = ws.parent / "opencode_events.jsonl"
+    events_file = run_dir / "opencode_events.jsonl"
     deadline = _time.time() + timeout
     base_cmd = ["opencode", "run", "--print-logs", "--log-level", "WARN", "--auto", "--format", "json",
                 "--dir", str(ws), "-m", f"ollama/{model}"]

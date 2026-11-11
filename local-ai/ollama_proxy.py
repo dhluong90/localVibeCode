@@ -67,7 +67,53 @@ def repair_string(value: str) -> Tuple[str, bool]:
     return ("".join(out), True) if changed else (value, False)
 
 
-def repair_arguments(arguments: str) -> Tuple[str, int]:
+def _indent(line: str) -> str:
+    return line[: len(line) - len(line.lstrip())]
+
+
+def anchor_edit(data: Dict[str, Any]) -> bool:
+    """Fuzzy-anchors an edit whose oldString is not an exact substring of the file (small models drift on
+    whitespace/indentation). If exactly one window of file lines matches oldString ignoring surrounding
+    whitespace, oldString becomes the file's exact text and newString is re-indented by the same offset."""
+    path, old, new = data.get("filePath"), data.get("oldString"), data.get("newString")
+    if not (isinstance(path, str) and isinstance(old, str) and isinstance(new, str) and old.strip()):
+        return False
+    try:
+        with open(path, encoding="utf-8") as f:
+            content = f.read()
+    except OSError:
+        return False
+    if old in content:
+        return False
+    old_lines = [l for l in old.split("\n")]
+    while old_lines and not old_lines[0].strip():
+        old_lines.pop(0)
+    while old_lines and not old_lines[-1].strip():
+        old_lines.pop()
+    if not old_lines:
+        return False
+    file_lines = content.split("\n")
+    want = [l.strip() for l in old_lines]
+    matches = [i for i in range(len(file_lines) - len(want) + 1)
+               if [l.strip() for l in file_lines[i:i + len(want)]] == want]
+    if len(matches) != 1:
+        return False
+    start = matches[0]
+    exact = "\n".join(file_lines[start:start + len(want)])
+    file_indent, model_indent = _indent(file_lines[start]), _indent(old_lines[0])
+    if file_indent != model_indent:
+        fixed = []
+        for line in new.split("\n"):
+            if line.startswith(model_indent):
+                fixed.append(file_indent + line[len(model_indent):])
+            else:
+                fixed.append(line)
+        new = "\n".join(fixed)
+    data["oldString"], data["newString"] = exact, new
+    return True
+
+
+def repair_arguments(arguments: str, tool_name: str = "") -> Tuple[str, int]:
     try:
         data = json.loads(arguments)
     except ValueError:
@@ -81,6 +127,8 @@ def repair_arguments(arguments: str) -> Tuple[str, int]:
             if changed:
                 data[key] = fixed
                 repairs += 1
+    if tool_name in ("edit", "") and anchor_edit(data):
+        repairs += 1
     return (json.dumps(data, ensure_ascii=False) if repairs else arguments), repairs
 
 
@@ -153,7 +201,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
         for choice in response.get("choices") or []:
             for tc in (choice.get("message") or {}).get("tool_calls") or []:
                 fn = tc.get("function") or {}
-                fn["arguments"], n = repair_arguments(fn.get("arguments", ""))
+                fn["arguments"], n = repair_arguments(fn.get("arguments", ""), fn.get("name", ""))
                 repairs += n
         self._log(model, time.time() - t0, response.get("usage") or {}, repairs)
         if not wants_stream:

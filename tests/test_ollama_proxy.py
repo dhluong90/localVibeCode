@@ -51,6 +51,35 @@ class RepairArgumentsTest(unittest.TestCase):
         self.assertEqual(proxy.repair_arguments("{not json"), ("{not json", 0))
 
 
+class AnchorEditTest(unittest.TestCase):
+    def setUp(self) -> None:
+        import tempfile
+        self.dir = tempfile.mkdtemp()
+        self.path = str(Path(self.dir) / "A.java")
+        Path(self.path).write_text(
+            "class A {\n    void f() {\n        int x = 1;\n        int y = 2;\n    }\n\n    void g() {\n        int x = 1;\n    }\n}\n")
+
+    def edit(self, old: str, new: str):
+        data = {"filePath": self.path, "oldString": old, "newString": new}
+        return proxy.anchor_edit(data), data
+
+    def test_exact_match_untouched(self) -> None:
+        self.assertFalse(self.edit("        int y = 2;", "        int y = 3;")[0])
+
+    def test_indentation_drift_is_anchored_and_reindented(self) -> None:
+        ok, data = self.edit("    int x = 1;\n    int y = 2;", "    int x = 1;\n    int y = 3;")
+        self.assertTrue(ok)
+        self.assertEqual(data["oldString"], "        int x = 1;\n        int y = 2;")
+        self.assertEqual(data["newString"], "        int x = 1;\n        int y = 3;")
+
+    def test_ambiguous_match_is_left_alone(self) -> None:
+        self.assertFalse(self.edit("int x = 1;", "int x = 5;")[0])  # appears in f() and g()
+
+    def test_missing_file_or_no_match(self) -> None:
+        self.assertFalse(proxy.anchor_edit({"filePath": "/nope", "oldString": "a", "newString": "b"}))
+        self.assertFalse(self.edit("int z = 9;", "int z = 0;")[0])
+
+
 class SseTest(unittest.TestCase):
     def test_tool_calls_are_replayed_with_indices(self) -> None:
         response = {"id": "c1", "model": "m", "choices": [{"message": {"role": "assistant", "tool_calls": [

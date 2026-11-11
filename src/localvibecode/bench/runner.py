@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -110,9 +111,12 @@ def run_one(ctx: BenchContext, task: Task, config: str, model: str, k: int, keep
     base = ctx.base_dir(task)
     out_dir = ctx.run_dir(model, config, task.id, k)
     out_dir.mkdir(parents=True, exist_ok=True)
-    ws = clone_workspace(base, out_dir / "ws")
+    # Short workspace path without spaces: agents copy absolute paths into tool calls, and a long path with
+    # spaces (".../AISDLC Solution/.claude/worktrees/...") was mis-copied in Round 02. Real repos have short paths.
+    ws_root = Path(os.environ.get("LVC_WS_ROOT", "/tmp/lvc-ws"))
+    ws = clone_workspace(base, ws_root / f"{model_slug(model)}-{config}-{task.id}-k{k}")
 
-    trace: Dict[str, Any] = {"llm_calls": []}
+    trace: Dict[str, Any] = {"llm_calls": [], "_run_dir": str(out_dir)}
     cfg = LocalVibeCodeConfig.load(ctx.project_root)
     t0 = time.time()
     try:
