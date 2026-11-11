@@ -125,6 +125,10 @@ def compute_baseline(task: Task, fixture: Fixture, base: Path) -> Dict[str, obje
     try:
         shutil.copytree(base, work / "repo")
         repo = work / "repo"
+        for rel, src in task.hidden_files().items():  # same test-support files as in grade()
+            if not is_runnable_test(src):
+                (repo / rel).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(src, repo / rel)
         units = base_test_units(fixture, base, task)
         res = run_units(fixture, repo, units, task)
         f2p_base = set(task.fail_to_pass_base)
@@ -161,6 +165,12 @@ def grade(task: Task, fixture: Fixture, ws: Path, base: Path, baseline: Dict[str
     #    before adding hidden tests (a non-compiling hidden test must not count as a regression).
     for rel in baseline["base_units"]:
         shutil.copy2(base / rel, ws / rel)
+    # Hidden test-support files (abstract base classes, fixtures) belong to the test change and are
+    # needed by existing tests too, so they go in before PASS_TO_PASS (as a test patch would).
+    for rel, src in task.hidden_files().items():
+        if not is_runnable_test(src):
+            (ws / rel).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, ws / rel)
     p2p = list(baseline["pass_to_pass"])
     p2p_res = run_units(fixture, ws, p2p, task) if p2p else {"compile_ok": True, "results": {}, "output": ""}
     result["pass_to_pass"] = {u: bool(p2p_res["results"].get(u, False)) for u in p2p}
