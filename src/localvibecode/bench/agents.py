@@ -12,6 +12,7 @@ edit format. H keeps its own JSON-constrained format: that is the design under t
 from __future__ import annotations
 
 import re
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -183,11 +184,39 @@ def opencode_config(model: str, base_url: str = "http://localhost:11434/v1", con
                 "name": "Ollama (local)",
                 "options": {"baseURL": base_url},
                 "models": {model: {"name": f"{model} (local)", "tools": True,
-                                   "limit": {"context": context, "output": 8192}}},
+                                   "limit": {"context": context, "output": 8192},
+                                   # Qwen3 "thinking" cost ~2k output tokens per step (~2.5 min at 13 tok/s);
+                                   # Ollama's OpenAI endpoint turns it off with reasoning_effort=none.
+                                   "options": {"reasoningEffort": "none"}}},
             }
         },
         "model": f"ollama/{model}",
     }
+
+
+PROXY_SCRIPT = Path(__file__).resolve().parents[3] / "local-ai" / "ollama_proxy.py"
+
+
+def _start_repair_proxy(run_dir: Path):
+    """Per-run tool-call repair proxy (local-ai/ollama_proxy.py) on a free port, logging to the run dir."""
+    import socket
+    import subprocess
+    import time as _time
+    import urllib.request
+
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        port = s.getsockname()[1]
+    log = run_dir / "proxy.jsonl"
+    proc = subprocess.Popen([sys.executable, str(PROXY_SCRIPT), "--port", str(port), "--log", str(log)],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    for _ in range(50):
+        try:
+            urllib.request.urlopen(f"http://127.0.0.1:{port}/v1/models", timeout=1).read()
+            break
+        except Exception:
+            _time.sleep(0.1)
+    return proc, port, log
 
 
 def run_opencode(
@@ -197,26 +226,46 @@ def run_opencode(
     import json as _json
     import subprocess
 
-    (ws / "opencode.json").write_text(_json.dumps(opencode_config(model), indent=2), encoding="utf-8")
-    exclude = ws / ".git" / "info" / "exclude"
-    exclude.parent.mkdir(parents=True, exist_ok=True)
-    with exclude.open("a", encoding="utf-8") as f:  # keep tool files out of the graded diff
-        f.write("\nopencode.json\n.opencode/\n")
+    import os
+
+    proxy, port, proxy_log = _start_repair_proxy(ws.parent)
+    # Config lives outside the workspace (OPENCODE_CONFIG): it stays out of the graded diff, and OpenCode
+    # ignored an opencode.json that git excluded.
+    config_file = ws.parent / "opencode.json"
+    config_file.write_text(
+        _json.dumps(opencode_config(model, base_url=f"http://127.0.0.1:{port}/v1"), indent=2), encoding="utf-8")
+    # OpenCode resolves its project from PWD, not the process cwd: pin both to the workspace.
+    env = dict(os.environ, OPENCODE_CONFIG=str(config_file), PWD=str(ws))
     prompt = (
         f"{task.prompt}\n\n"
         "Implement this in the repository. When you are done, make sure the code compiles and the relevant "
         f"tests pass. The relevant test command is: `{' '.join(task.effective_test_cmd(fixture))}`"
     )
-    cmd = ["opencode", "run", "--auto", "--format", "json", "-m", f"ollama/{model}", prompt]
+    cmd = ["opencode", "run", "--print-logs", "--log-level", "WARN", "--auto", "--format", "json", "--dir", str(ws),
+           "-m", f"ollama/{model}", prompt]
     trace["opencode_cmd"] = cmd[:-1] + ["<prompt>"]
     events_file = ws.parent / "opencode_events.jsonl"
     try:
         with events_file.open("w", encoding="utf-8") as out:
-            proc = subprocess.run(cmd, cwd=str(ws), stdout=out, stderr=subprocess.PIPE, text=True, timeout=timeout)
+            proc = subprocess.run(cmd, cwd=str(ws), stdout=out, stderr=subprocess.PIPE, text=True,
+                                  timeout=timeout, env=env)
         trace["opencode_rc"] = proc.returncode
         trace["opencode_stderr_tail"] = proc.stderr[-2000:]
     except subprocess.TimeoutExpired:
         trace["exception"] = f"opencode timeout after {timeout}s"
+    finally:
+        proxy.terminate()
+    calls = []
+    for line in proxy_log.read_text(encoding="utf-8").splitlines() if proxy_log.exists() else []:
+        try:
+            entry = _json.loads(line)
+        except ValueError:
+            continue
+        calls.append({"phase": "opencode", "prompt_tokens": entry.get("prompt_tokens") or 0,
+                      "completion_tokens": entry.get("completion_tokens") or 0,
+                      "elapsed_sec": entry.get("seconds"), "repairs": entry.get("repairs", 0)})
+    trace.setdefault("llm_calls", []).extend(calls)
+    trace["proxy_repairs"] = sum(c["repairs"] for c in calls)
     tools: Dict[str, int] = {}
     steps = 0
     for line in events_file.read_text(encoding="utf-8", errors="ignore").splitlines():
