@@ -168,6 +168,72 @@ def _tail_relevant(out: str, limit: int = 5000) -> str:
 # ----------------------------------------------------------------------------- H (localVibeCode)
 
 
+# ----------------------------------------------------------------------------- OC (OpenCode agent)
+
+OPENCODE_CONTEXT = 32768
+
+
+def opencode_config(model: str, base_url: str = "http://localhost:11434/v1", context: int = OPENCODE_CONTEXT) -> Dict[str, Any]:
+    """opencode.json pointing OpenCode at the local Ollama server (it does not auto-discover it)."""
+    return {
+        "$schema": "https://opencode.ai/config.json",
+        "provider": {
+            "ollama": {
+                "npm": "@ai-sdk/openai-compatible",
+                "name": "Ollama (local)",
+                "options": {"baseURL": base_url},
+                "models": {model: {"name": f"{model} (local)", "tools": True,
+                                   "limit": {"context": context, "output": 8192}}},
+            }
+        },
+        "model": f"ollama/{model}",
+    }
+
+
+def run_opencode(
+    task: Task, fixture: Fixture, ws: Path, model: str, trace: Dict[str, Any], timeout: int
+) -> None:
+    """Gives the ticket to OpenCode (headless, auto-approved) and lets it work in the workspace."""
+    import json as _json
+    import subprocess
+
+    (ws / "opencode.json").write_text(_json.dumps(opencode_config(model), indent=2), encoding="utf-8")
+    exclude = ws / ".git" / "info" / "exclude"
+    exclude.parent.mkdir(parents=True, exist_ok=True)
+    with exclude.open("a", encoding="utf-8") as f:  # keep tool files out of the graded diff
+        f.write("\nopencode.json\n.opencode/\n")
+    prompt = (
+        f"{task.prompt}\n\n"
+        "Implement this in the repository. When you are done, make sure the code compiles and the relevant "
+        f"tests pass. The relevant test command is: `{' '.join(task.effective_test_cmd(fixture))}`"
+    )
+    cmd = ["opencode", "run", "--auto", "--format", "json", "-m", f"ollama/{model}", prompt]
+    trace["opencode_cmd"] = cmd[:-1] + ["<prompt>"]
+    events_file = ws.parent / "opencode_events.jsonl"
+    try:
+        with events_file.open("w", encoding="utf-8") as out:
+            proc = subprocess.run(cmd, cwd=str(ws), stdout=out, stderr=subprocess.PIPE, text=True, timeout=timeout)
+        trace["opencode_rc"] = proc.returncode
+        trace["opencode_stderr_tail"] = proc.stderr[-2000:]
+    except subprocess.TimeoutExpired:
+        trace["exception"] = f"opencode timeout after {timeout}s"
+    tools: Dict[str, int] = {}
+    steps = 0
+    for line in events_file.read_text(encoding="utf-8", errors="ignore").splitlines():
+        try:
+            event = _json.loads(line)
+        except ValueError:
+            continue
+        kind = event.get("type", "")
+        steps += kind in ("step_start", "step-start")
+        part = event.get("part") or {}
+        tool = part.get("tool") or event.get("tool")
+        if tool and kind in ("tool_use", "tool", "tool-call", "tool_call"):
+            tools[tool] = tools.get(tool, 0) + 1
+    trace["opencode_tool_calls"] = tools
+    trace["opencode_steps"] = steps
+
+
 def run_harness(
     task: Task, fixture: Fixture, ws: Path, model: str, project_root: Path, trace: Dict[str, Any]
 ) -> None:

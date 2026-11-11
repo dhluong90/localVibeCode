@@ -2,19 +2,40 @@
   "py_orders": {
     "language": "python",
     "test_dir": "tests",
-    "test_cmd": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"],
+    "test_cmd": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_*.py"
+    ],
     "source": "demo_enterprise_repo"
   },
   "java_shop": {
     "language": "java",
     "test_dir": "src/test/java",
-    "test_cmd": ["mvn", "-o", "-q", "test"],
-    "source": "apps/ecommerce_app/backend"
+    "test_cmd": [
+      "mvn",
+      "-o",
+      "-q",
+      "test"
+    ],
+    "source": "apps/ecommerce_app/backend",
+    "run_timeout_sec": 1800
   },
   "apollo": {
     "language": "java",
     "test_dir": "src/test/java",
-    "test_cmd": ["mvn", "-o", "-q", "test", "-Dspotless.check.skip=true"],
+    "test_cmd": [
+      "mvn",
+      "-o",
+      "-q",
+      "test",
+      "-Dspotless.check.skip=true"
+    ],
     "path": "fixtures_cache/apollo",
     "large": true,
     "num_ctx": 16384,
