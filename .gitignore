@@ -55,3 +55,6 @@ benchmarks/rounds/*/runs/
 
 # Large-project fixtures are cloned here at a pinned commit (see benchmarks/fixtures/fixtures.json)
 benchmarks/fixtures_cache/
+
+# Personal Claude Code settings
+.claude/settings.local.json
