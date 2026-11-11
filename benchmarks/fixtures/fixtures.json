@@ -34,7 +34,8 @@
       "-o",
       "-q",
       "test",
-      "-Dspotless.check.skip=true"
+      "-Dspotless.check.skip=true",
+      "-Djacoco.skip=true"
     ],
     "path": "fixtures_cache/apollo",
     "large": true,

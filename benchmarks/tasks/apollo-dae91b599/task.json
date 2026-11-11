@@ -30,6 +30,7 @@
     "apollo-portal",
     "-am",
     "-Dspotless.check.skip=true",
+    "-Djacoco.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
   ],

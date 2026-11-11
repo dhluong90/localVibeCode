@@ -65,7 +65,9 @@ def _maven_scope(task: Optional[Task]) -> List[str]:
     """Multi-module repos: build only the task's modules and what they depend on."""
     if not task or not task.test_modules:
         return []
-    return ["-pl", ",".join(task.test_modules), "-am", "-Dspotless.check.skip=true"]
+    # jacoco.skip: JaCoCo cannot instrument JDK 27 classes and floods the output with errors (106 lines per
+    # module run) that sent agents chasing a non-problem; test results are unaffected.
+    return ["-pl", ",".join(task.test_modules), "-am", "-Dspotless.check.skip=true", "-Djacoco.skip=true"]
 
 
 def unit_name(fixture: Fixture, rel: str) -> str:

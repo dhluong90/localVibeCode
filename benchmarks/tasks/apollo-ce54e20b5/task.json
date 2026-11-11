@@ -41,6 +41,7 @@
     "apollo-audit/apollo-audit-api,apollo-audit/apollo-audit-impl",
     "-am",
     "-Dspotless.check.skip=true",
+    "-Djacoco.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.audit.**"
   ],

@@ -29,6 +29,7 @@ def main() -> None:
         mods = task["test_modules"]
         patterns = sorted({p + ".**" for m in mods for p in module_test_packages(repo, m)})
         task["test_cmd"] = ["mvn", "-o", "-q", "test", "-pl", ",".join(mods), "-am", "-Dspotless.check.skip=true",
+                            "-Djacoco.skip=true",
                             "-Dsurefire.failIfNoSpecifiedTests=false", "-Dtest=" + ",".join(patterns)]
         task_json.write_text(json.dumps(task, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(task["id"], " ".join(task["test_cmd"][4:]))

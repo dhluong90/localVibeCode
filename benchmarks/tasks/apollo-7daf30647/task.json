@@ -53,6 +53,7 @@
     "apollo-adminservice,apollo-biz,apollo-common,apollo-portal",
     "-am",
     "-Dspotless.check.skip=true",
+    "-Djacoco.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.adminservice.**,com.ctrip.framework.apollo.biz.**,com.ctrip.framework.apollo.common.**,com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
   ],

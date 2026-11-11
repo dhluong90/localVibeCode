@@ -41,6 +41,7 @@
     "apollo-biz,apollo-common",
     "-am",
     "-Dspotless.check.skip=true",
+    "-Djacoco.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.biz.**,com.ctrip.framework.apollo.common.**"
   ],

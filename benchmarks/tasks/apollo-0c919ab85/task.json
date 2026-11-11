@@ -35,6 +35,7 @@
     "apollo-configservice",
     "-am",
     "-Dspotless.check.skip=true",
+    "-Djacoco.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.configservice.**,com.ctrip.framework.apollo.metaservice.**"
   ],
