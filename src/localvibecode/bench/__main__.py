@@ -49,6 +49,8 @@ def main() -> None:
     p_rep = sub.add_parser("report", help="write summary.json and print Markdown tables")
     p_rep.add_argument("--round", required=True)
     p_rep.add_argument("--k", type=int, default=5)
+    p_rep.add_argument("--task-prefix", default="", help="only tasks whose id starts with this")
+    p_rep.add_argument("--models", default="", help="comma-separated models to include (default: all)")
 
     args = parser.parse_args()
     project_root = Path(args.project_root).resolve()
@@ -116,7 +118,8 @@ def main() -> None:
         sast = json.loads(sast_file.read_text()) if sast_file.exists() else None
         if sast:
             sast = {k: v for k, v in sast.items() if k != "cases"}
-        summary = build_summary(ctx.round_dir, ctx.bench_root / "tasks", args.k, sast)
+        summary = build_summary(ctx.round_dir, ctx.bench_root / "tasks", args.k, sast, task_prefix=args.task_prefix,
+                                models=[m for m in args.models.split(",") if m])
         (ctx.round_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
         print(render_markdown(summary))
 

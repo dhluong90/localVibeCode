@@ -79,15 +79,45 @@ Máy mục tiêu của team là MacBook Pro **24 GB** → chỉ benchmark **`qwe
 
 **Sửa bộ chấm trong vòng:** mutation score được tính cả khi test của agent fail trên code đúng (fail thì "giết" mọi mutant) → hiển thị 1.0 sai. Đã sửa (score = 0 khi test không pass trên code gốc) và vá 7 kết quả đã chạy; `resolved` không bị ảnh hưởng.
 
-## Kết quả cuối
-_(Điền theo mẫu Mục 9 của tiêu chuẩn sau khi chạy xong.)_
+**Sự cố bộ chấm trong vòng (đã sửa, đã chấm lại):**
+- Khi một `task.json` mới được thêm lúc runner đang chạy, 162 run crash tức thì (không ghi kết quả) → chạy lại; runner giờ tự dừng sau 3 crash liên tiếp.
+- `shutil.copy2` giữ mtime cũ nên Maven chạy class test cũ khi khôi phục test gốc → toàn bộ 99 run Java được chấm lại từ `diff.patch` (`bench regrade`): **3 run đổi** (H, cờ regression gỡ bỏ), **0 run đổi `resolved`**.
 
-| Category | Model | n | resolve@1 (±CI) | pass^5 | Regression | Scope P/R | Level đạt | Level kỳ vọng | Gap tới Oracle | Δ so với B0 |
-|---|---|---|---|---|---|---|---|---|---|---|
+## Kết quả cuối — `qwen2.5-coder:14b`, Java, k = 3 (99 run)
 
-## Pareto lỗi
-| Mã | Số run | % |
+Lệnh: `PYTHONPATH=src python3 -m localvibecode.bench report --round benchmarks/rounds/round_00 --k 3 --task-prefix java- --models qwen2.5-coder:14b` → `summary.json`.
+
+| Category | n | B0 (model trần) | H (localVibeCode) | O (Oracle) | Level H | Level kỳ vọng 14B | Ghi chú |
+|---|---|---|---|---|---|---|---|
+| I1 sửa bug 1 file | 2 | 83% | **100%** | 100% | L4 | L4 | ✅ đạt |
+| I2 feature 1 file | 2 | 100% | **100%** | 100% | L4 | L4 | ✅ đạt |
+| I3 feature xuyên tầng | 2 | 100% | **50%** | 83% | L2 | L3 | ❌ timeout LLM ×3 |
+| I6 đổi contract | 1 | 100% | **100%** | 100% | L4 | L3 | ✅ vượt |
+| M1 lỗi gốc ở file khác | 2 | 100% | **0%** | 100% | <L2 | L3 | ❌ plan sai file ×5 |
+| T1 sinh unit test | 2 | 67% | **0%** | 50% | <L2 | L4 | ❌ plan phân mảnh + timeout |
+| **Tất cả** (CI95) | 11 | **91%** (76–97%) | **55%** (38–70%) | 88% (73–95%) | <L2 | | |
+| pass^3 | | 82% | 55% | 82% | | | |
+| Regression | | 0% | 18% | 3% | | | |
+| Thời gian / run | | 86 s | 226 s | 134 s | | | |
+
+**Harness gap:** max(B0, O) − H = **+36 pp**. **H − B0 = −36 pp**: trên repo nhỏ (toàn bộ code vừa context), harness hiện tại **làm kết quả tệ hơn** model trần và chậm hơn 2.6×.
+
+## Pareto lỗi (15 run H thất bại)
+
+| Mã (primary) | Số run | Nguyên nhân cụ thể |
 |---|---|---|
+| **H8** — hạ tầng/timeout | 7 | Client LLM của harness có **timeout cứng 90 s** (`llm_client.py:104`); 14B trên M5 ~14 tok/s → một lần sinh 1,536 token ≈ 110 s. Tổng cộng 10 run H dính timeout (một số vẫn resolve vì timeout ở bước critic). |
+| **H1** — plan chọn sai file | 5 | Toàn bộ ở M1: plan không bao giờ chọn file gây lỗi (`Product.java`, `CheckoutRequest.java`), luôn đi sửa `OrderService`. |
+| M1 (thực chất harness) | 3 | T1: plan tách 6–8 bước cùng viết lại một file test → file test cuối fail ngay trên code đúng (và làm vỡ build → regression 100% ở T1). |
+
+→ **80% thất bại của H do harness** (12/15). Chưa chạm trần model.
 
 ## Kết luận & action cho Round 01
-—
+
+1. **Chưa nên dùng H thay cho model trần trên repo nhỏ.** Giá trị thật của harness (tìm đúng file trong repo lớn) phải đo trên Apollo — B0 ở đó chỉ có được file liên quan nhờ người tìm hộ.
+2. Action Round 01, theo Pareto:
+   - **A-new: timeout LLM** — bỏ timeout cứng 90 s (timeout theo số token / streaming) → nhắm H8 (7 run).
+   - **A6 + A4: plan & heal** — kiểm tra plan tất định (không lặp file, file tồn tại), định vị file gốc từ stack trace/compile error qua graph → nhắm H1 (5 run).
+   - **Gộp bước cùng file** trong plan (1 file = 1 bước) → nhắm T1 (3 run).
+   - **A1: định vị dạng edit** — bỏ "full file trong chuỗi JSON" (pilot cho thấy làm hỏng thụt lề).
+3. Đo lại Round 01 trên **cả** Java nhỏ (11 task) **và** Apollo dev split.

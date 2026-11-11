@@ -86,14 +86,16 @@ def aggregate(rows: List[Dict[str, Any]], k_max: int) -> Dict[str, Any]:
 
 
 def build_summary(
-    round_dir: Path, tasks_root: Path, k_max: int, sast: Optional[Dict[str, Any]] = None
+    round_dir: Path, tasks_root: Path, k_max: int, sast: Optional[Dict[str, Any]] = None,
+    task_prefix: str = "", models: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
-    rows = load_results(round_dir)
+    rows = [r for r in load_results(round_dir)
+            if r["task"].startswith(task_prefix) and (not models or r["model"] in models)]
     groups: Dict[str, Dict[str, Dict[str, List[Dict[str, Any]]]]] = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     for r in rows:
         groups[r["model"]][r["config"]][r["category"]].append(r)
         groups[r["model"]][r["config"]]["ALL"].append(r)
-    summary: Dict[str, Any] = {"k": k_max, "total_runs": len(rows), "models": {}}
+    summary: Dict[str, Any] = {"k": k_max, "total_runs": len(rows), "task_prefix": task_prefix, "models": {}}
     for model, by_cfg in groups.items():
         summary["models"][model] = {}
         for cfg, by_cat in by_cfg.items():
