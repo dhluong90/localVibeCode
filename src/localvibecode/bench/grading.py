@@ -125,17 +125,25 @@ def compute_baseline(task: Task, fixture: Fixture, base: Path) -> Dict[str, obje
     try:
         shutil.copytree(base, work / "repo")
         repo = work / "repo"
-        for rel, src in task.hidden_files().items():  # same test-support files as in grade()
-            if not is_runnable_test(src):
-                (repo / rel).parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(src, repo / rel)
-        units = base_test_units(fixture, base, task)
+        for rel, src in test_patch_files(task, base).items():  # same files as before P2P in grade()
+            (repo / rel).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, repo / rel)
+        hidden = set(task.hidden_files())
+        units = [u for u in base_test_units(fixture, base, task) if u not in hidden]
         res = run_units(fixture, repo, units, task)
         f2p_base = set(task.fail_to_pass_base)
         p2p = [u for u in units if res["results"].get(u) and unit_name(fixture, u) not in f2p_base and u not in f2p_base]
         return {"base_units": units, "pass_to_pass": p2p, "base_results": res["results"]}
     finally:
         shutil.rmtree(work, ignore_errors=True)
+
+
+def test_patch_files(task: Task, base: Path) -> Dict[str, Path]:
+    """Hidden files installed before PASS_TO_PASS, like a test patch: test-support files and new
+    versions of test files that already exist (a change that alters an API also updates its tests).
+    Brand-new test classes are added only for FAIL_TO_PASS."""
+    return {rel: src for rel, src in task.hidden_files().items()
+            if not is_runnable_test(src) or (base / rel).exists()}
 
 
 def fail_to_pass_units(task: Task, fixture: Fixture, base_units: List[str]) -> List[str]:
@@ -165,12 +173,9 @@ def grade(task: Task, fixture: Fixture, ws: Path, base: Path, baseline: Dict[str
     #    before adding hidden tests (a non-compiling hidden test must not count as a regression).
     for rel in baseline["base_units"]:
         shutil.copy2(base / rel, ws / rel)
-    # Hidden test-support files (abstract base classes, fixtures) belong to the test change and are
-    # needed by existing tests too, so they go in before PASS_TO_PASS (as a test patch would).
-    for rel, src in task.hidden_files().items():
-        if not is_runnable_test(src):
-            (ws / rel).parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(src, ws / rel)
+    for rel, src in test_patch_files(task, base).items():
+        (ws / rel).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, ws / rel)
     p2p = list(baseline["pass_to_pass"])
     p2p_res = run_units(fixture, ws, p2p, task) if p2p else {"compile_ok": True, "results": {}, "output": ""}
     result["pass_to_pass"] = {u: bool(p2p_res["results"].get(u, False)) for u in p2p}
