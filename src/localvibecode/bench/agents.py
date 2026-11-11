@@ -220,41 +220,78 @@ def _start_repair_proxy(run_dir: Path):
 
 
 def run_opencode(
-    task: Task, fixture: Fixture, ws: Path, model: str, trace: Dict[str, Any], timeout: int
+    task: Task, fixture: Fixture, ws: Path, model: str, trace: Dict[str, Any], timeout: int,
+    verify_rounds: int = 0,
 ) -> None:
-    """Gives the ticket to OpenCode (headless, auto-approved) and lets it work in the workspace."""
-    import json as _json
-    import subprocess
+    """Gives the ticket to OpenCode (headless, auto-approved) and lets it work in the workspace.
 
+    verify_rounds > 0 (config OCV): when the agent stops, run the test command; if it fails, send the
+    failure back into the same OpenCode session and let it continue (agents claimed "tests pass" after a
+    compile error in Round 01).
+    """
+    import json as _json
     import os
+    import subprocess
+    import time as _time
 
     proxy, port, proxy_log = _start_repair_proxy(ws.parent)
     # Config lives outside the workspace (OPENCODE_CONFIG): it stays out of the graded diff, and OpenCode
-    # ignored an opencode.json that git excluded.
+    # ignored an opencode.json that the VCS excluded.
     config_file = ws.parent / "opencode.json"
     config_file.write_text(
         _json.dumps(opencode_config(model, base_url=f"http://127.0.0.1:{port}/v1"), indent=2), encoding="utf-8")
     # OpenCode resolves its project from PWD, not the process cwd: pin both to the workspace.
     env = dict(os.environ, OPENCODE_CONFIG=str(config_file), PWD=str(ws))
+    test_cmd = task.effective_test_cmd(fixture)
     prompt = (
         f"{task.prompt}\n\n"
         "Implement this in the repository. When you are done, make sure the code compiles and the relevant "
-        f"tests pass. The relevant test command is: `{' '.join(task.effective_test_cmd(fixture))}`"
+        f"tests pass. The relevant test command is: `{' '.join(test_cmd)}`"
     )
-    cmd = ["opencode", "run", "--print-logs", "--log-level", "WARN", "--auto", "--format", "json", "--dir", str(ws),
-           "-m", f"ollama/{model}", prompt]
-    trace["opencode_cmd"] = cmd[:-1] + ["<prompt>"]
     events_file = ws.parent / "opencode_events.jsonl"
+    deadline = _time.time() + timeout
+    base_cmd = ["opencode", "run", "--print-logs", "--log-level", "WARN", "--auto", "--format", "json",
+                "--dir", str(ws), "-m", f"ollama/{model}"]
+    trace["opencode_cmd"] = base_cmd + ["<prompt>"]
+    rounds: List[Dict[str, Any]] = []
+
+    def run_once(extra: List[str], message: str) -> bool:
+        remaining = deadline - _time.time()
+        if remaining <= 30:
+            trace["exception"] = f"opencode timeout after {timeout}s"
+            return False
+        try:
+            with events_file.open("a", encoding="utf-8") as out:
+                proc = subprocess.run(base_cmd + extra + [message], cwd=str(ws), stdout=out, stderr=subprocess.PIPE,
+                                      text=True, timeout=remaining, env=env)
+            trace["opencode_rc"] = proc.returncode
+            trace["opencode_stderr_tail"] = proc.stderr[-2000:]
+            return True
+        except subprocess.TimeoutExpired:
+            trace["exception"] = f"opencode timeout after {timeout}s"
+            return False
+
     try:
-        with events_file.open("w", encoding="utf-8") as out:
-            proc = subprocess.run(cmd, cwd=str(ws), stdout=out, stderr=subprocess.PIPE, text=True,
-                                  timeout=timeout, env=env)
-        trace["opencode_rc"] = proc.returncode
-        trace["opencode_stderr_tail"] = proc.stderr[-2000:]
-    except subprocess.TimeoutExpired:
-        trace["exception"] = f"opencode timeout after {timeout}s"
+        ok = run_once([], prompt)
+        for i in range(1, verify_rounds + 1):
+            if not ok:
+                break
+            rc, out = run_cmd(test_cmd, ws)
+            rounds.append({"round": i, "tests_passed": rc == 0})
+            if rc == 0:
+                break
+            session = _first_session_id(events_file)
+            if not session:
+                break
+            feedback = (
+                "The test command failed. Fix the code so that it passes, then run the command again to confirm.\n"
+                f"Command: `{' '.join(test_cmd)}`\nOutput (tail):\n```\n{_tail_relevant(out, 3500)}\n```"
+            )
+            ok = run_once(["-s", session], feedback)
     finally:
         proxy.terminate()
+    trace["verify_rounds"] = rounds
+
     calls = []
     for line in proxy_log.read_text(encoding="utf-8").splitlines() if proxy_log.exists() else []:
         try:
@@ -268,7 +305,7 @@ def run_opencode(
     trace["proxy_repairs"] = sum(c["repairs"] for c in calls)
     tools: Dict[str, int] = {}
     steps = 0
-    for line in events_file.read_text(encoding="utf-8", errors="ignore").splitlines():
+    for line in events_file.read_text(encoding="utf-8", errors="ignore").splitlines() if events_file.exists() else []:
         try:
             event = _json.loads(line)
         except ValueError:
@@ -281,6 +318,19 @@ def run_opencode(
             tools[tool] = tools.get(tool, 0) + 1
     trace["opencode_tool_calls"] = tools
     trace["opencode_steps"] = steps
+
+
+def _first_session_id(events_file: Path) -> Optional[str]:
+    import json as _json
+
+    for line in events_file.read_text(encoding="utf-8", errors="ignore").splitlines():
+        try:
+            sid = _json.loads(line).get("sessionID")
+        except ValueError:
+            continue
+        if sid:
+            return sid
+    return None
 
 
 def run_harness(
