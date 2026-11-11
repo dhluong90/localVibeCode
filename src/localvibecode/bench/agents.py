@@ -23,7 +23,6 @@ from localvibecode.bench.workspace import list_repo_files, safe_write
 ORACLE_REPAIR_ROUNDS = 3
 ORACLE_REPAIR_TEMPERATURES = (0.2, 0.5, 0.8)
 MAX_OUTPUT_TOKENS = 8192
-LARGE_CTX = 16384
 
 FILE_BLOCK_FORMAT = (
     "For EVERY file you create or modify, output a line `FILE: <relative path>` immediately followed by a "
@@ -78,7 +77,7 @@ B0_SYSTEM = "You are a senior software engineer. Implement the task by editing t
 def run_b0(task: Task, fixture: Fixture, ws: Path, llm: RecordingOllama, trace: Dict[str, Any]) -> None:
     files = list_repo_files(ws)
     user = f"## Task\n{task.prompt}\n\n## Repository files\n\n{_render_files(ws, files)}"
-    text = llm.chat("b0", B0_SYSTEM, user, num_ctx=LARGE_CTX, num_predict=MAX_OUTPUT_TOKENS)
+    text = llm.chat("b0", B0_SYSTEM, user, num_ctx=llm.num_ctx, num_predict=MAX_OUTPUT_TOKENS)
     _write_file_blocks(ws, text, trace)
 
 
@@ -127,7 +126,7 @@ def run_oracle(task: Task, fixture: Fixture, ws: Path, llm: RecordingOllama, tra
             f"## Current step {i}: edit `{step['file']}`\n{step['instruction']}\n\n"
             f"## Relevant files (current state)\n\n{_render_files(ws, context)}"
         )
-        text = llm.chat(f"oracle_step_{i}", ORACLE_SYSTEM, user, num_ctx=LARGE_CTX, num_predict=MAX_OUTPUT_TOKENS)
+        text = llm.chat(f"oracle_step_{i}", ORACLE_SYSTEM, user, num_ctx=llm.num_ctx, num_predict=MAX_OUTPUT_TOKENS)
         blocks = _CODE_BLOCK.findall(text)
         if not blocks:
             events.append({"type": "no_code_block", "file": step["file"], "response_head": text[:300]})
@@ -147,7 +146,7 @@ def run_oracle(task: Task, fixture: Fixture, ws: Path, llm: RecordingOllama, tra
             f"## Relevant files (current state)\n\n{_render_files(ws, context)}"
         )
         # Raise temperature on each retry so repeated attempts are not identical.
-        text = llm.chat(f"oracle_repair_{attempt}", ORACLE_REPAIR_SYSTEM, user, num_ctx=LARGE_CTX,
+        text = llm.chat(f"oracle_repair_{attempt}", ORACLE_REPAIR_SYSTEM, user, num_ctx=llm.num_ctx,
                         num_predict=MAX_OUTPUT_TOKENS, temperature=ORACLE_REPAIR_TEMPERATURES[attempt - 1])
         _write_file_blocks(ws, text, trace, allowed=list(task.gold_files))
 

@@ -9,7 +9,11 @@ from typing import Any, Dict, List, Optional
 
 
 class RecordingOllama:
-    def __init__(self, base_url: str, model: str, keep_alive: str, calls: List[Dict[str, Any]]) -> None:
+    def __init__(
+        self, base_url: str, model: str, keep_alive: str, calls: List[Dict[str, Any]], num_ctx: int = 8192
+    ) -> None:
+        # Same num_ctx as the harness: Ollama reloads the model (~45 s for 14B) whenever num_ctx changes.
+        self.num_ctx = num_ctx
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.keep_alive = keep_alive

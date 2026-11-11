@@ -111,7 +111,7 @@ def run_one(ctx: BenchContext, task: Task, config: str, model: str, k: int, keep
         if config == "H":
             agents.run_harness(task, fixture, ws, model, ctx.project_root, trace)
         else:
-            llm = RecordingOllama(cfg.ollama_base_url, model, cfg.keep_alive, trace["llm_calls"])
+            llm = RecordingOllama(cfg.ollama_base_url, model, cfg.keep_alive, trace["llm_calls"], num_ctx=cfg.num_ctx)
             if config == "B0":
                 agents.run_b0(task, fixture, ws, llm, trace)
             elif config == "O":
