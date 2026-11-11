@@ -125,9 +125,12 @@ def compute_baseline(task: Task, fixture: Fixture, base: Path) -> Dict[str, obje
     try:
         shutil.copytree(base, work / "repo")
         repo = work / "repo"
-        for rel, src in test_patch_files(task, base).items():  # same files as before P2P in grade()
-            (repo / rel).parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(src, repo / rel)
+        # Only test-support files here: updated versions of existing tests may use the API the task
+        # introduces and would not compile against the start state.
+        for rel, src in task.hidden_files().items():
+            if not is_runnable_test(src):
+                (repo / rel).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(src, repo / rel)
         hidden = set(task.hidden_files())
         units = [u for u in base_test_units(fixture, base, task) if u not in hidden]
         res = run_units(fixture, repo, units, task)
