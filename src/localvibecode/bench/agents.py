@@ -22,6 +22,7 @@ from localvibecode.bench.workspace import list_repo_files, safe_write
 
 ORACLE_REPAIR_ROUNDS = 3
 ORACLE_REPAIR_TEMPERATURES = (0.2, 0.5, 0.8)
+ORACLE_CONTEXT_CHARS = 36000  # ~9k tokens of source context, leaves room for the answer in a 16k window
 MAX_OUTPUT_TOKENS = 8192
 
 FILE_BLOCK_FORMAT = (
@@ -75,7 +76,9 @@ B0_SYSTEM = "You are a senior software engineer. Implement the task by editing t
 
 
 def run_b0(task: Task, fixture: Fixture, ws: Path, llm: RecordingOllama, trace: Dict[str, Any]) -> None:
-    files = list_repo_files(ws)
+    # Small repos: the whole repo is pasted. Large repos do not fit any context window, so B0 models a
+    # developer who located the relevant files and pasted only those (retrieval done by the human).
+    files = list(task.gold_files) if fixture.large else list_repo_files(ws)
     user = f"## Task\n{task.prompt}\n\n## Repository files\n\n{_render_files(ws, files)}"
     text = llm.chat("b0", B0_SYSTEM, user, num_ctx=llm.num_ctx, num_predict=MAX_OUTPUT_TOKENS)
     _write_file_blocks(ws, text, trace)
@@ -109,9 +112,15 @@ def _oracle_context(task: Task, fixture: Fixture, ws: Path) -> List[str]:
         for gold in task.gold_files:
             context += graph.file_imports.get(gold, []) + graph.inbound_files.get(gold, [])
     ordered: List[str] = []
+    budget = ORACLE_CONTEXT_CHARS
     for rel in list(task.gold_files) + context:
-        if rel not in ordered and ((ws / rel).exists() or rel in task.gold_files):
-            ordered.append(rel)
+        if rel in ordered or not ((ws / rel).exists() or rel in task.gold_files):
+            continue
+        size = (ws / rel).stat().st_size if (ws / rel).exists() else 0
+        if rel not in task.gold_files and size > budget:
+            continue  # neighbours are added only while they fit; gold files always are
+        ordered.append(rel)
+        budget -= size
     return ordered
 
 
@@ -135,7 +144,7 @@ def run_oracle(task: Task, fixture: Fixture, ws: Path, llm: RecordingOllama, tra
         events.append({"type": "write", "file": step["file"]})
 
     for attempt in range(1, ORACLE_REPAIR_ROUNDS + 1):
-        rc, out = run_cmd(fixture.test_cmd, ws)
+        rc, out = run_cmd(task.effective_test_cmd(fixture), ws)
         events.append({"type": "oracle_test", "attempt": attempt, "passed": rc == 0})
         if rc == 0:
             return
@@ -169,7 +178,9 @@ def run_harness(
     cfg = LocalVibeCodeConfig.load(project_root)
     cfg.primary_model = model
     cfg.fallback_model = model
-    cfg.test_command = list(fixture.test_cmd)
+    cfg.test_command = task.effective_test_cmd(fixture)
+    if fixture.num_ctx:
+        cfg.num_ctx = fixture.num_ctx
     trace["h_config"] = {"num_ctx": cfg.num_ctx, "max_surgical_context_chars": cfg.max_surgical_context_chars,
                          "max_self_healing_retries": cfg.max_self_healing_retries}
     calls = trace.setdefault("llm_calls", [])

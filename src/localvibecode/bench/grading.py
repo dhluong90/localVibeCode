@@ -30,14 +30,23 @@ def run_cmd(cmd: List[str], cwd: Path, timeout: int = TEST_TIMEOUT_SEC) -> Tuple
 
 
 def _java_class(rel: str, test_dir: str) -> str:
-    return rel[len(test_dir.rstrip("/")) + 1 : -len(".java")].replace("/", ".")
+    marker = "/" + test_dir.strip("/") + "/"
+    return ("/" + rel).split(marker, 1)[1][: -len(".java")].replace("/", ".")
 
 
-def base_test_units(fixture: Fixture, base: Path) -> List[str]:
-    """Test modules/classes that exist in the base repo (relative paths)."""
-    root = base / fixture.test_dir
+def base_test_units(fixture: Fixture, base: Path, task: Optional[Task] = None) -> List[str]:
+    """Test modules/classes that exist in the base repo (relative paths), limited to the task's modules."""
+    roots = [base / m / fixture.test_dir for m in task.test_modules] if task and task.test_modules \
+        else [base / fixture.test_dir]
     pattern = "test_*.py" if fixture.language == "python" else "*Test.java"
-    return sorted(p.relative_to(base).as_posix() for p in root.rglob(pattern))
+    return sorted(p.relative_to(base).as_posix() for root in roots if root.exists() for p in root.rglob(pattern))
+
+
+def _maven_scope(task: Optional[Task]) -> List[str]:
+    """Multi-module repos: build only the task's modules and what they depend on."""
+    if not task or not task.test_modules:
+        return []
+    return ["-pl", ",".join(task.test_modules), "-am", "-Dspotless.check.skip=true"]
 
 
 def unit_name(fixture: Fixture, rel: str) -> str:
@@ -47,7 +56,7 @@ def unit_name(fixture: Fixture, rel: str) -> str:
     return rel
 
 
-def run_units(fixture: Fixture, ws: Path, units: List[str]) -> Dict[str, object]:
+def run_units(fixture: Fixture, ws: Path, units: List[str], task: Optional[Task] = None) -> Dict[str, object]:
     """Runs the given test units; returns {"compile_ok", "results": {unit: bool}, "output"}."""
     if fixture.language == "python":
         results: Dict[str, bool] = {}
@@ -61,19 +70,19 @@ def run_units(fixture: Fixture, ws: Path, units: List[str]) -> Dict[str, object]
                 outputs.append(f"--- {rel}\n{out[-3000:]}")
         return {"compile_ok": python_compile_errors(ws) == [], "results": results, "output": "\n".join(outputs)}
 
-    reports = ws / "target" / "surefire-reports"
-    if reports.exists():
-        shutil.rmtree(reports)
+    for reports in list(ws.glob("**/target/surefire-reports")):
+        shutil.rmtree(reports, ignore_errors=True)
     classes = [_java_class(rel, fixture.test_dir) for rel in units]
     rc, out = run_cmd(
-        ["mvn", "-o", "-q", "test", "-Dtest=" + ",".join(Path(r).stem for r in units),
+        ["mvn", "-o", "-q", "test", *_maven_scope(task), "-Dtest=" + ",".join(Path(r).stem for r in units),
          "-Dsurefire.failIfNoSpecifiedTests=false", "-DfailIfNoTests=false"],
         ws,
     )
     compile_ok = "COMPILATION ERROR" not in out and "Compilation failure" not in out
     results = {}
     for rel, fqcn in zip(units, classes):
-        report = reports / f"TEST-{fqcn}.xml"
+        found = [p for p in ws.glob(f"**/target/surefire-reports/TEST-{fqcn}.xml")]
+        report = found[0] if found else ws / "missing"
         ok = False
         if report.exists():
             suite = ET.parse(report).getroot()
@@ -107,8 +116,8 @@ def compute_baseline(task: Task, fixture: Fixture, base: Path) -> Dict[str, obje
     try:
         shutil.copytree(base, work / "repo")
         repo = work / "repo"
-        units = base_test_units(fixture, base)
-        res = run_units(fixture, repo, units)
+        units = base_test_units(fixture, base, task)
+        res = run_units(fixture, repo, units, task)
         f2p_base = set(task.fail_to_pass_base)
         p2p = [u for u in units if res["results"].get(u) and unit_name(fixture, u) not in f2p_base and u not in f2p_base]
         return {"base_units": units, "pass_to_pass": p2p, "base_results": res["results"]}
@@ -132,7 +141,7 @@ def grade(task: Task, fixture: Fixture, ws: Path, base: Path, baseline: Dict[str
     result: Dict[str, object] = {}
 
     # 1. The agent's own deliverable: does the repo's normal test command pass as left by the agent?
-    rc, out = run_cmd(fixture.test_cmd, ws)
+    rc, out = run_cmd(task.effective_test_cmd(fixture), ws)
     result["own_tests_pass"] = rc == 0
     result["own_tests_output"] = out[-3000:]
 
@@ -144,7 +153,7 @@ def grade(task: Task, fixture: Fixture, ws: Path, base: Path, baseline: Dict[str
     for rel in baseline["base_units"]:
         shutil.copy2(base / rel, ws / rel)
     p2p = list(baseline["pass_to_pass"])
-    p2p_res = run_units(fixture, ws, p2p) if p2p else {"compile_ok": True, "results": {}, "output": ""}
+    p2p_res = run_units(fixture, ws, p2p, task) if p2p else {"compile_ok": True, "results": {}, "output": ""}
     result["pass_to_pass"] = {u: bool(p2p_res["results"].get(u, False)) for u in p2p}
     result["p2p_compile_ok"] = p2p_res["compile_ok"]
     result["regression"] = any(not ok for ok in result["pass_to_pass"].values())
@@ -154,7 +163,7 @@ def grade(task: Task, fixture: Fixture, ws: Path, base: Path, baseline: Dict[str
         (ws / rel).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, ws / rel)
     f2p = fail_to_pass_units(task, fixture, baseline["base_units"])
-    f2p_res = run_units(fixture, ws, f2p) if f2p else {"compile_ok": True, "results": {}, "output": ""}
+    f2p_res = run_units(fixture, ws, f2p, task) if f2p else {"compile_ok": True, "results": {}, "output": ""}
     result["compile_ok"] = f2p_res["compile_ok"]
     result["fail_to_pass"] = {u: bool(f2p_res["results"].get(u, False)) for u in f2p}
     result["test_output"] = str(f2p_res["output"]) + "\n" + str(p2p_res["output"])
@@ -166,8 +175,8 @@ def grade(task: Task, fixture: Fixture, ws: Path, base: Path, baseline: Dict[str
     return result
 
 
-def _run_single(fixture: Fixture, repo: Path, rel: str) -> Tuple[bool, str]:
-    res = run_units(fixture, repo, [rel])
+def _run_single(fixture: Fixture, repo: Path, rel: str, task: Optional[Task] = None) -> Tuple[bool, str]:
+    res = run_units(fixture, repo, [rel], task)
     return bool(res["results"].get(rel)), str(res["output"])
 
 
@@ -186,7 +195,7 @@ def _grade_t1(task: Task, fixture: Fixture, ws: Path, base: Path) -> Dict[str, o
         shutil.copytree(base, repo)
         (repo / test_rel).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ws / test_rel, repo / test_rel)
-        passes, log = _run_single(fixture, repo, test_rel)
+        passes, log = _run_single(fixture, repo, test_rel, task)
         out["t1_passes_on_base"] = passes
         out["t1_base_output"] = log[-2000:]
         killed = 0
@@ -194,7 +203,7 @@ def _grade_t1(task: Task, fixture: Fixture, ws: Path, base: Path) -> Dict[str, o
         for mutant in mutants:
             original = (repo / mutant["file"]).read_text(encoding="utf-8")
             apply_edits(repo, [mutant])
-            survived, _ = _run_single(fixture, repo, test_rel)
+            survived, _ = _run_single(fixture, repo, test_rel, task)
             killed += 0 if survived else 1
             (repo / mutant["file"]).write_text(original, encoding="utf-8")
         # A test file that already fails on correct code "kills" every mutant trivially.

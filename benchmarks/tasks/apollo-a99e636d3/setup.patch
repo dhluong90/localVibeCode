@@ -1,0 +1,72 @@
+diff --git a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ClusterController.java b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ClusterController.java
+index 024c51664..3e7f4a899 100644
+--- a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ClusterController.java
++++ b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ClusterController.java
+@@ -19,7 +19,6 @@ package com.ctrip.framework.apollo.portal.controller;
+ import com.ctrip.framework.apollo.audit.annotation.ApolloAuditLog;
+ import com.ctrip.framework.apollo.audit.annotation.OpType;
+ import com.ctrip.framework.apollo.common.dto.ClusterDTO;
+-import com.ctrip.framework.apollo.common.exception.BadRequestException;
+ import com.ctrip.framework.apollo.portal.environment.Env;
+ import com.ctrip.framework.apollo.portal.service.ClusterService;
+ import com.ctrip.framework.apollo.portal.spi.UserInfoHolder;
+@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestBody;
+ import org.springframework.web.bind.annotation.RestController;
+ 
+ import jakarta.validation.Valid;
+-import java.util.Objects;
+ 
+ /**
+  * @deprecated Portal UI uses /openapi/v1 endpoints. This legacy WebAPI controller is kept for
+@@ -57,11 +55,6 @@ public class ClusterController {
+   @ApolloAuditLog(type = OpType.CREATE, name = "Cluster.create")
+   public ClusterDTO createCluster(@PathVariable String appId, @PathVariable String env,
+       @Valid @RequestBody ClusterDTO cluster) {
+-    if (!Objects.equals(appId, cluster.getAppId())) {
+-      throw new BadRequestException("AppId not equal. AppId in path = %s, AppId in payload = %s",
+-          appId, cluster.getAppId());
+-    }
+-
+     String operator = userInfoHolder.getUser().getUserId();
+     cluster.setDataChangeLastModifiedBy(operator);
+     cluster.setDataChangeCreatedBy(operator);
+diff --git a/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/controller/ClusterControllerTest.java b/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/controller/ClusterControllerTest.java
+index 8128a6bfe..08729b226 100644
+--- a/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/controller/ClusterControllerTest.java
++++ b/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/controller/ClusterControllerTest.java
+@@ -18,13 +18,11 @@ package com.ctrip.framework.apollo.portal.controller;
+ 
+ import static org.junit.Assert.assertEquals;
+ import static org.junit.Assert.assertSame;
+-import static org.junit.Assert.fail;
+ import static org.mockito.ArgumentMatchers.eq;
+ import static org.mockito.Mockito.verify;
+ import static org.mockito.Mockito.when;
+ 
+ import com.ctrip.framework.apollo.common.dto.ClusterDTO;
+-import com.ctrip.framework.apollo.common.exception.BadRequestException;
+ import com.ctrip.framework.apollo.portal.entity.bo.UserInfo;
+ import com.ctrip.framework.apollo.portal.environment.Env;
+ import com.ctrip.framework.apollo.portal.service.ClusterService;
+@@ -75,21 +73,6 @@ public class ClusterControllerTest {
+     assertEquals("apollo", captured.getDataChangeLastModifiedBy());
+   }
+ 
+-  @Test
+-  public void shouldRejectCreateClusterWhenPathAppIdDiffersFromPayload() {
+-    ClusterDTO toCreate = new ClusterDTO();
+-    toCreate.setAppId("AnotherApp");
+-    toCreate.setName("sampleCluster");
+-
+-    try {
+-      clusterController.createCluster("SampleApp", "DEV", toCreate);
+-      fail("Should throw");
+-    } catch (BadRequestException e) {
+-      assertEquals("AppId not equal. AppId in path = SampleApp, AppId in payload = AnotherApp",
+-          e.getMessage());
+-    }
+-  }
+-
+   @Test
+   public void shouldDeleteClusterByEnvAndName() {
+     when(userInfoHolder.getUser()).thenReturn(new UserInfo("apollo"));

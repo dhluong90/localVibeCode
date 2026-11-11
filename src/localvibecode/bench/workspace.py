@@ -22,8 +22,13 @@ def prepare_base(task: Task, fixture: Fixture, dest: Path) -> Path:
     """Creates the task's starting state (fixture + setup edits) as a committed git repo."""
     if dest.exists():
         shutil.rmtree(dest)
-    shutil.copytree(fixture.path, dest, ignore=shutil.ignore_patterns("target", "graphify-out", "__pycache__"))
+    shutil.copytree(fixture.path, dest,
+                    ignore=shutil.ignore_patterns(".git", "target", "graphify-out", "__pycache__", "node_modules"))
     apply_edits(dest, task.setup)
+    if task.setup_patch:
+        # `git apply` also works on a plain directory; the base repo is initialised afterwards.
+        subprocess.run(["git", "apply", str(task.dir / task.setup_patch)], cwd=str(dest), check=True,
+                       capture_output=True, text=True)
     (dest / ".gitignore").write_text(WORKSPACE_GITIGNORE, encoding="utf-8")
     _git(dest, "init", "-q")
     _git(dest, "add", "-A")

@@ -1,0 +1,36 @@
+{
+  "id": "apollo-a99e636d3",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: fix: validate cluster app id in legacy portal api",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ClusterController.java"
+  ],
+  "test_modules": [
+    "apollo-portal"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ClusterController.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "a99e636d3",
+  "main_loc_changed": 7,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-portal",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
+  ]
+}

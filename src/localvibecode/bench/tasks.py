@@ -15,9 +15,12 @@ class Fixture:
     test_dir: str
     test_cmd: List[str]
     path: Path
+    large: bool = False  # too big to put in a prompt; B0 gets only the task's relevant files
+    num_ctx: Optional[int] = None  # context size used by every configuration on this fixture
 
     def is_test_file(self, rel: str) -> bool:
-        return rel.startswith(self.test_dir.rstrip("/") + "/")
+        # Multi-module repos keep tests under <module>/src/test/java/.
+        return ("/" + self.test_dir.strip("/") + "/") in ("/" + rel)
 
 
 @dataclass
@@ -34,6 +37,15 @@ class Task:
     setup: List[Dict[str, str]] = field(default_factory=list)
     fail_to_pass_base: List[str] = field(default_factory=list)
     t1: Optional[Dict[str, Any]] = None
+    setup_patch: Optional[str] = None  # patch file (in the task dir) applied to build the start state
+    test_modules: List[str] = field(default_factory=list)  # multi-module repos: modules whose tests count
+    test_cmd: Optional[List[str]] = None  # agent-visible test command for this task (overrides fixture)
+    human_baseline: Optional[Dict[str, Any]] = None  # docs/BENCHMARK_STANDARD.md section 11.1
+    source_commit: Optional[str] = None
+    main_loc_changed: Optional[int] = None
+
+    def effective_test_cmd(self, fixture: "Fixture") -> List[str]:
+        return list(self.test_cmd or fixture.test_cmd)
 
     def _files_under(self, kind: str) -> Dict[str, Path]:
         root = self.dir / kind
@@ -56,7 +68,9 @@ def load_fixtures(bench_root: Path) -> Dict[str, Fixture]:
             language=cfg["language"],
             test_dir=cfg["test_dir"],
             test_cmd=list(cfg["test_cmd"]),
-            path=(bench_root / "fixtures" / name).resolve(),
+            path=(bench_root / cfg.get("path", f"fixtures/{name}")).resolve(),
+            large=bool(cfg.get("large", False)),
+            num_ctx=cfg.get("num_ctx"),
         )
         for name, cfg in data.items()
     }

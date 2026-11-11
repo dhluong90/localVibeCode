@@ -1,0 +1,93 @@
+diff --git a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.java b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.java
+index 606eb9f29..e9180d774 100644
+--- a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.java
++++ b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.java
+@@ -375,16 +375,7 @@ public class DefaultRolePermissionService implements RolePermissionService {
+     }
+   }
+ 
+-  @Override
+   public boolean hasAnyPermission(String userId, List<Permission> permissions) {
+-    if (CollectionUtils.isEmpty(permissions)) {
+-      return false;
+-    }
+-
+-    if (isSuperAdmin(userId)) {
+-      return true;
+-    }
+-
+     List<Permission> userPermissions = permissionRepository.findUserPermissions(userId);
+ 
+     if (CollectionUtils.isEmpty(userPermissions)) {
+diff --git a/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/component/UserPermissionValidatorTest.java b/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/component/UserPermissionValidatorTest.java
+index 1cb7846c6..f14298b19 100644
+--- a/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/component/UserPermissionValidatorTest.java
++++ b/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/component/UserPermissionValidatorTest.java
+@@ -17,10 +17,10 @@
+ package com.ctrip.framework.apollo.portal.component;
+ 
+ import static org.assertj.core.api.Assertions.assertThat;
+-import static org.mockito.ArgumentMatchers.anyList;
+-import static org.mockito.ArgumentMatchers.eq;
+ import static org.mockito.Mockito.lenient;
+ import static org.mockito.Mockito.when;
++import static org.mockito.ArgumentMatchers.anyList;
++import static org.mockito.ArgumentMatchers.eq;
+ 
+ import com.ctrip.framework.apollo.common.entity.AppNamespace;
+ import com.ctrip.framework.apollo.portal.component.config.PortalConfig;
+@@ -218,13 +218,6 @@ class UserPermissionValidatorTest {
+     assertThat(validator.hasPermissions(requiredPerms)).isFalse();
+   }
+ 
+-  @Test
+-  void hasReleaseNamespacePermission_match() {
+-    when(rolePermissionService.hasAnyPermission(eq(USER_ID), anyList())).thenReturn(true);
+-
+-    assertThat(validator.hasReleaseNamespacePermission(APP_ID, ENV, CLUSTER, NAMESPACE)).isTrue();
+-  }
+-
+   @Test
+   void hasPermissions_emptyList() {
+     assertThat(validator.hasPermissions(Collections.emptyList())).isFalse();
+diff --git a/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/spi/defaultImpl/RolePermissionServiceTest.java b/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/spi/defaultImpl/RolePermissionServiceTest.java
+index 21e384895..054de4557 100644
+--- a/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/spi/defaultImpl/RolePermissionServiceTest.java
++++ b/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/spi/defaultImpl/RolePermissionServiceTest.java
+@@ -35,7 +35,6 @@ import com.ctrip.framework.apollo.portal.repository.UserRoleRepository;
+ import com.ctrip.framework.apollo.portal.service.RolePermissionService;
+ import com.ctrip.framework.apollo.portal.util.RoleUtils;
+ import com.google.common.collect.Sets;
+-import java.util.Collections;
+ import java.util.List;
+ import java.util.Set;
+ import java.util.stream.Collectors;
+@@ -342,28 +341,6 @@ public class RolePermissionServiceTest extends AbstractIntegrationTest {
+ 
+   }
+ 
+-  @Test
+-  @Sql(scripts = "/sql/permission/insert-test-permissions.sql",
+-      executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+-  @Sql(scripts = "/sql/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+-  public void testHasAnyPermissionIncludesSuperAdmin() {
+-    List<Permission> requiredPermissions =
+-        Collections.singletonList(new Permission("somePermissionType", "someTargetId"));
+-    String previousSuperAdmin = System.getProperty("superAdmin");
+-    try {
+-      System.setProperty("superAdmin", "apollo");
+-      assertTrue(rolePermissionService.hasAnyPermission("apollo", requiredPermissions));
+-      assertFalse(
+-          rolePermissionService.hasAnyPermission("someUserWithNoPermission", requiredPermissions));
+-    } finally {
+-      if (previousSuperAdmin == null) {
+-        System.clearProperty("superAdmin");
+-      } else {
+-        System.setProperty("superAdmin", previousSuperAdmin);
+-      }
+-    }
+-  }
+-
+   @Test
+   @Sql(
+       scripts = "/sql/permission/RolePermissionServiceTest.deleteRolePermissionsByAppIdWithClusterRoles.sql",

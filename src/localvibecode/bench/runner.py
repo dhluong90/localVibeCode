@@ -17,6 +17,7 @@ from localvibecode.bench.tasks import Fixture, Task, load_fixtures, load_tasks
 from localvibecode.bench.workspace import clone_workspace, collect_changes, prepare_base
 
 RUN_TIMEOUT_SEC = 900
+MAX_CONSECUTIVE_CRASHES = 3  # a broken checkout must not silently burn through the whole matrix
 CONFIGS = ("B0", "H", "O")
 
 
@@ -111,7 +112,8 @@ def run_one(ctx: BenchContext, task: Task, config: str, model: str, k: int, keep
         if config == "H":
             agents.run_harness(task, fixture, ws, model, ctx.project_root, trace)
         else:
-            llm = RecordingOllama(cfg.ollama_base_url, model, cfg.keep_alive, trace["llm_calls"], num_ctx=cfg.num_ctx)
+            llm = RecordingOllama(cfg.ollama_base_url, model, cfg.keep_alive, trace["llm_calls"],
+                                  num_ctx=fixture.num_ctx or cfg.num_ctx)
             if config == "B0":
                 agents.run_b0(task, fixture, ws, llm, trace)
             elif config == "O":
@@ -179,6 +181,7 @@ def run_matrix(
         ctx.ensure_base(task)
     total = len(models) * k_max * len(tasks) * len(configs)
     done = 0
+    consecutive_crashes = 0
     # k outermost: every full pass gives complete coverage of all models/tasks/configs.
     for k in range(1, k_max + 1):
         for model in models:
@@ -202,6 +205,12 @@ def run_matrix(
                         if proc.returncode != 0:
                             out_dir.mkdir(parents=True, exist_ok=True)
                             (out_dir / "crash.log").write_text(proc.stdout + proc.stderr, encoding="utf-8")
+                            consecutive_crashes += 1
+                            if consecutive_crashes >= MAX_CONSECUTIVE_CRASHES:
+                                log(f"[abort] {consecutive_crashes} consecutive crashes, last log: {out_dir / 'crash.log'}")
+                                raise SystemExit(2)
+                        else:
+                            consecutive_crashes = 0
                     except subprocess.TimeoutExpired:
                         status = "timeout"
                         _write_timeout_result(out_dir, task, config, model, k)

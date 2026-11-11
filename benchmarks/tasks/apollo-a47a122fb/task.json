@@ -1,0 +1,46 @@
+{
+  "id": "apollo-a47a122fb",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: fix: physically delete retained release histories (#5641)\n* fix: physically delete retained release histories\n\n* docs: update changes for release history cleanup\n\n* fix: address release history cleanup review feedback\n\n* fix: scope release cleanup and index gray rules\n\n* fix: use millisecond namespace cleanup boundary\n\n* perf: index release retention script lookups",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/repository/ReleaseHistoryRepository.java",
+    "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/repository/ReleaseRepository.java",
+    "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/ReleaseHistoryService.java"
+  ],
+  "test_modules": [
+    "apollo-biz"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/repository/ReleaseHistoryRepository.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/repository/ReleaseRepository.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/ReleaseHistoryService.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "a47a122fb",
+  "main_loc_changed": 41,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-biz",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.biz.**"
+  ]
+}

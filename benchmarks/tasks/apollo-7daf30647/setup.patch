@@ -1,0 +1,485 @@
+diff --git a/apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/AppController.java b/apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/AppController.java
+index afb185a74..7764fcf6d 100644
+--- a/apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/AppController.java
++++ b/apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/AppController.java
+@@ -16,22 +16,15 @@
+  */
+ package com.ctrip.framework.apollo.adminservice.controller;
+ 
+-import com.ctrip.framework.apollo.biz.config.BizConfig;
+-import com.ctrip.framework.apollo.biz.entity.AccessKey;
+-import com.ctrip.framework.apollo.biz.service.AccessKeyService;
+ import com.ctrip.framework.apollo.biz.service.AdminService;
+ import com.ctrip.framework.apollo.biz.service.AppService;
+-import com.ctrip.framework.apollo.common.constants.AccessKeyMode;
+ import com.ctrip.framework.apollo.common.dto.AppDTO;
+ import com.ctrip.framework.apollo.common.entity.App;
+ import com.ctrip.framework.apollo.common.exception.BadRequestException;
+ import com.ctrip.framework.apollo.common.exception.NotFoundException;
+ import com.ctrip.framework.apollo.common.utils.BeanUtils;
+-import com.ctrip.framework.apollo.common.utils.UniqueKeyGenerator;
+ import com.ctrip.framework.apollo.core.utils.StringUtils;
+ import org.springframework.data.domain.Pageable;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
+ import org.springframework.web.bind.annotation.DeleteMapping;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.PathVariable;
+@@ -48,19 +41,12 @@ import java.util.Objects;
+ @RestController
+ public class AppController {
+ 
+-  private static final Logger logger = LoggerFactory.getLogger(AppController.class);
+-
+   private final AppService appService;
+   private final AdminService adminService;
+-  private final AccessKeyService accessKeyService;
+-  private final BizConfig bizConfig;
+ 
+-  public AppController(final AppService appService, final AdminService adminService,
+-      final AccessKeyService accessKeyService, final BizConfig bizConfig) {
++  public AppController(final AppService appService, final AdminService adminService) {
+     this.appService = appService;
+     this.adminService = adminService;
+-    this.accessKeyService = accessKeyService;
+-    this.bizConfig = bizConfig;
+   }
+ 
+   @PostMapping("/apps")
+@@ -72,34 +58,10 @@ public class AppController {
+     }
+ 
+     entity = adminService.createNewApp(entity);
+-    if (bizConfig.isAccessKeyAutoProvisionEnabled()) {
+-      try {
+-        accessKeyService.create(entity.getAppId(), createDefaultAccessKey(entity));
+-      } catch (Exception ex) {
+-        logger.warn("Failed to auto-provision access key for appId={}", entity.getAppId(), ex);
+-      }
+-    }
+ 
+     return BeanUtils.transform(AppDTO.class, entity);
+   }
+ 
+-  private AccessKey createDefaultAccessKey(App app) {
+-    String operator = app.getDataChangeCreatedBy();
+-    if (StringUtils.isBlank(operator)) {
+-      operator = app.getDataChangeLastModifiedBy();
+-    }
+-    if (StringUtils.isBlank(operator)) {
+-      operator = app.getOwnerName();
+-    }
+-    AccessKey accessKey = new AccessKey();
+-    accessKey.setAppId(app.getAppId());
+-    accessKey.setSecret(UniqueKeyGenerator.generateId());
+-    accessKey.setMode(AccessKeyMode.FILTER);
+-    accessKey.setEnabled(true);
+-    accessKey.setDataChangeCreatedBy(operator);
+-    return accessKey;
+-  }
+-
+   @DeleteMapping("/apps/{appId:.+}")
+   public void delete(@PathVariable("appId") String appId, @RequestParam String operator) {
+     App entity = appService.findOne(appId);
+diff --git a/apollo-adminservice/src/test/java/com/ctrip/framework/apollo/adminservice/controller/ControllerExceptionTest.java b/apollo-adminservice/src/test/java/com/ctrip/framework/apollo/adminservice/controller/ControllerExceptionTest.java
+index b6d468a7f..b01812952 100644
+--- a/apollo-adminservice/src/test/java/com/ctrip/framework/apollo/adminservice/controller/ControllerExceptionTest.java
++++ b/apollo-adminservice/src/test/java/com/ctrip/framework/apollo/adminservice/controller/ControllerExceptionTest.java
+@@ -17,10 +17,7 @@
+ package com.ctrip.framework.apollo.adminservice.controller;
+ 
+ import com.ctrip.framework.apollo.biz.service.AdminService;
+-import com.ctrip.framework.apollo.biz.service.AccessKeyService;
+ import com.ctrip.framework.apollo.biz.service.AppService;
+-import com.ctrip.framework.apollo.biz.entity.AccessKey;
+-import com.ctrip.framework.apollo.biz.config.BizConfig;
+ import com.ctrip.framework.apollo.common.dto.AppDTO;
+ import com.ctrip.framework.apollo.common.entity.App;
+ import com.ctrip.framework.apollo.common.exception.NotFoundException;
+@@ -38,9 +35,6 @@ import java.util.ArrayList;
+ import java.util.List;
+ 
+ import static org.mockito.ArgumentMatchers.any;
+-import static org.mockito.ArgumentMatchers.eq;
+-import static org.mockito.Mockito.never;
+-import static org.mockito.Mockito.verify;
+ import static org.mockito.Mockito.when;
+ 
+ @RunWith(MockitoJUnitRunner.class)
+@@ -54,10 +48,6 @@ public class ControllerExceptionTest {
+ 
+   @Mock
+   private AdminService adminService;
+-  @Mock
+-  private AccessKeyService accessKeyService;
+-  @Mock
+-  private BizConfig bizConfig;
+ 
+   @Test(expected = NotFoundException.class)
+   public void testFindNotExists() {
+@@ -100,46 +90,7 @@ public class ControllerExceptionTest {
+     when(adminService.createNewApp(any(App.class)))
+         .thenThrow(new ServiceException("create app failed"));
+ 
+-    try {
+-      appController.create(dto);
+-    } finally {
+-      verify(accessKeyService, never()).create(any(String.class), any(AccessKey.class));
+-    }
+-  }
+-
+-  @Test
+-  public void createAutoProvisionAccessKey() {
+-    AppDTO dto = generateSampleDTOData();
+-    App app = new App();
+-    app.setAppId(dto.getAppId());
+-    app.setDataChangeCreatedBy(dto.getDataChangeCreatedBy());
+-
+-    when(appService.findOne(any(String.class))).thenReturn(null);
+-    when(adminService.createNewApp(any(App.class))).thenReturn(app);
+-    when(bizConfig.isAccessKeyAutoProvisionEnabled()).thenReturn(true);
+-
+     appController.create(dto);
+-
+-    verify(accessKeyService).create(eq(dto.getAppId()), any(AccessKey.class));
+-  }
+-
+-  @Test
+-  public void createAutoProvisionAccessKeyFailedShouldNotAffectAppCreation() {
+-    AppDTO dto = generateSampleDTOData();
+-    App app = new App();
+-    app.setAppId(dto.getAppId());
+-    app.setDataChangeCreatedBy(dto.getDataChangeCreatedBy());
+-
+-    when(appService.findOne(any(String.class))).thenReturn(null);
+-    when(adminService.createNewApp(any(App.class))).thenReturn(app);
+-    when(bizConfig.isAccessKeyAutoProvisionEnabled()).thenReturn(true);
+-    when(accessKeyService.create(any(String.class), any(AccessKey.class)))
+-        .thenThrow(new RuntimeException("simulated accesskey provision failure"));
+-
+-    AppDTO created = appController.create(dto);
+-
+-    Assert.assertEquals(dto.getAppId(), created.getAppId());
+-    verify(accessKeyService).create(eq(dto.getAppId()), any(AccessKey.class));
+   }
+ 
+   private AppDTO generateSampleDTOData() {
+diff --git a/apollo-adminservice/src/test/java/com/ctrip/framework/apollo/adminservice/controller/ControllerIntegrationExceptionTest.java b/apollo-adminservice/src/test/java/com/ctrip/framework/apollo/adminservice/controller/ControllerIntegrationExceptionTest.java
+index 784b3bf3d..a1c029428 100644
+--- a/apollo-adminservice/src/test/java/com/ctrip/framework/apollo/adminservice/controller/ControllerIntegrationExceptionTest.java
++++ b/apollo-adminservice/src/test/java/com/ctrip/framework/apollo/adminservice/controller/ControllerIntegrationExceptionTest.java
+@@ -18,9 +18,6 @@ package com.ctrip.framework.apollo.adminservice.controller;
+ 
+ import com.google.gson.Gson;
+ 
+-import com.ctrip.framework.apollo.biz.config.BizConfig;
+-import com.ctrip.framework.apollo.biz.entity.AccessKey;
+-import com.ctrip.framework.apollo.biz.service.AccessKeyService;
+ import com.ctrip.framework.apollo.biz.service.AdminService;
+ import com.ctrip.framework.apollo.biz.service.AppService;
+ import com.ctrip.framework.apollo.common.dto.AppDTO;
+@@ -32,8 +29,6 @@ import org.junit.Before;
+ import org.junit.Test;
+ import org.mockito.Mock;
+ import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+ import org.springframework.test.context.jdbc.Sql;
+ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+ import org.springframework.test.util.ReflectionTestUtils;
+@@ -42,8 +37,6 @@ import org.springframework.web.client.HttpStatusCodeException;
+ import java.util.Map;
+ 
+ import static org.mockito.ArgumentMatchers.any;
+-import static org.mockito.ArgumentMatchers.eq;
+-import static org.mockito.Mockito.verify;
+ import static org.mockito.Mockito.when;
+ 
+ public class ControllerIntegrationExceptionTest extends AbstractControllerTest {
+@@ -55,13 +48,6 @@ public class ControllerIntegrationExceptionTest extends AbstractControllerTest {
+   AdminService adminService;
+ 
+   private Object realAdminService;
+-  private Object realAccessKeyService;
+-  private Object realBizConfig;
+-
+-  @Mock
+-  AccessKeyService accessKeyService;
+-  @Mock
+-  BizConfig bizConfig;
+ 
+   @Autowired
+   AppService appService;
+@@ -71,8 +57,6 @@ public class ControllerIntegrationExceptionTest extends AbstractControllerTest {
+   @Before
+   public void setUp() {
+     realAdminService = ReflectionTestUtils.getField(appController, "adminService");
+-    realAccessKeyService = ReflectionTestUtils.getField(appController, "accessKeyService");
+-    realBizConfig = ReflectionTestUtils.getField(appController, "bizConfig");
+ 
+     ReflectionTestUtils.setField(appController, "adminService", adminService);
+   }
+@@ -80,8 +64,6 @@ public class ControllerIntegrationExceptionTest extends AbstractControllerTest {
+   @After
+   public void tearDown() throws Exception {
+     ReflectionTestUtils.setField(appController, "adminService", realAdminService);
+-    ReflectionTestUtils.setField(appController, "accessKeyService", realAccessKeyService);
+-    ReflectionTestUtils.setField(appController, "bizConfig", realBizConfig);
+   }
+ 
+   @Test
+@@ -102,33 +84,6 @@ public class ControllerIntegrationExceptionTest extends AbstractControllerTest {
+     Assert.assertNull(savedApp);
+   }
+ 
+-  @Test
+-  @Sql(scripts = "/controller/cleanup.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
+-  public void testCreateWithAccessKeyAutoProvisionFailedAppStillCreated() {
+-    AppDTO dto = generateSampleDTOData();
+-
+-    ReflectionTestUtils.setField(appController, "adminService", realAdminService);
+-    ReflectionTestUtils.setField(appController, "accessKeyService", accessKeyService);
+-    ReflectionTestUtils.setField(appController, "bizConfig", bizConfig);
+-
+-    when(bizConfig.isAccessKeyAutoProvisionEnabled()).thenReturn(true);
+-    when(accessKeyService.create(any(String.class), any(AccessKey.class)))
+-        .thenThrow(new RuntimeException("create access key failed"));
+-
+-    ResponseEntity<AppDTO> response = restTemplate.postForEntity(url("/apps"), dto, AppDTO.class);
+-
+-    Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+-    AppDTO result = response.getBody();
+-    Assert.assertNotNull(result);
+-    Assert.assertEquals(dto.getAppId(), result.getAppId());
+-    Assert.assertTrue(result.getId() > 0);
+-
+-    App savedApp = appService.findOne(dto.getAppId());
+-    Assert.assertNotNull(savedApp);
+-    Assert.assertEquals(dto.getAppId(), savedApp.getAppId());
+-    verify(accessKeyService).create(eq(dto.getAppId()), any(AccessKey.class));
+-  }
+-
+   private AppDTO generateSampleDTOData() {
+     AppDTO dto = new AppDTO();
+     dto.setAppId("someAppId");
+diff --git a/apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/config/BizConfig.java b/apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/config/BizConfig.java
+index 79558d4f2..452ae0eca 100644
+--- a/apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/config/BizConfig.java
++++ b/apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/config/BizConfig.java
+@@ -179,10 +179,6 @@ public class BizConfig extends RefreshableConfig {
+     return INTERVAL_TIME_UNIT;
+   }
+ 
+-  public boolean isAccessKeyAutoProvisionEnabled() {
+-    return getBooleanProperty("apollo.access-key.auto-provision.enabled", false);
+-  }
+-
+   public int accessKeyCacheScanInterval() {
+     int interval = getIntProperty("apollo.access-key-cache-scan.interval",
+         DEFAULT_ACCESS_KEY_CACHE_SCAN_INTERVAL);
+diff --git a/apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/AdminService.java b/apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/AdminService.java
+index 1730d4824..6fb44ea7a 100644
+--- a/apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/AdminService.java
++++ b/apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/AdminService.java
+@@ -19,17 +19,18 @@ package com.ctrip.framework.apollo.biz.service;
+ import com.ctrip.framework.apollo.biz.entity.Cluster;
+ import com.ctrip.framework.apollo.common.entity.App;
+ import com.ctrip.framework.apollo.core.ConfigConsts;
+-import java.util.List;
+-import java.util.Objects;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ import org.springframework.context.annotation.Lazy;
+ import org.springframework.stereotype.Service;
+ import org.springframework.transaction.annotation.Transactional;
+ 
++import java.util.List;
++import java.util.Objects;
++
+ @Service
+ public class AdminService {
+-  private static final Logger logger = LoggerFactory.getLogger(AdminService.class);
++  private final static Logger logger = LoggerFactory.getLogger(AdminService.class);
+ 
+   private final AppService appService;
+   private final AppNamespaceService appNamespaceService;
+@@ -58,7 +59,7 @@ public class AdminService {
+ 
+     namespaceService.instanceOfAppNamespaces(appId, ConfigConsts.CLUSTER_NAME_DEFAULT, createBy);
+ 
+-    return createdApp;
++    return app;
+   }
+ 
+   @Transactional
+diff --git a/apollo-biz/src/test/java/com/ctrip/framework/apollo/biz/config/BizConfigTest.java b/apollo-biz/src/test/java/com/ctrip/framework/apollo/biz/config/BizConfigTest.java
+index 0ba9f010c..efe45e052 100644
+--- a/apollo-biz/src/test/java/com/ctrip/framework/apollo/biz/config/BizConfigTest.java
++++ b/apollo-biz/src/test/java/com/ctrip/framework/apollo/biz/config/BizConfigTest.java
+@@ -202,12 +202,4 @@ public class BizConfigTest {
+     assertTrue(result.contains("app1"));
+     assertTrue(result.contains("app2"));
+   }
+-
+-  @Test
+-  public void testIsAccessKeyAutoProvisionEnabled() {
+-    assertFalse(bizConfig.isAccessKeyAutoProvisionEnabled());
+-
+-    when(environment.getProperty("apollo.access-key.auto-provision.enabled")).thenReturn("true");
+-    assertTrue(bizConfig.isAccessKeyAutoProvisionEnabled());
+-  }
+ }
+diff --git a/apollo-biz/src/test/java/com/ctrip/framework/apollo/biz/service/AdminServiceUnitTest.java b/apollo-biz/src/test/java/com/ctrip/framework/apollo/biz/service/AdminServiceUnitTest.java
+deleted file mode 100644
+index 5b69a631e..000000000
+--- a/apollo-biz/src/test/java/com/ctrip/framework/apollo/biz/service/AdminServiceUnitTest.java
++++ /dev/null
+@@ -1,96 +0,0 @@
+-/*
+- * Copyright 2025 Apollo Authors
+- *
+- * Licensed under the Apache License, Version 2.0 (the "License");
+- * you may not use this file except in compliance with the License.
+- * You may obtain a copy of the License at
+- *
+- * http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing, software
+- * distributed under the License is distributed on an "AS IS" BASIS,
+- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+- * See the License for the specific language governing permissions and
+- * limitations under the License.
+- *
+- */
+-package com.ctrip.framework.apollo.biz.service;
+-
+-import static org.junit.Assert.assertSame;
+-import static org.mockito.ArgumentMatchers.any;
+-import static org.mockito.Mockito.verify;
+-import static org.mockito.Mockito.when;
+-
+-import com.ctrip.framework.apollo.common.entity.App;
+-import java.util.Date;
+-import org.junit.Before;
+-import org.junit.Test;
+-import org.junit.runner.RunWith;
+-import org.mockito.Mock;
+-import org.mockito.junit.MockitoJUnitRunner;
+-
+-/**
+- * Unit tests for {@link AdminService#createNewApp}.
+- */
+-@RunWith(MockitoJUnitRunner.class)
+-public class AdminServiceUnitTest {
+-
+-  private static final String APP_ID = "unitTestApp";
+-  private static final String OPERATOR = "operator";
+-
+-  @Mock
+-  private AppService appService;
+-  @Mock
+-  private AppNamespaceService appNamespaceService;
+-  @Mock
+-  private ClusterService clusterService;
+-  @Mock
+-  private NamespaceService namespaceService;
+-
+-  private AdminService adminService;
+-
+-  @Before
+-  public void setUp() {
+-    adminService =
+-        new AdminService(appService, appNamespaceService, clusterService, namespaceService);
+-  }
+-
+-  @Test
+-  public void createNewApp_createsDefaultAppStructure() {
+-    App saved = savedApp();
+-    when(appService.save(any(App.class))).thenReturn(saved);
+-
+-    adminService.createNewApp(inputApp());
+-
+-    verify(appNamespaceService).createDefaultAppNamespace(APP_ID, OPERATOR);
+-    verify(clusterService).createDefaultCluster(APP_ID, OPERATOR);
+-    verify(namespaceService).instanceOfAppNamespaces(APP_ID, "default", OPERATOR);
+-  }
+-
+-  @Test
+-  public void createNewApp_returnsSavedAppEntity() {
+-    App saved = savedApp();
+-    when(appService.save(any(App.class))).thenReturn(saved);
+-
+-    App created = adminService.createNewApp(inputApp());
+-    assertSame(saved, created);
+-  }
+-
+-  private App inputApp() {
+-    App app = new App();
+-    app.setAppId(APP_ID);
+-    app.setName("n");
+-    app.setOwnerName(OPERATOR);
+-    app.setOwnerEmail("o@x.com");
+-    app.setDataChangeCreatedBy(OPERATOR);
+-    app.setDataChangeLastModifiedBy(OPERATOR);
+-    app.setDataChangeCreatedTime(new Date());
+-    return app;
+-  }
+-
+-  private App savedApp() {
+-    App app = inputApp();
+-    app.setId(1L);
+-    return app;
+-  }
+-}
+diff --git a/apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/UniqueKeyGenerator.java b/apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/UniqueKeyGenerator.java
+index a55ab7267..d64add17f 100644
+--- a/apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/UniqueKeyGenerator.java
++++ b/apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/UniqueKeyGenerator.java
+@@ -19,7 +19,6 @@ package com.ctrip.framework.apollo.common.utils;
+ import com.ctrip.framework.apollo.core.utils.ByteUtil;
+ import com.ctrip.framework.apollo.core.utils.MachineUtil;
+ import com.google.common.base.Joiner;
+-import java.util.UUID;
+ import org.apache.commons.lang3.time.FastDateFormat;
+ 
+ import java.security.SecureRandom;
+@@ -59,8 +58,5 @@ public class UniqueKeyGenerator {
+     return bytes;
+   }
+ 
+-  public static String generateId() {
+-    return UUID.randomUUID().toString().replaceAll("-", "");
+-  }
+ 
+ }
+diff --git a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/AccessKeyController.java b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/AccessKeyController.java
+index f08461308..f02dfedd6 100644
+--- a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/AccessKeyController.java
++++ b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/AccessKeyController.java
+@@ -21,7 +21,6 @@ import static com.ctrip.framework.apollo.common.constants.AccessKeyMode.FILTER;
+ import com.ctrip.framework.apollo.audit.annotation.ApolloAuditLog;
+ import com.ctrip.framework.apollo.audit.annotation.OpType;
+ import com.ctrip.framework.apollo.common.dto.AccessKeyDTO;
+-import com.ctrip.framework.apollo.common.utils.UniqueKeyGenerator;
+ import com.ctrip.framework.apollo.portal.environment.Env;
+ import com.ctrip.framework.apollo.portal.service.AccessKeyService;
+ import com.ctrip.framework.apollo.portal.spi.UserInfoHolder;
+@@ -29,6 +28,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
+ import org.springframework.web.bind.annotation.*;
+ 
+ import java.util.List;
++import java.util.UUID;
+ 
+ /**
+  * @author nisiyong
+@@ -49,8 +49,9 @@ public class AccessKeyController {
+   @ApolloAuditLog(type = OpType.CREATE, name = "AccessKey.create")
+   public AccessKeyDTO save(@PathVariable String appId, @PathVariable String env,
+       @RequestBody AccessKeyDTO accessKeyDTO) {
++    String secret = UUID.randomUUID().toString().replaceAll("-", "");
+     accessKeyDTO.setAppId(appId);
+-    accessKeyDTO.setSecret(UniqueKeyGenerator.generateId());
++    accessKeyDTO.setSecret(secret);
+     return accessKeyService.createAccessKey(Env.valueOf(env), accessKeyDTO);
+   }
+ 

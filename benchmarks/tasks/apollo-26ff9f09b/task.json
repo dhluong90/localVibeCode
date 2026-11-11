@@ -1,0 +1,36 @@
+{
+  "id": "apollo-26ff9f09b",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: fix(portal): restore shared sessions after Boot 4 migration (#5706)\n* fix(portal): restore shared sessions after Boot 4 migration\n\n* docs: record shared Portal session fix in changelog\n\n* fix(portal): avoid implicit Redis connections and validate session stores\n\n* fix(portal): bootstrap Redis only when configured or selected\n\n* docs: preserve Apollo 3.1.0 changelog ordering",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/component/config/SessionStoreAutoConfigurationImportFilter.java"
+  ],
+  "test_modules": [
+    "apollo-portal"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/component/config/SessionStoreAutoConfigurationImportFilter.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "26ff9f09b",
+  "main_loc_changed": 80,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-portal",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
+  ]
+}

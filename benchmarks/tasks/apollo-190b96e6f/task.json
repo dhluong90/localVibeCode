@@ -1,0 +1,36 @@
+{
+  "id": "apollo-190b96e6f",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: Merge commit from fork\nThe release rollback endpoint authorized only the namespace owning\n`releaseId`, while the caller supplied `toReleaseId` was forwarded to\n`ReleaseService.rollbackTo` without any ownership check. That method then\nused the target release's configuration to publish the caller's own child\n(gray) namespace, so a user with release permission on one namespace could\ncopy another application's configuration and read it back.\n\nReject a target release that does not belong to the same appId,\nclusterName and namespaceName as the release being rolled back. The check\nlives in the biz layer, which covers the legacy WebAPI handler, the OpenAPI\nhandler and any future caller with a single invariant, and runs before any\nwrite or gray publication.\n\nThe Portal handlers are left unchanged: they keep authorizing the source\nnamespace, and deliberately do not require read permission on the target\nrelease, since that would need `config:read` for a `config:release`\ncapability and would break rollback for tokens that may release but not\nread. Cross-namespace targets now surface the biz layer's 400 through\nPortal.\n\nFixes GHSA-6gfh-7m5g-c78c",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/ReleaseService.java"
+  ],
+  "test_modules": [
+    "apollo-biz"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/ReleaseService.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "190b96e6f",
+  "main_loc_changed": 19,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-biz",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.biz.**"
+  ]
+}

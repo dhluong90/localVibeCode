@@ -1,0 +1,59 @@
+{
+  "id": "apollo-7daf30647",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: 新建应用时按环境自动创建并启用 AccessKey（Auto-provision） (#5589)\n* feat(biz): 添加访问密钥自动配置功能\n\n* feat(apollo): 更新CHANGES.md文件\n\n* feat(app): 应用创建时自动配置访问密钥\n\n* test(controller): 添加访问密钥自动配置失败测试\n\n* test(controller): 添加控制器集成异常测试补充",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/AppController.java",
+    "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/config/BizConfig.java",
+    "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/AdminService.java",
+    "apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/UniqueKeyGenerator.java",
+    "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/AccessKeyController.java"
+  ],
+  "test_modules": [
+    "apollo-adminservice",
+    "apollo-biz",
+    "apollo-common",
+    "apollo-portal"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/AppController.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/config/BizConfig.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/AdminService.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/UniqueKeyGenerator.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/AccessKeyController.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "7daf30647",
+  "main_loc_changed": 53,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-adminservice,apollo-biz,apollo-common,apollo-portal",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.adminservice.**,com.ctrip.framework.apollo.biz.**,com.ctrip.framework.apollo.common.**,com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
+  ]
+}

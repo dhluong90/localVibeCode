@@ -1,0 +1,36 @@
+{
+  "id": "apollo-dae91b599",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: fix: include super admin in hasAnyPermission semantics (#5568)\n* fix: include super admin in hasAnyPermission semantics\n\n* docs: add 5568 to changes log",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.java"
+  ],
+  "test_modules": [
+    "apollo-portal"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "dae91b599",
+  "main_loc_changed": 9,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-portal",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
+  ]
+}

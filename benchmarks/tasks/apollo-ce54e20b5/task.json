@@ -1,0 +1,47 @@
+{
+  "id": "apollo-ce54e20b5",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: fix(audit): support open-ended date filters (#5684)\n* fix(audit): support open-ended date filters\n\nPreserve optional audit date bounds and pagination with real JPA regression coverage. Align the 160-check release handbook with supported UI behavior and authorized HTTP credential setup.\n\n* docs: add changelog for audit date filter fix",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-audit/apollo-audit-api/src/main/java/com/ctrip/framework/apollo/audit/api/ApolloAuditLogQueryApi.java",
+    "apollo-audit/apollo-audit-impl/src/main/java/com/ctrip/framework/apollo/audit/repository/ApolloAuditLogRepository.java",
+    "apollo-audit/apollo-audit-impl/src/main/java/com/ctrip/framework/apollo/audit/service/ApolloAuditLogService.java"
+  ],
+  "test_modules": [
+    "apollo-audit/apollo-audit-api",
+    "apollo-audit/apollo-audit-impl"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-audit/apollo-audit-api/src/main/java/com/ctrip/framework/apollo/audit/api/ApolloAuditLogQueryApi.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-audit/apollo-audit-impl/src/main/java/com/ctrip/framework/apollo/audit/repository/ApolloAuditLogRepository.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-audit/apollo-audit-impl/src/main/java/com/ctrip/framework/apollo/audit/service/ApolloAuditLogService.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "ce54e20b5",
+  "main_loc_changed": 19,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-audit/apollo-audit-api,apollo-audit/apollo-audit-impl",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.audit.**"
+  ]
+}

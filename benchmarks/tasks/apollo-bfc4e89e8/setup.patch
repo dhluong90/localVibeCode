@@ -1,0 +1,345 @@
+diff --git a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/configuration/OidcExtendProperties.java b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/configuration/OidcExtendProperties.java
+index e623eac2d..055022ccc 100644
+--- a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/configuration/OidcExtendProperties.java
++++ b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/configuration/OidcExtendProperties.java
+@@ -34,18 +34,6 @@ public class OidcExtendProperties {
+    */
+   private String jwtUserDisplayNameClaimName;
+ 
+-  /**
+-   * claim name used as the Apollo user identity {@link UserPO#getUsername()} for both oidc
+-   * (interactive) and jwt logins. default to the token subject ({@link StandardClaimNames#SUB}).
+-   * <p>
+-   * The value of this claim becomes the Apollo login identity and drives authorization, so when it
+-   * is configured the claim must be IdP-controlled, unique, immutable, non-reassignable and not
+-   * user-editable. If a configured claim is missing or blank in a token, login is rejected rather
+-   * than falling back to the subject, so the same principal cannot be provisioned as two different
+-   * Apollo users across the oidc and jwt paths.
+-   */
+-  private String userIdClaimName;
+-
+   public String getUserDisplayNameClaimName() {
+     return userDisplayNameClaimName;
+   }
+@@ -54,14 +42,6 @@ public class OidcExtendProperties {
+     this.userDisplayNameClaimName = userDisplayNameClaimName;
+   }
+ 
+-  public String getUserIdClaimName() {
+-    return userIdClaimName;
+-  }
+-
+-  public void setUserIdClaimName(String userIdClaimName) {
+-    this.userIdClaimName = userIdClaimName;
+-  }
+-
+   public String getJwtUserDisplayNameClaimName() {
+     return jwtUserDisplayNameClaimName;
+   }
+diff --git a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcAuthenticationSuccessEventListener.java b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcAuthenticationSuccessEventListener.java
+index a2d149aa3..e1e60b4c7 100644
+--- a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcAuthenticationSuccessEventListener.java
++++ b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcAuthenticationSuccessEventListener.java
+@@ -71,27 +71,27 @@ public class OidcAuthenticationSuccessEventListener
+   }
+ 
+   private void oidcUserLogin(OidcUser oidcUser) {
+-    String userId = OidcUserInfoUtil.getOidcUserId(oidcUser, this.oidcExtendProperties);
++    String subject = oidcUser.getSubject();
+     String userDisplayName =
+         OidcUserInfoUtil.getOidcUserDisplayName(oidcUser, this.oidcExtendProperties);
+     String email = oidcUser.getEmail();
+ 
+-    this.logOidc(oidcUser, userId, userDisplayName, email);
++    this.logOidc(oidcUser, subject, userDisplayName, email);
+ 
+     UserInfo newUserInfo = new UserInfo();
+-    newUserInfo.setUserId(userId);
++    newUserInfo.setUserId(subject);
+     newUserInfo.setName(userDisplayName);
+     newUserInfo.setEmail(email);
+-    if (this.contains(userId)) {
++    if (this.contains(subject)) {
+       this.oidcLocalUserService.updateUserInfo(newUserInfo);
+       return;
+     }
+     this.oidcLocalUserService.createLocalUser(newUserInfo);
+   }
+ 
+-  private void logOidc(OidcUser oidcUser, String userId, String userDisplayName, String email) {
+-    oidcLog.debug("oidc authentication success, userId=[{}] userDisplayName=[{}] email=[{}]",
+-        userId, userDisplayName, email);
++  private void logOidc(OidcUser oidcUser, String subject, String userDisplayName, String email) {
++    oidcLog.debug("oidc authentication success, sub=[{}] userDisplayName=[{}] email=[{}]", subject,
++        userDisplayName, email);
+     if (oidcLog.isTraceEnabled()) {
+       Map<String, Object> claims = oidcUser.getClaims();
+       for (Entry<String, Object> entry : claims.entrySet()) {
+@@ -113,22 +113,22 @@ public class OidcAuthenticationSuccessEventListener
+   }
+ 
+   private void jwtLogin(Jwt jwt) {
+-    String userId = OidcUserInfoUtil.getJwtUserId(jwt, this.oidcExtendProperties);
++    String subject = jwt.getSubject();
+     String userDisplayName = OidcUserInfoUtil.getJwtUserDisplayName(jwt, this.oidcExtendProperties);
+ 
+-    this.logJwt(jwt, userId, userDisplayName);
++    this.logJwt(jwt, subject, userDisplayName);
+ 
+-    if (this.contains(userId)) {
++    if (this.contains(subject)) {
+       return;
+     }
+     UserInfo newUserInfo = new UserInfo();
+-    newUserInfo.setUserId(userId);
++    newUserInfo.setUserId(subject);
+     newUserInfo.setName(userDisplayName);
+     this.oidcLocalUserService.createLocalUser(newUserInfo);
+   }
+ 
+-  private void logJwt(Jwt jwt, String userId, String userDisplayName) {
+-    jwtLog.debug("jwt authentication success, userId=[{}] userDisplayName=[{}]", userId,
++  private void logJwt(Jwt jwt, String subject, String userDisplayName) {
++    jwtLog.debug("jwt authentication success, sub=[{}] userDisplayName=[{}]", subject,
+         userDisplayName);
+     if (jwtLog.isTraceEnabled()) {
+       Map<String, Object> claims = jwt.getClaims();
+diff --git a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.java b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.java
+index 116ce8c56..ea1a028fe 100644
+--- a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.java
++++ b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.java
+@@ -64,7 +64,7 @@ public class OidcUserInfoHolder implements UserInfoHolder {
+     if (principal instanceof OidcUser) {
+       UserInfo userInfo = new UserInfo();
+       OidcUser oidcUser = (OidcUser) principal;
+-      userInfo.setUserId(OidcUserInfoUtil.getOidcUserId(oidcUser, this.oidcExtendProperties));
++      userInfo.setUserId(oidcUser.getSubject());
+       userInfo
+           .setName(OidcUserInfoUtil.getOidcUserDisplayName(oidcUser, this.oidcExtendProperties));
+       userInfo.setEmail(oidcUser.getEmail());
+@@ -73,7 +73,7 @@ public class OidcUserInfoHolder implements UserInfoHolder {
+     if (principal instanceof Jwt) {
+       Jwt jwt = (Jwt) principal;
+       UserInfo userInfo = new UserInfo();
+-      userInfo.setUserId(OidcUserInfoUtil.getJwtUserId(jwt, this.oidcExtendProperties));
++      userInfo.setUserId(jwt.getSubject());
+       userInfo.setName(OidcUserInfoUtil.getJwtUserDisplayName(jwt, this.oidcExtendProperties));
+       return userInfo;
+     }
+diff --git a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtil.java b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtil.java
+index d02bf7f74..60c8536de 100644
+--- a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtil.java
++++ b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtil.java
+@@ -18,7 +18,6 @@ package com.ctrip.framework.apollo.portal.spi.oidc;
+ 
+ import com.ctrip.framework.apollo.core.utils.StringUtils;
+ import com.ctrip.framework.apollo.portal.spi.configuration.OidcExtendProperties;
+-import org.springframework.security.authentication.BadCredentialsException;
+ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+ import org.springframework.security.oauth2.jwt.Jwt;
+ 
+@@ -28,58 +27,6 @@ public class OidcUserInfoUtil {
+     throw new UnsupportedOperationException("util class");
+   }
+ 
+-  /**
+-   * resolve the Apollo user id from an oidc (interactive) user. When
+-   * {@link OidcExtendProperties#getUserIdClaimName()} is configured, the value of that claim is
+-   * used as the Apollo login identity. If a claim is configured but missing or blank in the token,
+-   * login is rejected rather than falling back to the subject: falling back could resolve the same
+-   * principal to a different id across the oidc and jwt paths and provision two local accounts. When
+-   * no claim is configured, the token subject is used (default behavior).
+-   *
+-   * @param oidcUser             the user
+-   * @param oidcExtendProperties claimName properties
+-   * @return the Apollo user id
+-   * @throws BadCredentialsException if a claim is configured but absent or blank in the token
+-   */
+-  public static String getOidcUserId(OidcUser oidcUser, OidcExtendProperties oidcExtendProperties) {
+-    String userIdClaimName = oidcExtendProperties.getUserIdClaimName();
+-    if (StringUtils.isBlank(userIdClaimName)) {
+-      return oidcUser.getSubject();
+-    }
+-    String userId = oidcUser.getClaimAsString(userIdClaimName);
+-    if (StringUtils.isBlank(userId)) {
+-      throw new BadCredentialsException(
+-          String.format("the configured oidc user id claim [%s] is missing or blank in the token",
+-              userIdClaimName));
+-    }
+-    return userId;
+-  }
+-
+-  /**
+-   * resolve the Apollo user id from a jwt. Behaves like
+-   * {@link #getOidcUserId(OidcUser, OidcExtendProperties)}, reading the same configured claim,
+-   * using the jwt subject only when no claim is configured, and rejecting the login when a
+-   * configured claim is missing or blank.
+-   *
+-   * @param jwt                  the user
+-   * @param oidcExtendProperties claimName properties
+-   * @return the Apollo user id
+-   * @throws BadCredentialsException if a claim is configured but absent or blank in the token
+-   */
+-  public static String getJwtUserId(Jwt jwt, OidcExtendProperties oidcExtendProperties) {
+-    String userIdClaimName = oidcExtendProperties.getUserIdClaimName();
+-    if (StringUtils.isBlank(userIdClaimName)) {
+-      return jwt.getSubject();
+-    }
+-    String userId = jwt.getClaimAsString(userIdClaimName);
+-    if (StringUtils.isBlank(userId)) {
+-      throw new BadCredentialsException(
+-          String.format("the configured jwt user id claim [%s] is missing or blank in the token",
+-              userIdClaimName));
+-    }
+-    return userId;
+-  }
+-
+   /**
+    * get userDisplayName from oidcUser
+    *
+diff --git a/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtilTest.java b/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtilTest.java
+deleted file mode 100644
+index 353aeaba1..000000000
+--- a/apollo-portal/src/test/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtilTest.java
++++ /dev/null
+@@ -1,140 +0,0 @@
+-/*
+- * Copyright 2025 Apollo Authors
+- *
+- * Licensed under the Apache License, Version 2.0 (the "License");
+- * you may not use this file except in compliance with the License.
+- * You may obtain a copy of the License at
+- *
+- * http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing, software
+- * distributed under the License is distributed on an "AS IS" BASIS,
+- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+- * See the License for the specific language governing permissions and
+- * limitations under the License.
+- *
+- */
+-package com.ctrip.framework.apollo.portal.spi.oidc;
+-
+-import static org.junit.jupiter.api.Assertions.assertEquals;
+-import static org.junit.jupiter.api.Assertions.assertThrows;
+-import static org.mockito.Mockito.mock;
+-import static org.mockito.Mockito.when;
+-
+-import com.ctrip.framework.apollo.portal.spi.configuration.OidcExtendProperties;
+-import org.junit.jupiter.api.Test;
+-import org.springframework.security.authentication.BadCredentialsException;
+-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+-import org.springframework.security.oauth2.jwt.Jwt;
+-
+-/**
+- * Tests resolution of the Apollo user id from the configurable OIDC/JWT claim, covering the
+- * unconfigured default (token subject), a configured-and-present claim, the fail-closed rejection
+- * when a configured claim is missing or blank, and cross-path consistency between the OIDC and JWT
+- * resolvers.
+- */
+-public class OidcUserInfoUtilTest {
+-
+-  private static final String SUBJECT = "8f3a2c1e-uuid-subject";
+-
+-  private static Jwt jwtWith(String preferredUsername) {
+-    Jwt.Builder builder = Jwt.withTokenValue("token").header("alg", "none").subject(SUBJECT);
+-    if (preferredUsername != null) {
+-      builder.claim("preferred_username", preferredUsername);
+-    }
+-    return builder.build();
+-  }
+-
+-  @Test
+-  public void testGetOidcUserIdDefaultsToSubjectWhenClaimNotConfigured() {
+-    OidcExtendProperties properties = new OidcExtendProperties();
+-    OidcUser oidcUser = mock(OidcUser.class);
+-    when(oidcUser.getSubject()).thenReturn(SUBJECT);
+-
+-    assertEquals(SUBJECT, OidcUserInfoUtil.getOidcUserId(oidcUser, properties));
+-  }
+-
+-  @Test
+-  public void testGetOidcUserIdUsesConfiguredClaim() {
+-    OidcExtendProperties properties = new OidcExtendProperties();
+-    properties.setUserIdClaimName("preferred_username");
+-    OidcUser oidcUser = mock(OidcUser.class);
+-    when(oidcUser.getSubject()).thenReturn(SUBJECT);
+-    when(oidcUser.getClaimAsString("preferred_username")).thenReturn("alice");
+-
+-    assertEquals("alice", OidcUserInfoUtil.getOidcUserId(oidcUser, properties));
+-  }
+-
+-  @Test
+-  public void testGetOidcUserIdRejectsWhenConfiguredClaimBlank() {
+-    OidcExtendProperties properties = new OidcExtendProperties();
+-    properties.setUserIdClaimName("preferred_username");
+-    OidcUser oidcUser = mock(OidcUser.class);
+-    when(oidcUser.getClaimAsString("preferred_username")).thenReturn(" ");
+-
+-    assertThrows(BadCredentialsException.class,
+-        () -> OidcUserInfoUtil.getOidcUserId(oidcUser, properties));
+-  }
+-
+-  @Test
+-  public void testGetOidcUserIdRejectsWhenConfiguredClaimMissing() {
+-    OidcExtendProperties properties = new OidcExtendProperties();
+-    properties.setUserIdClaimName("preferred_username");
+-    OidcUser oidcUser = mock(OidcUser.class);
+-    when(oidcUser.getClaimAsString("preferred_username")).thenReturn(null);
+-
+-    assertThrows(BadCredentialsException.class,
+-        () -> OidcUserInfoUtil.getOidcUserId(oidcUser, properties));
+-  }
+-
+-  @Test
+-  public void testGetJwtUserIdDefaultsToSubjectWhenClaimNotConfigured() {
+-    OidcExtendProperties properties = new OidcExtendProperties();
+-
+-    assertEquals(SUBJECT, OidcUserInfoUtil.getJwtUserId(jwtWith("alice"), properties));
+-  }
+-
+-  @Test
+-  public void testGetJwtUserIdUsesConfiguredClaim() {
+-    OidcExtendProperties properties = new OidcExtendProperties();
+-    properties.setUserIdClaimName("preferred_username");
+-
+-    assertEquals("alice", OidcUserInfoUtil.getJwtUserId(jwtWith("alice"), properties));
+-  }
+-
+-  @Test
+-  public void testGetJwtUserIdRejectsWhenConfiguredClaimMissing() {
+-    OidcExtendProperties properties = new OidcExtendProperties();
+-    properties.setUserIdClaimName("preferred_username");
+-
+-    assertThrows(BadCredentialsException.class,
+-        () -> OidcUserInfoUtil.getJwtUserId(jwtWith(null), properties));
+-  }
+-
+-  @Test
+-  public void testGetJwtUserIdRejectsWhenConfiguredClaimBlank() {
+-    OidcExtendProperties properties = new OidcExtendProperties();
+-    properties.setUserIdClaimName("preferred_username");
+-
+-    assertThrows(BadCredentialsException.class,
+-        () -> OidcUserInfoUtil.getJwtUserId(jwtWith(" "), properties));
+-  }
+-
+-  /**
+-   * The same principal must resolve to the same Apollo user id, or be rejected, regardless of
+-   * whether it arrives on the interactive OIDC path or the JWT path. When the configured claim is
+-   * present on one path but absent on the other, failing closed on the absent path prevents the
+-   * principal from being provisioned as two different Apollo accounts.
+-   */
+-  @Test
+-  public void testCrossPathConsistencyWhenClaimPresentOnOidcButAbsentOnJwt() {
+-    OidcExtendProperties properties = new OidcExtendProperties();
+-    properties.setUserIdClaimName("preferred_username");
+-    OidcUser oidcUser = mock(OidcUser.class);
+-    when(oidcUser.getClaimAsString("preferred_username")).thenReturn("alice");
+-
+-    assertEquals("alice", OidcUserInfoUtil.getOidcUserId(oidcUser, properties));
+-    assertThrows(BadCredentialsException.class,
+-        () -> OidcUserInfoUtil.getJwtUserId(jwtWith(null), properties));
+-  }
+-}

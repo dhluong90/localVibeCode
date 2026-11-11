@@ -1,0 +1,36 @@
+{
+  "id": "apollo-55fdcbb57",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: fix: avoid accidentally deleting new appNamespaceCache of same appid and name with the old appNamespaceCache. (#5504)\nFixes #5502",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/service/AppNamespaceServiceWithCache.java"
+  ],
+  "test_modules": [
+    "apollo-configservice"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/service/AppNamespaceServiceWithCache.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "55fdcbb57",
+  "main_loc_changed": 8,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-configservice",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.configservice.**,com.ctrip.framework.apollo.metaservice.**"
+  ]
+}

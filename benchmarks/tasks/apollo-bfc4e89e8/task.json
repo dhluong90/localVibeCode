@@ -1,0 +1,51 @@
+{
+  "id": "apollo-bfc4e89e8",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: feat(portal): support configurable OIDC username claim for user identity (#5655)\n* feat(portal): support configurable OIDC username claim for user identity\n\nApollo used the OIDC/JWT subject (sub) as the Apollo user identity\n(Users.Username). Enterprise IdPs often carry an opaque UUID in sub and\nthe real login name in another claim such as preferred_username.\n\nAdd spring.security.oidc.user-id-claim-name (default: token subject) and\nresolve the user id through a shared OidcUserInfoUtil helper so both the\nauthentication success listener and the user info holder agree. When the\nconfigured claim is missing or blank, fall back to the subject so a user\nis never created with an empty id. Non-breaking: unset keeps sub behavior.\n\nCloses #5633\n\n* docs: add CHANGES entry for configurable OIDC username claim (#5655)\n\n* test: add class-level Javadoc to OidcUserInfoUtilTest\n\n* test: migrate OidcUserInfoUtilTest to JUnit 5 (Jupiter)\n\n* fix(portal): fail closed on missing OIDC id claim, document identity security contract\n\nAddress review on #5655:\n- Reject login (BadCredentialsException) when a configured user-id claim is\n  missing or blank, instead of falling back to sub, so the same principal is\n  not provisioned as two accounts across the OIDC and JWT paths.\n- Document the claim security contract (IdP-controlled, unique, immutable,\n  non-reassignable, non-user-editable), the 64-char Username limit, and the\n  conditional recommendation for preferred_username, in the EN and ZH guides.\n- Add cross-path and blank-JWT-claim test coverage.\n- Move the CHANGES entry to the bottom of the 3.0.0 section.\n\n* test: add JWT blank-claim rejection case for configurable OIDC username claim (#5655)",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/configuration/OidcExtendProperties.java",
+    "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcAuthenticationSuccessEventListener.java",
+    "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.java",
+    "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtil.java"
+  ],
+  "test_modules": [
+    "apollo-portal"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/configuration/OidcExtendProperties.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcAuthenticationSuccessEventListener.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtil.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "bfc4e89e8",
+  "main_loc_changed": 88,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-portal",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
+  ]
+}

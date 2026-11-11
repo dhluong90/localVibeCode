@@ -10,5 +10,17 @@
     "test_dir": "src/test/java",
     "test_cmd": ["mvn", "-o", "-q", "test"],
     "source": "apps/ecommerce_app/backend"
+  },
+  "apollo": {
+    "language": "java",
+    "test_dir": "src/test/java",
+    "test_cmd": ["mvn", "-o", "-q", "test", "-Dspotless.check.skip=true"],
+    "path": "fixtures_cache/apollo",
+    "large": true,
+    "num_ctx": 16384,
+    "source": "https://github.com/apolloconfig/apollo",
+    "commit": "5b663c5f8",
+    "setup": "git clone https://github.com/apolloconfig/apollo.git benchmarks/fixtures_cache/apollo && git -C benchmarks/fixtures_cache/apollo checkout 5b663c5f8 && (cd benchmarks/fixtures_cache/apollo && mvn -q -DskipTests install -Dspotless.check.skip=true && mvn -q test -Dspotless.check.skip=true)",
+    "notes": "apolloconfig/apollo, ~57.6k LOC main Java, 14 Maven modules, Spring Boot 4.1, Java 17; full suite green offline in ~3 min (882 portal tests). Tasks mined from git history by benchmarks/tools/mine_history_tasks.py."
   }
 }

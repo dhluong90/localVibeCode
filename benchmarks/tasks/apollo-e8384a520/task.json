@@ -1,0 +1,41 @@
+{
+  "id": "apollo-e8384a520",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: Replace synchronized multimap with concurrent hash map in NotificationControllerV2 for better performance",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/controller/NotificationControllerV2.java",
+    "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/wrapper/CaseInsensitiveMultimapWrapper.java"
+  ],
+  "test_modules": [
+    "apollo-configservice"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/controller/NotificationControllerV2.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/wrapper/CaseInsensitiveMultimapWrapper.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "e8384a520",
+  "main_loc_changed": 103,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-configservice",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.configservice.**,com.ctrip.framework.apollo.metaservice.**"
+  ]
+}

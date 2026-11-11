@@ -1,0 +1,36 @@
+{
+  "id": "apollo-42d4d827e",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: Merge commit from fork\nUse the checked app, cluster, namespace and branch from the Admin Service\nURL when constructing the persisted gray release rule. This prevents a\nbody-supplied identity from redirecting a Portal-authorized update to\nanother application and covers all callers at one boundary.\n\nAdd HTTP/H2 regressions for mismatched and missing identities, normal\nupdates and missing branches, including checks that another application's\nrules remain unchanged.\n\nFixes GHSA-8j5g-8m4g-frrh",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/NamespaceBranchController.java"
+  ],
+  "test_modules": [
+    "apollo-adminservice"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/NamespaceBranchController.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "42d4d827e",
+  "main_loc_changed": 5,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-adminservice",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.adminservice.**"
+  ]
+}

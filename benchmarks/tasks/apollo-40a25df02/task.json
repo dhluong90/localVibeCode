@@ -1,0 +1,47 @@
+{
+  "id": "apollo-40a25df02",
+  "category": "TODO",
+  "fixture": "apollo",
+  "split": "draft",
+  "difficulty": "TODO",
+  "prompt": "TODO ticket. Commit: fix: change GrayReleaseRule.Rules to TEXT to avoid utf8mb4 row-size 1118 (#5699)\n* fix(database): 修复灰度规则表字段行大小超限问题\n\n* docs: add #5699 to CHANGES.md\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n\n* chore(sql): 清理H2迁移脚本中的无关注释并格式化SQL\n\n* fix(gray-release): 处理灰度规则JSON为空或null时的空值保护\n\n---------\n\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+  "setup": [],
+  "setup_patch": "setup.patch",
+  "gold_files": [
+    "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/entity/GrayReleaseRule.java",
+    "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/entity/ReleaseHistory.java",
+    "apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/GrayReleaseRuleItemTransformer.java"
+  ],
+  "test_modules": [
+    "apollo-biz",
+    "apollo-common"
+  ],
+  "oracle_plan": [
+    {
+      "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/entity/GrayReleaseRule.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/entity/ReleaseHistory.java",
+      "instruction": "TODO"
+    },
+    {
+      "file": "apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/GrayReleaseRuleItemTransformer.java",
+      "instruction": "TODO"
+    }
+  ],
+  "source_commit": "40a25df02",
+  "main_loc_changed": 11,
+  "test_cmd": [
+    "mvn",
+    "-o",
+    "-q",
+    "test",
+    "-pl",
+    "apollo-biz,apollo-common",
+    "-am",
+    "-Dspotless.check.skip=true",
+    "-Dsurefire.failIfNoSpecifiedTests=false",
+    "-Dtest=com.ctrip.framework.apollo.biz.**,com.ctrip.framework.apollo.common.**"
+  ]
+}
