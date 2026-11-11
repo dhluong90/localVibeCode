@@ -12,6 +12,7 @@ edit format. H keeps its own JSON-constrained format: that is the design under t
 from __future__ import annotations
 
 import re
+import shlex
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -255,7 +256,7 @@ def run_opencode(
     prompt = (
         f"{task.prompt}\n\n"
         "Implement this in the repository. When you are done, make sure the code compiles and the relevant "
-        f"tests pass. The relevant test command is: `{' '.join(test_cmd)}`"
+        f"tests pass. The relevant test command is: `{shlex.join(test_cmd)}`"  # quoted: zsh expands ** in -Dtest
     )
     events_file = ws.parent / "opencode_events.jsonl"
     deadline = _time.time() + timeout
@@ -294,7 +295,7 @@ def run_opencode(
                 break
             feedback = (
                 "The test command failed. Fix the code so that it passes, then run the command again to confirm.\n"
-                f"Command: `{' '.join(test_cmd)}`\nOutput (tail):\n```\n{_tail_relevant(out, 3500)}\n```"
+                f"Command: `{shlex.join(test_cmd)}`\nOutput (tail):\n```\n{_tail_relevant(out, 3500)}\n```"
             )
             ok = run_once(["-s", session], feedback)
     finally:

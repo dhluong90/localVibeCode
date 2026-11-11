@@ -10,3 +10,4 @@
 - Files here are large. Do NOT read whole files: grep for the method first, then read with an offset and a limit of
   about 80 lines around it. Keep the context small.
 - Make the change with the edit tool as soon as you have located the code. Then run the module's tests.
+- Always quote Maven `-Dtest` patterns in the shell (zsh expands `**`): `'-Dtest=com.ctrip.framework.apollo.biz.**'`.
