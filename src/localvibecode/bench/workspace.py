@@ -27,14 +27,16 @@ def prepare_base(task: Task, fixture: Fixture, dest: Path) -> Path:
     shutil.copytree(fixture.path, dest,
                     ignore=shutil.ignore_patterns(".git", "target", "graphify-out", "__pycache__", "node_modules"))
     apply_edits(dest, task.setup)
-    if task.setup_patch:
-        # `git apply` also works on a plain directory; the base repo is initialised afterwards.
-        subprocess.run(["git", "apply", str(task.dir / task.setup_patch)], cwd=str(dest), check=True,
-                       capture_output=True, text=True)
     (dest / ".gitignore").write_text(WORKSPACE_GITIGNORE, encoding="utf-8")
     _git(dest, "init", "-q")
     _git(dest, "config", "gc.auto", "0")
     _git(dest, "config", "maintenance.auto", "false")
+    if task.setup_patch:
+        # Apply only after `git init`: inside an enclosing repo, `git apply` silently skips paths
+        # outside the current directory, which left the start state unchanged.
+        _git(dest, "apply", "--verbose", str((task.dir / task.setup_patch).resolve()))
+        if not _git(dest, "status", "--porcelain").strip():
+            raise RuntimeError(f"setup patch of {task.id} changed nothing")
     _git(dest, "add", "-A")
     _git(dest, "commit", "-q", "-m", "base")
     return dest
