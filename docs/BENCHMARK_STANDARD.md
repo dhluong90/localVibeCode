@@ -341,3 +341,70 @@ Kèm theo:
 - Danh sách category **chưa đạt** và lý do (harness hay model).
 
 **Điều kiện nghiệm thu:** Toàn bộ Nhóm A đạt mức kỳ vọng và ≥ 80% Nhóm B đạt mức kỳ vọng trên test set, với 14B; không có SAST High/Critical mới; mọi số liệu tái lập được.
+
+---
+
+## 10. % SDLC được phủ (SDLC Coverage)
+
+Trả lời câu hỏi: *"Model + harness tự gánh được bao nhiêu phần trăm công sức SDLC?"*
+
+### 10.1 Trọng số công sức theo loại task
+
+Mặc định dưới đây là **giả định khởi điểm** (không phải số đo) — team cần chỉnh theo phân bổ thời gian thực tế của mình. Tổng = 100%.
+
+| Phase | Trọng số | Phân bổ trong phase |
+|---|---|---|
+| P1 Requirements | 10% | R1 5, R2 5 |
+| P2 Design | 10% | D1 5, D2 5 |
+| P3 Implementation | 35% | I1 5, I2 8, I3 10, I4 4, I5 4, I6 4 |
+| P4 Testing | 20% | T1 10, T2 6, T3 4 |
+| P5 Review & Quality | 10% | Q1 5, Q2 2, Q3 3 |
+| P6 Debug & Maintenance | 10% | M1 5, M2 3, M3 2 |
+| P7 Release & Ops | 5% | O1 2, O2 3 |
+
+### 10.2 Công thức
+
+Với mỗi category `c` có trọng số `w_c` và level đạt được `L_c` (đo trên **test set**, theo Mục 1.1):
+
+- **Mức phủ chặt** = Σ `w_c` với `L_c ≥ L3` — phần công sức AI tự làm, người chỉ duyệt.
+- **Mức phủ có trọng số** = Σ `w_c × a(L_c)`, với `a(L4) = 1.0`, `a(L3) = 0.7`, `a(L2) = 0.3`, `a(<L2) = 0`.
+- **Độ phủ đo lường** = Σ `w_c` của các category đã có dữ liệu. Category chưa đo được tính `a = 0` và liệt kê riêng là *"chưa đo"* — không được ngoại suy.
+
+Báo cáo luôn ghi cả ba con số, kèm bảng trọng số đã dùng.
+
+---
+
+## 11. Velocity
+
+Trả lời câu hỏi: *"Dùng model + harness thì nhanh hơn tự làm bao nhiêu?"*
+
+### 11.1 Baseline thời gian người làm (`T_human`)
+
+Mỗi task có trường `human_baseline` trong `task.json`:
+
+```json
+"human_baseline": {"minutes": 35, "source": "proxy:claude-mid-dev", "breakdown": {"understand": 10, "implement": 12, "test": 8, "build_debug": 5}}
+```
+
+| `source` | Ý nghĩa | Được dùng để |
+|---|---|---|
+| `measured:<người>` | Developer thật làm task, có bấm giờ | Báo cáo velocity **đo được** |
+| `proxy:claude-mid-dev` | Claude đóng vai developer trình độ trung bình, ước lượng theo breakdown (đọc hiểu → code → viết test → build/debug) dựa trên lời giải tham chiếu | Báo cáo velocity **mô hình hoá** — luôn ghi nhãn rõ |
+
+Khi có số đo thật, báo cáo ghi thêm sai lệch giữa proxy và đo thật để hiệu chỉnh proxy.
+
+### 11.2 Thời gian khi dùng AI (`T_ai`) cho một run
+
+```
+T_ai = T_agent + T_review + (nếu run thất bại hoặc gây regression: T_triage + T_human)
+```
+
+- `T_agent`: wall-clock của agent (đo được). Mặc định coi là developer **chờ**; báo cáo thêm biến thể *song song* (`T_agent` không tính) làm cận trên.
+- `T_review` = 3 phút + 1 phút / 20 dòng diff — thời gian đọc và duyệt diff (giả định proxy).
+- `T_triage` = 5 phút — đọc kết quả AI trước khi bỏ và tự làm (giả định proxy).
+
+### 11.3 Chỉ số
+
+- **Velocity** = Σ `T_human` / Σ `T_ai` trên mọi run của tập đánh giá (lấy kỳ vọng qua k lần chạy).
+- **Thời gian tiết kiệm** = 1 − Σ `T_ai` / Σ `T_human`.
+- Báo cáo theo từng category và tổng, ghi rõ `source` của baseline và các giả định ở 11.2. Velocity < 1 nghĩa là dùng AI **chậm hơn** tự làm — phải báo cáo đúng như vậy.
