@@ -1,0 +1,315 @@
+{
+  "k": 1,
+  "total_runs": 17,
+  "task_prefix": "apollo-",
+  "models": {
+    "qwen2.5-coder:14b": {
+      "B0": {
+        "ALL": {
+          "instances": 6,
+          "runs": 6,
+          "resolve_at_1": 0.333,
+          "resolve_ci95": [
+            0.097,
+            0.7
+          ],
+          "pass_k": 0.333,
+          "pass_k_instances": 6,
+          "regression_rate": 0.5,
+          "scope_precision": 0.917,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 248.783,
+          "mean_prompt_tokens": 2964.5,
+          "mean_completion_tokens": 2853.667,
+          "failure_tags": {
+            "M1": 3,
+            "M2": 1
+          },
+          "harness_failure_share": 0.0,
+          "level": "<L2"
+        },
+        "I2": {
+          "instances": 1,
+          "runs": 1,
+          "resolve_at_1": 0.0,
+          "resolve_ci95": [
+            0.0,
+            0.793
+          ],
+          "pass_k": 0.0,
+          "pass_k_instances": 1,
+          "regression_rate": 1.0,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 412.1,
+          "mean_prompt_tokens": 4732.0,
+          "mean_completion_tokens": 4641.0,
+          "failure_tags": {
+            "M2": 1
+          },
+          "harness_failure_share": 0.0,
+          "level": "<L2"
+        },
+        "I3": {
+          "instances": 3,
+          "runs": 3,
+          "resolve_at_1": 0.0,
+          "resolve_ci95": [
+            0.0,
+            0.562
+          ],
+          "pass_k": 0.0,
+          "pass_k_instances": 3,
+          "regression_rate": 0.667,
+          "scope_precision": 0.833,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 162.1,
+          "mean_prompt_tokens": 2015.333,
+          "mean_completion_tokens": 1911.0,
+          "failure_tags": {
+            "M1": 3
+          },
+          "harness_failure_share": 0.0,
+          "level": "<L2"
+        },
+        "Q3": {
+          "instances": 2,
+          "runs": 2,
+          "resolve_at_1": 1.0,
+          "resolve_ci95": [
+            0.342,
+            1.0
+          ],
+          "pass_k": 1.0,
+          "pass_k_instances": 2,
+          "regression_rate": 0.0,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 297.15,
+          "mean_prompt_tokens": 3504.5,
+          "mean_completion_tokens": 3374.0,
+          "failure_tags": {},
+          "harness_failure_share": null,
+          "level": "L4"
+        }
+      },
+      "H": {
+        "ALL": {
+          "instances": 6,
+          "runs": 6,
+          "resolve_at_1": 0.0,
+          "resolve_ci95": [
+            0.0,
+            0.39
+          ],
+          "pass_k": 0.0,
+          "pass_k_instances": 6,
+          "regression_rate": 0.333,
+          "scope_precision": 0.0,
+          "scope_recall": 0.0,
+          "mutation_score": null,
+          "mean_agent_sec": 187.417,
+          "mean_prompt_tokens": 5887.333,
+          "mean_completion_tokens": 289.167,
+          "failure_tags": {
+            "H8": 5,
+            "H1": 1
+          },
+          "harness_failure_share": 1.0,
+          "level": "<L2"
+        },
+        "I2": {
+          "instances": 1,
+          "runs": 1,
+          "resolve_at_1": 0.0,
+          "resolve_ci95": [
+            0.0,
+            0.793
+          ],
+          "pass_k": 0.0,
+          "pass_k_instances": 1,
+          "regression_rate": 1.0,
+          "scope_precision": 0.0,
+          "scope_recall": 0.0,
+          "mutation_score": null,
+          "mean_agent_sec": 236.6,
+          "mean_prompt_tokens": 10742.0,
+          "mean_completion_tokens": 820.0,
+          "failure_tags": {
+            "H1": 1
+          },
+          "harness_failure_share": 1.0,
+          "level": "<L2"
+        },
+        "I3": {
+          "instances": 3,
+          "runs": 3,
+          "resolve_at_1": 0.0,
+          "resolve_ci95": [
+            0.0,
+            0.562
+          ],
+          "pass_k": 0.0,
+          "pass_k_instances": 3,
+          "regression_rate": 0.333,
+          "scope_precision": null,
+          "scope_recall": 0.0,
+          "mutation_score": null,
+          "mean_agent_sec": 153.033,
+          "mean_prompt_tokens": 2731.333,
+          "mean_completion_tokens": 119.0,
+          "failure_tags": {
+            "H8": 3
+          },
+          "harness_failure_share": 1.0,
+          "level": "<L2"
+        },
+        "Q3": {
+          "instances": 2,
+          "runs": 2,
+          "resolve_at_1": 0.0,
+          "resolve_ci95": [
+            0.0,
+            0.658
+          ],
+          "pass_k": 0.0,
+          "pass_k_instances": 2,
+          "regression_rate": 0.0,
+          "scope_precision": null,
+          "scope_recall": 0.0,
+          "mutation_score": null,
+          "mean_agent_sec": 214.4,
+          "mean_prompt_tokens": 8194.0,
+          "mean_completion_tokens": 279.0,
+          "failure_tags": {
+            "H8": 2
+          },
+          "harness_failure_share": 1.0,
+          "level": "<L2"
+        }
+      },
+      "O": {
+        "ALL": {
+          "instances": 5,
+          "runs": 5,
+          "resolve_at_1": 0.4,
+          "resolve_ci95": [
+            0.118,
+            0.769
+          ],
+          "pass_k": 0.4,
+          "pass_k_instances": 5,
+          "regression_rate": 0.6,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 787.36,
+          "mean_prompt_tokens": 23084.0,
+          "mean_completion_tokens": 7517.8,
+          "failure_tags": {
+            "H5": 1,
+            "M2": 1,
+            "M1": 1
+          },
+          "harness_failure_share": 0.333,
+          "level": "<L2"
+        },
+        "I2": {
+          "instances": 1,
+          "runs": 1,
+          "resolve_at_1": 0.0,
+          "resolve_ci95": [
+            0.0,
+            0.793
+          ],
+          "pass_k": 0.0,
+          "pass_k_instances": 1,
+          "regression_rate": 1.0,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 1369.2,
+          "mean_prompt_tokens": 33268.0,
+          "mean_completion_tokens": 14478.0,
+          "failure_tags": {
+            "H5": 1
+          },
+          "harness_failure_share": 1.0,
+          "level": "<L2"
+        },
+        "I3": {
+          "instances": 3,
+          "runs": 3,
+          "resolve_at_1": 0.333,
+          "resolve_ci95": [
+            0.061,
+            0.792
+          ],
+          "pass_k": 0.333,
+          "pass_k_instances": 3,
+          "regression_rate": 0.667,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 672.533,
+          "mean_prompt_tokens": 24827.333,
+          "mean_completion_tokens": 5949.333,
+          "failure_tags": {
+            "M2": 1,
+            "M1": 1
+          },
+          "harness_failure_share": 0.0,
+          "level": "<L2"
+        },
+        "Q3": {
+          "instances": 1,
+          "runs": 1,
+          "resolve_at_1": 1.0,
+          "resolve_ci95": [
+            0.207,
+            1.0
+          ],
+          "pass_k": 1.0,
+          "pass_k_instances": 1,
+          "regression_rate": 0.0,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 550.0,
+          "mean_prompt_tokens": 7670.0,
+          "mean_completion_tokens": 5263.0,
+          "failure_tags": {},
+          "harness_failure_share": null,
+          "level": "L4"
+        }
+      },
+      "gaps": {
+        "I2": {
+          "oracle_minus_h": 0.0,
+          "h_minus_b0": 0.0
+        },
+        "ALL": {
+          "oracle_minus_h": 0.4,
+          "h_minus_b0": -0.333
+        },
+        "I3": {
+          "oracle_minus_h": 0.333,
+          "h_minus_b0": 0.0
+        },
+        "Q3": {
+          "oracle_minus_h": 1.0,
+          "h_minus_b0": -1.0
+        }
+      },
+      "D1_plan_scope": {
+        "runs": 1,
+        "plan_precision": 0.0,
+        "plan_recall": 0.0
+      }
+    }
+  }
+}

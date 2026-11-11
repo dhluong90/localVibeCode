@@ -1,6 +1,6 @@
 # Round 00b — Baseline trên dự án lớn (Apollo)
 
-**Trạng thái:** Running (bắt đầu 2026-11-11 14:05)
+**Trạng thái:** Stopped (partial, 17/33 run) — dừng theo yêu cầu để thiết kế lại môi trường
 **Harness commit:** `0d817a1` (chạy từ bản sao code đóng băng để việc phát triển Round 01 không ảnh hưởng)
 **Model:** `qwen2.5-coder:14b` · **Phần cứng:** Apple M5, 24 GB, Ollama 0.40.13
 
@@ -29,3 +29,13 @@
 
 ## Kết quả
 _(Điền sau khi chạy.)_
+
+## Kết quả một phần (dừng theo yêu cầu 2026-11-11 ~15:20, 17/33 run, k=1)
+
+| Cấu hình | Resolve | Ghi chú |
+|---|---|---|
+| B0 — model + file liên quan do người chọn | **2/6** | Giải cả 2 task sửa lỗ hổng nhỏ (Q3: 190b96e6f, 42d4d827e); fail feature/nhiều file |
+| H — localVibeCode PEV (harness cũ) | **0/6** | 5 timeout LLM 90 s, 1 plan bịa đường dẫn file không tồn tại |
+| O — Oracle (file + plan đúng, sửa theo test) | **2/5** | ~40%: trần 14B trên repo thật thấp hơn nhiều so với repo demo |
+
+Kết luận dùng cho thiết kế lại: 14B local làm tốt **thay đổi nhỏ, phạm vi rõ** khi có đúng context; yếu ở thay đổi lớn nhiều file. Pipeline PEV hiện tại không dùng được trên repo lớn.
