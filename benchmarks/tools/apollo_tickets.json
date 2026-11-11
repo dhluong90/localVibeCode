@@ -1,0 +1,83 @@
+{
+  "_baseline_persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement.",
+  "apollo-190b96e6f": {
+    "category": "Q3", "difficulty": "S",
+    "prompt": "Security issue in release rollback (apollo-biz). `ReleaseService.rollbackTo(releaseId, toReleaseId, operator)` only authorises the namespace that owns `releaseId`; `toReleaseId` is taken from the caller as-is. If the target release belongs to another app, cluster or namespace, its configuration is used to publish the caller's own (gray) namespace, letting a user copy and read another application's configuration. Reject such requests: when the target release does not belong to the same appId, clusterName and namespaceName as the release being rolled back, throw a `BadRequestException` and change nothing.",
+    "plan": {"apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/ReleaseService.java": "In rollbackTo, after loading both releases, verify toRelease has the same appId, clusterName and namespaceName as release; otherwise throw BadRequestException before any change."},
+    "baseline": {"understand": 20, "implement": 10, "test": 25, "build_debug": 15}
+  },
+  "apollo-42d4d827e": {
+    "category": "Q3", "difficulty": "S",
+    "prompt": "Security issue in the Admin Service gray-release rule update (`NamespaceBranchController`, endpoint that updates a branch's gray release rules). The persisted `GrayReleaseRule` is built from the request body, so a body that carries a different appId / clusterName / namespaceName / branchName can redirect an update that the Portal authorised for one application to another application. The persisted rule must always use the app, cluster, namespace and branch from the request path (the identity that was checked), never the identity in the body.",
+    "plan": {"apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/NamespaceBranchController.java": "When building the GrayReleaseRule from the DTO, overwrite appId, clusterName, namespaceName and branchName with the path variables."},
+    "baseline": {"understand": 20, "implement": 5, "test": 25, "build_debug": 10}
+  },
+  "apollo-55fdcbb57": {
+    "category": "I1", "difficulty": "M",
+    "prompt": "Bug in Config Service app-namespace cache (`AppNamespaceServiceWithCache`). When an app namespace is deleted and a new one is created with the same appId and name, the periodic scan of deleted records removes the cache entry for that appId+name — which by then is the NEW app namespace. Clients then stop seeing a namespace that exists. When handling deleted app namespaces, only evict the cache entry if the cached app namespace is the same record (same id) as the deleted one.",
+    "plan": {"apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/service/AppNamespaceServiceWithCache.java": "In the deleted-records handling, look up the cached entry by key and remove it only when its id equals the deleted id."},
+    "baseline": {"understand": 30, "implement": 10, "test": 30, "build_debug": 15}
+  },
+  "apollo-5d0755e1e": {
+    "category": "I1", "difficulty": "M",
+    "prompt": "Concurrency bug in Config Service `AccessKeyServiceWithCache`. `getSecrets(appId, filter)` streams over the live list from the synchronized multimap `accessKeyCache` without holding its lock, so a concurrent cache refresh can throw ConcurrentModificationException. In addition, when an access key is updated the refresh puts the new key and removes the old one as two separate operations, so a reader can briefly see both versions of the same key (or neither). Make readers work on a snapshot copied under the multimap's lock, and make the old→new replacement a single mutation under the same lock.",
+    "plan": {"apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/service/AccessKeyServiceWithCache.java": "getSecrets: copy the list under synchronized(accessKeyCache) and filter the copy. Refresh: inside synchronized(accessKeyCache) remove the outdated key (if replaced) and put the new one."},
+    "baseline": {"understand": 30, "implement": 20, "test": 45, "build_debug": 20}
+  },
+  "apollo-a99e636d3": {
+    "category": "Q3", "difficulty": "S",
+    "prompt": "Security issue in the legacy Portal API for creating clusters (`ClusterController#createCluster`, POST /apps/{appId}/envs/{env}/clusters). Permission is checked for the appId in the URL path, but the cluster is created with the appId from the request body, so a user can create clusters in another application. Reject the request with a `BadRequestException` when the appId in the path and the appId in the payload differ.",
+    "plan": {"apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ClusterController.java": "At the start of createCluster, throw BadRequestException if path appId != cluster.getAppId()."},
+    "baseline": {"understand": 10, "implement": 5, "test": 15, "build_debug": 10}
+  },
+  "apollo-c01018384": {
+    "category": "Q3", "difficulty": "S",
+    "prompt": "Security issue in Portal `NamespaceController`. Two endpoints check permission for the appId in the URL path but act on the appId from the request body: creating namespaces (POST /apps/{appId}/namespaces, a list of namespace creation models) and creating app namespaces (POST /apps/{appId}/appnamespaces). A user can therefore create namespaces for another application. In both endpoints, reject the request with a `BadRequestException` when any payload appId differs from the path appId.",
+    "plan": {"apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/NamespaceController.java": "Add a helper that throws BadRequestException when path and payload appId differ; call it for every model in createNamespace and for the AppNamespace in createAppNamespace, before any side effect."},
+    "baseline": {"understand": 15, "implement": 10, "test": 25, "build_debug": 10}
+  },
+  "apollo-b4ab0ea9f": {
+    "category": "Q3", "difficulty": "M",
+    "prompt": "Security issue in Portal `ReleaseController`. GET /envs/{env}/releases/{releaseId} checks that the current user may view the release's namespace, but the compare endpoint (GET /envs/{env}/releases/compare?baseReleaseId=..&toCompareReleaseId=..) returns the diff of any two releases without any permission check, leaking configuration of namespaces the user cannot see. Apply the same per-release permission check used by the single-release endpoint to both releases in compare (a release id of 0 means 'no release' and is not checked).",
+    "plan": {"apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ReleaseController.java": "Extract the permission-checked release lookup from get() into a private method; in compareRelease load each non-zero release through it and compare the two loaded releases."},
+    "baseline": {"understand": 25, "implement": 15, "test": 30, "build_debug": 15}
+  },
+  "apollo-b124f902d": {
+    "category": "Q3", "difficulty": "M",
+    "prompt": "Security issue in Config Service access-key authentication (`AccessKeyUtil#extractAppIdFromRequest`). Config file requests come in two shapes: the generic `/configfiles/{appId}/{cluster}/{namespace}` and the format-specific `/configfiles/{json|raw}/{appId}/{cluster}/{namespace}`. The current prefix matching treats any path starting with `/configfiles/json/` or `/configfiles/raw/` as format-specific, so for an app whose id is literally `json` or `raw` the generic request `/configfiles/raw/default/application` is authenticated against app `default` instead of app `raw`. Determine the appId from the number of path segments: 4 segments with a leading `json`/`raw` → the second segment; otherwise (3 segments) → the first segment; fewer → no appId.",
+    "plan": {"apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/util/AccessKeyUtil.java": "Replace the json/raw prefix branches with one /configfiles/ branch that splits the remaining path and picks the appId by segment count as described."},
+    "baseline": {"understand": 25, "implement": 15, "test": 20, "build_debug": 10}
+  },
+  "apollo-ce54e20b5": {
+    "category": "I3", "difficulty": "M",
+    "prompt": "Bug in the audit log query (apollo-audit). `ApolloAuditLogService.findByOpNameAndTime(opName, startDate, endDate, page, size)` always queries with both a lower and an upper date bound, so callers that pass `null` for startDate and/or endDate (open-ended filters from the UI) get no results or an error. Support open-ended filters: no dates → filter by opName only; only startDate → created time >= startDate; only endDate → created time <= endDate; both → between. Keep paging and newest-first sorting, and document the null semantics in `ApolloAuditLogQueryApi`.",
+    "plan": {
+      "apollo-audit/apollo-audit-api/src/main/java/com/ctrip/framework/apollo/audit/api/ApolloAuditLogQueryApi.java": "Document that startDate/endDate may be null meaning no lower/upper bound.",
+      "apollo-audit/apollo-audit-impl/src/main/java/com/ctrip/framework/apollo/audit/repository/ApolloAuditLogRepository.java": "Add derived queries findByOpNameAndDataChangeCreatedTimeGreaterThanEqual and ...LessThanEqual (with Pageable).",
+      "apollo-audit/apollo-audit-impl/src/main/java/com/ctrip/framework/apollo/audit/service/ApolloAuditLogService.java": "In findByOpNameAndTime, dispatch to findByOpName / >= / <= / between depending on which dates are null."
+    },
+    "baseline": {"understand": 20, "implement": 20, "test": 35, "build_debug": 15}
+  },
+  "apollo-dae91b599": {
+    "category": "I1", "difficulty": "S",
+    "prompt": "Bug in Portal permissions (`DefaultRolePermissionService#hasAnyPermission`). Super admins are granted everything by `userHasPermission`, but `hasAnyPermission(userId, permissions)` only looks at permissions explicitly assigned to the user, so super admins are denied on pages guarded by 'any of these permissions'. Make `hasAnyPermission` return true for super admins, and return false when the permission list is null or empty.",
+    "plan": {"apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.java": "In hasAnyPermission: return false for empty permissions, true if isSuperAdmin(userId), otherwise the existing lookup."},
+    "baseline": {"understand": 15, "implement": 5, "test": 20, "build_debug": 10}
+  },
+  "apollo-40a25df02": {
+    "category": "I3", "difficulty": "S",
+    "prompt": "Gray release rules break on MySQL with utf8mb4 and on empty rule payloads. (1) `GrayReleaseRule.rules` and `ReleaseHistory.operationContext` are mapped as plain strings and hit the 65,535-byte row-size limit; map both as large objects (`@Lob`) — the SQL migration is handled separately. (2) `GrayReleaseRuleItemTransformer.batchTransformFromJSON(content)` returns null for null/empty content or JSON `null`, which later causes NullPointerExceptions when gray rules are loaded (e.g. in `GrayReleaseRulesHolder`); it must return an empty set in those cases.",
+    "plan": {
+      "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/entity/GrayReleaseRule.java": "Annotate the rules field with @Lob.",
+      "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/entity/ReleaseHistory.java": "Annotate the operationContext field with @Lob.",
+      "apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/GrayReleaseRuleItemTransformer.java": "batchTransformFromJSON: return an empty set for null/empty content and when Gson returns null."
+    },
+    "baseline": {"understand": 20, "implement": 10, "test": 25, "build_debug": 15}
+  },
+  "apollo-0008c348e": {
+    "category": "I2", "difficulty": "M",
+    "prompt": "Portal must refuse to start without real authentication. When no authentication profile (auth, ldap or oidc) is active and no custom SSO is configured, Portal falls back to the placeholder `DefaultUserInfoHolder` and every request runs as a fixed fake user. Add a startup check in `AuthConfiguration`: once all singletons are initialised (also when lazy initialisation is enabled), fail startup with an `IllegalStateException` explaining that authentication is not configured if the active `UserInfoHolder` is the `DefaultUserInfoHolder`. Built-in authentication and custom SSO implementations (a custom `UserInfoHolder` bean) must keep working.",
+    "plan": {"apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/configuration/AuthConfiguration.java": "Add a non-lazy SmartInitializingSingleton @Bean that throws IllegalStateException when the injected UserInfoHolder is a DefaultUserInfoHolder."},
+    "baseline": {"understand": 40, "implement": 20, "test": 45, "build_debug": 25}
+  }
+}

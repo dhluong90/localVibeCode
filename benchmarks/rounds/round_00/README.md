@@ -47,6 +47,8 @@ Bộ 14 case (`benchmarks/sast_cases/`), chạy `ZeroTokenVerifier` hiện tại
 
 Máy mục tiêu của team là MacBook Pro **24 GB** → chỉ benchmark **`qwen2.5-coder:14b`** từ đây (k = 3). Kết quả 7B dừng ở **k1** (66 run) và giữ lại làm tham chiếu, không tính level cho 7B. Tổng còn 66 (7B) + 198 (14B) = 264 run.
 
+**Thu hẹp thêm (2026-11-11 ~10:55):** chỉ đánh giá **Java** từ đây (theo yêu cầu). Task Python (`py-*`) dừng; kết quả đã có giữ lại làm tham chiếu, không tính level. Phạm vi 14B còn lại: 11 task Java × 3 cấu hình × k3 = 99 run (33 đã xong lúc đổi phạm vi).
+
 ## Kết quả giữa kỳ #2 (2026-11-11 09:20 — 76/396 run)
 
 **Tiến độ:** 7B đã xong lượt k1 (22 task × 3 cấu hình); 14B mới 10/66 run của k1. Máy khởi động lại lúc 18:16 ngày 10/11 nên runner dừng ~15 h; đã chạy tiếp lúc 09:00 ngày 11/11 (resume, không mất kết quả). Dự kiến xong khoảng 21:00 ngày 11/11.
