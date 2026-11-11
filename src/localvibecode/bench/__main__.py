@@ -41,6 +41,11 @@ def main() -> None:
     p_sast = sub.add_parser("sast", help="Q2 deterministic SAST suite")
     p_sast.add_argument("--round", required=True)
 
+    p_reg = sub.add_parser("regrade", help="re-grade finished runs from their saved diffs")
+    p_reg.add_argument("--round", required=True)
+    p_reg.add_argument("--task-prefix", default="", help="only tasks whose id starts with this")
+    p_reg.add_argument("--before", type=float, default=None, help="only results written before this epoch")
+
     p_rep = sub.add_parser("report", help="write summary.json and print Markdown tables")
     p_rep.add_argument("--round", required=True)
     p_rep.add_argument("--k", type=int, default=5)
@@ -85,6 +90,23 @@ def main() -> None:
         for c in res["cases"]:
             print(f"{'VULN' if c['vulnerable'] else 'SAFE'} flagged={c['flagged']!s:5} {c['file']}  ({c['note']})")
         print(f"recall={res['recall']} fp_rate={res['fp_rate']}")
+        return
+
+    if args.cmd == "regrade":
+        from localvibecode.bench.runner import regrade_run
+
+        files = sorted(ctx.round_dir.glob("runs/*/*/*/k*/result.json"))
+        files = [f for f in files if f.parent.parent.name.startswith(args.task_prefix)
+                 and (args.before is None or f.stat().st_mtime < args.before)]
+        changed = 0
+        for i, f in enumerate(files, 1):
+            r = regrade_run(ctx, f)
+            same = (r["before"], r["regression_before"]) == (r["after"], r["regression_after"])
+            changed += not same
+            print(f"[{i}/{len(files)}] {'same' if same else 'CHANGED'} {r['model']} {r['config']} {r['task']} "
+                  f"k{r['k']}: resolved {r['before']}->{r['after']} "
+                  f"regression {r['regression_before']}->{r['regression_after']}", flush=True)
+        print(f"regraded {len(files)} runs, {changed} changed")
         return
 
     if args.cmd == "report":

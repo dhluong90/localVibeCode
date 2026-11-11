@@ -251,3 +251,47 @@ def _write_timeout_result(out_dir: Path, task: Task, config: str, model: str, k:
 def find_task(ctx: BenchContext, task_id: str) -> Optional[Task]:
     found = load_tasks(ctx.bench_root, ids=[task_id])
     return found[0] if found else None
+
+
+# ----------------------------------------------------------------------------- re-grading
+
+
+def regrade_run(ctx: BenchContext, result_file: Path) -> Dict[str, Any]:
+    """Re-grades a finished run from its saved diff (base + diff.patch), e.g. after a grading fix."""
+    from localvibecode.bench.tagging import tag_failure
+    from localvibecode.bench.workspace import _git
+
+    run_dir = result_file.parent
+    result = json.loads(result_file.read_text(encoding="utf-8"))
+    trace_file = run_dir / "trace.json"
+    trace = json.loads(trace_file.read_text(encoding="utf-8")) if trace_file.exists() else {}
+    task = find_task(ctx, result["task"])
+    fixture = ctx.fixtures[task.fixture]
+    baseline = ctx.ensure_base(task)
+    base = ctx.base_dir(task)
+    work = Path(tempfile.mkdtemp(prefix="bench-regrade-"))
+    try:
+        ws = clone_workspace(base, work / "ws")
+        patch = run_dir / "diff.patch"
+        if patch.exists() and patch.read_text(encoding="utf-8").strip():
+            _git(ws, "apply", "--whitespace=nowarn", str(patch.resolve()))
+        grade = grading.grade(task, fixture, ws, base, baseline)
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+    grade.update(grading.scope_metrics(task, fixture, result.get("changed_files", [])))
+    tags = tag_failure(result["config"], task, fixture, trace, grade, base)
+    previous = {k: result.get(k) for k in ("resolved", "regression", "own_tests_pass", "primary_tag")}
+    result.update({
+        "resolved": bool(grade["resolved"]), "regression": bool(grade["regression"]),
+        "own_tests_pass": grade["own_tests_pass"], "compile_ok": grade["compile_ok"],
+        "mutation_score": grade.get("mutation_score"), "tags": tags, "primary_tag": tags[0] if tags else None,
+        "fail_to_pass": grade["fail_to_pass"], "pass_to_pass": grade["pass_to_pass"],
+        "regraded": {"at": time.strftime("%Y-%m-%d %H:%M:%S"), "previous": previous},
+    })
+    result_file.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    if trace:
+        trace["grade"] = {k: v for k, v in grade.items() if k != "changed_files"}
+        trace_file.write_text(json.dumps(trace, indent=2, default=str), encoding="utf-8")
+    return {"task": result["task"], "config": result["config"], "k": result["k"], "model": result["model"],
+            "before": previous["resolved"], "after": result["resolved"],
+            "regression_before": previous["regression"], "regression_after": result["regression"]}
