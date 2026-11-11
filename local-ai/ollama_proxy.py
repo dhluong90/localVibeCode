@@ -71,6 +71,35 @@ def _indent(line: str) -> str:
     return line[: len(line) - len(line.lstrip())]
 
 
+def _whitespace_insensitive_span(content: str, needle: str):
+    """(start, end) of the unique span of `content` equal to `needle` when every whitespace run (including
+    newlines) counts as one space; None if absent or ambiguous."""
+    def collapse(text: str):
+        out, index, in_ws = [], [], False
+        for i, ch in enumerate(text):
+            if ch.isspace():
+                if not in_ws and out:
+                    out.append(" ")
+                    index.append(i)
+                in_ws = True
+            else:
+                out.append(ch)
+                index.append(i)
+                in_ws = False
+        return "".join(out), index
+
+    flat, index = collapse(content)
+    target = collapse(needle.strip())[0].rstrip()
+    if len(target) < 12:  # too short to anchor safely
+        return None
+    first = flat.find(target)
+    if first < 0 or flat.find(target, first + 1) >= 0:
+        return None
+    start = index[first]
+    end = index[first + len(target) - 1] + 1
+    return start, end
+
+
 def anchor_edit(data: Dict[str, Any]) -> bool:
     """Fuzzy-anchors an edit whose oldString is not an exact substring of the file (small models drift on
     whitespace/indentation). If exactly one window of file lines matches oldString ignoring surrounding
@@ -97,7 +126,14 @@ def anchor_edit(data: Dict[str, Any]) -> bool:
     matches = [i for i in range(len(file_lines) - len(want) + 1)
                if [l.strip() for l in file_lines[i:i + len(want)]] == want]
     if len(matches) != 1:
-        return False
+        # Fallback: the file may wrap a statement the model wrote on one line (or vice versa).
+        span = _whitespace_insensitive_span(content, old)
+        if span is None:
+            return False
+        data["oldString"] = content[span[0]:span[1]]
+        # The span starts at the first non-blank character, so the file keeps its own indentation there.
+        data["newString"] = new.lstrip(" \t") if old[:1].isspace() else new
+        return True
     start = matches[0]
     exact = "\n".join(file_lines[start:start + len(want)])
     file_indent, model_indent = _indent(file_lines[start]), _indent(old_lines[0])

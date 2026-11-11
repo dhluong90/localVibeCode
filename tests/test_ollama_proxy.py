@@ -72,6 +72,14 @@ class AnchorEditTest(unittest.TestCase):
         self.assertEqual(data["oldString"], "        int x = 1;\n        int y = 2;")
         self.assertEqual(data["newString"], "        int x = 1;\n        int y = 3;")
 
+    def test_wrapped_statement_is_anchored(self) -> None:
+        Path(self.path).write_text(
+            "class A {\n  void f() {\n    service.update(appId, clusterName,\n        branchName, rules);\n  }\n}\n")
+        ok, data = self.edit("    service.update(appId, clusterName, branchName, rules);", "    service.update(x);")
+        self.assertEqual(data["newString"], "service.update(x);")
+        self.assertTrue(ok)
+        self.assertEqual(data["oldString"], "service.update(appId, clusterName,\n        branchName, rules);")
+
     def test_ambiguous_match_is_left_alone(self) -> None:
         self.assertFalse(self.edit("int x = 1;", "int x = 5;")[0])  # appears in f() and g()
 
