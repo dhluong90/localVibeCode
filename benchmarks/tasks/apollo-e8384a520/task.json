@@ -1,10 +1,10 @@
 {
   "id": "apollo-e8384a520",
-  "category": "TODO",
+  "category": "I3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: Replace synchronized multimap with concurrent hash map in NotificationControllerV2 for better performance",
+  "difficulty": "L",
+  "prompt": "Performance: `NotificationControllerV2` keeps waiting long-poll clients in `Multimaps.synchronizedSetMultimap(TreeMultimap.create(String.CASE_INSENSITIVE_ORDER, ...))`; every access takes one global lock and the tree map is slow with many keys. Replace it with a new concurrent structure `com.ctrip.framework.apollo.configservice.wrapper.CaseInsensitiveMultimapWrapper<V>`: constructor `(Map<String, Set<V>> delegate, Supplier<Set<V>> setSupplier)` (used as `new CaseInsensitiveMultimapWrapper<>(Maps.newConcurrentMap(), Sets::newConcurrentHashSet)`), keys compared case-insensitively (normalise with Locale.ROOT lower case), and methods `boolean put(String key, V value)`, `boolean remove(String key, V value)` (drops the key when its set becomes empty), `Set<V> get(String key)` (empty set, never null, for unknown keys), `boolean containsKey(String key)` and `int size()` (total number of values). Use it for `deferredResults` in the controller.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -17,11 +17,11 @@
   "oracle_plan": [
     {
       "file": "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/controller/NotificationControllerV2.java",
-      "instruction": "TODO"
+      "instruction": "Replace the synchronized TreeMultimap with CaseInsensitiveMultimapWrapper over a concurrent map and concurrent sets; adapt the put/remove/get calls."
     },
     {
       "file": "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/wrapper/CaseInsensitiveMultimapWrapper.java",
-      "instruction": "TODO"
+      "instruction": "Create the class with the constructor and put/remove/get/containsKey/size semantics described, backed by the delegate map and per-key sets from the supplier."
     }
   ],
   "source_commit": "e8384a520",
@@ -37,5 +37,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.configservice.**,com.ctrip.framework.apollo.metaservice.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 145,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 30,
+      "implement": 45,
+      "test": 50,
+      "build_debug": 20
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

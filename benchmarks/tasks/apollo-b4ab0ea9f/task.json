@@ -1,10 +1,10 @@
 {
   "id": "apollo-b4ab0ea9f",
-  "category": "TODO",
+  "category": "Q3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: Merge commit from fork",
+  "difficulty": "M",
+  "prompt": "Security issue in Portal `ReleaseController`. GET /envs/{env}/releases/{releaseId} checks that the current user may view the release's namespace, but the compare endpoint (GET /envs/{env}/releases/compare?baseReleaseId=..&toCompareReleaseId=..) returns the diff of any two releases without any permission check, leaking configuration of namespaces the user cannot see. Apply the same per-release permission check used by the single-release endpoint to both releases in compare (a release id of 0 means 'no release' and is not checked).",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ReleaseController.java",
-      "instruction": "TODO"
+      "instruction": "Extract the permission-checked release lookup from get() into a private method; in compareRelease load each non-zero release through it and compare the two loaded releases."
     }
   ],
   "source_commit": "b4ab0ea9f",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 85,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 25,
+      "implement": 15,
+      "test": 30,
+      "build_debug": 15
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

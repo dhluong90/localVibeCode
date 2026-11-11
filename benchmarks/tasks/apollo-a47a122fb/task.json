@@ -1,10 +1,10 @@
 {
   "id": "apollo-a47a122fb",
-  "category": "TODO",
+  "category": "I3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: fix: physically delete retained release histories (#5641)\n* fix: physically delete retained release histories\n\n* docs: update changes for release history cleanup\n\n* fix: address release history cleanup review feedback\n\n* fix: scope release cleanup and index gray rules\n\n* fix: use millisecond namespace cleanup boundary\n\n* perf: index release retention script lookups",
+  "difficulty": "L",
+  "prompt": "Release history retention does not actually free space: `ReleaseHistoryService` cleanup soft-deletes old `ReleaseHistory` rows and deletes releases by id even if they are still referenced. Change the retention cleanup to physically delete: add `ReleaseHistoryRepository.deletePhysicallyByIdIn(Collection<Long> ids)` (native DELETE by id) and `ReleaseRepository.deletePhysicallyIfUnreferencedByIdIn(Collection<Long> ids)` (native DELETE of the given releases only when no remaining ReleaseHistory references them as ReleaseId or PreviousReleaseId and no active gray release rule (IsDeleted = false, BranchStatus = 1) references them). In the cleanup loop, stop when a batch is empty, delete the batch's history rows physically, and then physically delete the referenced releases (both release ids and previous release ids, ignoring ids <= 0) that are no longer referenced.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -18,15 +18,15 @@
   "oracle_plan": [
     {
       "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/repository/ReleaseHistoryRepository.java",
-      "instruction": "TODO"
+      "instruction": "Add @Modifying native deletePhysicallyByIdIn(@Param(\"ids\") Collection<Long> ids)."
     },
     {
       "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/repository/ReleaseRepository.java",
-      "instruction": "TODO"
+      "instruction": "Add @Modifying native deletePhysicallyIfUnreferencedByIdIn with the NOT EXISTS conditions described."
     },
     {
       "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/ReleaseHistoryService.java",
-      "instruction": "TODO"
+      "instruction": "In the cleanup loop: break on empty batch; collect history ids and release/previous release ids > 0; in the transaction call the two physical deletes."
     }
   ],
   "source_commit": "a47a122fb",
@@ -42,5 +42,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.biz.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 180,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 50,
+      "implement": 40,
+      "test": 60,
+      "build_debug": 30
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

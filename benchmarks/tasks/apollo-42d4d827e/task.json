@@ -1,10 +1,10 @@
 {
   "id": "apollo-42d4d827e",
-  "category": "TODO",
+  "category": "Q3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: Merge commit from fork\nUse the checked app, cluster, namespace and branch from the Admin Service\nURL when constructing the persisted gray release rule. This prevents a\nbody-supplied identity from redirecting a Portal-authorized update to\nanother application and covers all callers at one boundary.\n\nAdd HTTP/H2 regressions for mismatched and missing identities, normal\nupdates and missing branches, including checks that another application's\nrules remain unchanged.\n\nFixes GHSA-8j5g-8m4g-frrh",
+  "difficulty": "S",
+  "prompt": "Security issue in the Admin Service gray-release rule update (`NamespaceBranchController`, endpoint that updates a branch's gray release rules). The persisted `GrayReleaseRule` is built from the request body, so a body that carries a different appId / clusterName / namespaceName / branchName can redirect an update that the Portal authorised for one application to another application. The persisted rule must always use the app, cluster, namespace and branch from the request path (the identity that was checked), never the identity in the body.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/NamespaceBranchController.java",
-      "instruction": "TODO"
+      "instruction": "When building the GrayReleaseRule from the DTO, overwrite appId, clusterName, namespaceName and branchName with the path variables."
     }
   ],
   "source_commit": "42d4d827e",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.adminservice.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 60,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 20,
+      "implement": 5,
+      "test": 25,
+      "build_debug": 10
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

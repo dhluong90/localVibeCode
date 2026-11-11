@@ -1,10 +1,10 @@
 {
   "id": "apollo-40a25df02",
-  "category": "TODO",
+  "category": "I3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: fix: change GrayReleaseRule.Rules to TEXT to avoid utf8mb4 row-size 1118 (#5699)\n* fix(database): 修复灰度规则表字段行大小超限问题\n\n* docs: add #5699 to CHANGES.md\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n\n* chore(sql): 清理H2迁移脚本中的无关注释并格式化SQL\n\n* fix(gray-release): 处理灰度规则JSON为空或null时的空值保护\n\n---------\n\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+  "difficulty": "S",
+  "prompt": "Gray release rules break on MySQL with utf8mb4 and on empty rule payloads. (1) `GrayReleaseRule.rules` and `ReleaseHistory.operationContext` are mapped as plain strings and hit the 65,535-byte row-size limit; map both as large objects (`@Lob`) — the SQL migration is handled separately. (2) `GrayReleaseRuleItemTransformer.batchTransformFromJSON(content)` returns null for null/empty content or JSON `null`, which later causes NullPointerExceptions when gray rules are loaded (e.g. in `GrayReleaseRulesHolder`); it must return an empty set in those cases.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -19,15 +19,15 @@
   "oracle_plan": [
     {
       "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/entity/GrayReleaseRule.java",
-      "instruction": "TODO"
+      "instruction": "Annotate the rules field with @Lob."
     },
     {
       "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/entity/ReleaseHistory.java",
-      "instruction": "TODO"
+      "instruction": "Annotate the operationContext field with @Lob."
     },
     {
       "file": "apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/GrayReleaseRuleItemTransformer.java",
-      "instruction": "TODO"
+      "instruction": "batchTransformFromJSON: return an empty set for null/empty content and when Gson returns null."
     }
   ],
   "source_commit": "40a25df02",
@@ -43,5 +43,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.biz.**,com.ctrip.framework.apollo.common.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 70,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 20,
+      "implement": 10,
+      "test": 25,
+      "build_debug": 15
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

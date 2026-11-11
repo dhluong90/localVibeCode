@@ -1,10 +1,10 @@
 {
   "id": "apollo-a99e636d3",
-  "category": "TODO",
+  "category": "Q3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: fix: validate cluster app id in legacy portal api",
+  "difficulty": "S",
+  "prompt": "Security issue in the legacy Portal API for creating clusters (`ClusterController#createCluster`, POST /apps/{appId}/envs/{env}/clusters). Permission is checked for the appId in the URL path, but the cluster is created with the appId from the request body, so a user can create clusters in another application. Reject the request with a `BadRequestException` when the appId in the path and the appId in the payload differ.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/ClusterController.java",
-      "instruction": "TODO"
+      "instruction": "At the start of createCluster, throw BadRequestException if path appId != cluster.getAppId()."
     }
   ],
   "source_commit": "a99e636d3",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 40,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 10,
+      "implement": 5,
+      "test": 15,
+      "build_debug": 10
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

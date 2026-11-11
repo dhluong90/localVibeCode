@@ -1,10 +1,10 @@
 {
   "id": "apollo-7daf30647",
-  "category": "TODO",
+  "category": "I3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: 新建应用时按环境自动创建并启用 AccessKey（Auto-provision） (#5589)\n* feat(biz): 添加访问密钥自动配置功能\n\n* feat(apollo): 更新CHANGES.md文件\n\n* feat(app): 应用创建时自动配置访问密钥\n\n* test(controller): 添加访问密钥自动配置失败测试\n\n* test(controller): 添加控制器集成异常测试补充",
+  "difficulty": "L",
+  "prompt": "Feature: auto-provision an access key when an application is created. Add a configuration switch (`BizConfig#isAccessKeyAutoProvisionEnabled()`) and, in the Admin Service app creation endpoint (`AppController#create`), when it is enabled create and enable a default access key for the new app via `AccessKeyService`, generated with the existing unique key generator and the default access key mode. A failure to provision the access key must be logged and must NOT fail the app creation.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -23,23 +23,23 @@
   "oracle_plan": [
     {
       "file": "apollo-adminservice/src/main/java/com/ctrip/framework/apollo/adminservice/controller/AppController.java",
-      "instruction": "TODO"
+      "instruction": "Inject AccessKeyService and BizConfig; after creating the app, if enabled, create an enabled default access key inside try/catch and log failures."
     },
     {
       "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/config/BizConfig.java",
-      "instruction": "TODO"
+      "instruction": "Add isAccessKeyAutoProvisionEnabled() reading a boolean config (default false)."
     },
     {
       "file": "apollo-biz/src/main/java/com/ctrip/framework/apollo/biz/service/AdminService.java",
-      "instruction": "TODO"
+      "instruction": "Apply the changes this file needs for the task."
     },
     {
       "file": "apollo-common/src/main/java/com/ctrip/framework/apollo/common/utils/UniqueKeyGenerator.java",
-      "instruction": "TODO"
+      "instruction": "Apply the changes this file needs for the task."
     },
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/AccessKeyController.java",
-      "instruction": "TODO"
+      "instruction": "Apply the changes this file needs for the task."
     }
   ],
   "source_commit": "7daf30647",
@@ -55,5 +55,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.adminservice.**,com.ctrip.framework.apollo.biz.**,com.ctrip.framework.apollo.common.**,com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 160,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 45,
+      "implement": 35,
+      "test": 50,
+      "build_debug": 30
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

@@ -1,10 +1,10 @@
 {
   "id": "apollo-5d0755e1e",
-  "category": "TODO",
+  "category": "I1",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: refactor(configservice): 优化AccessKeyServiceWithCache并发安全性 (#5678)\n* refactor(configservice): 优化AccessKeyServiceWithCache并发安全性\n\n* docs: add changelog for AccessKey cache concurrency fix\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n\n* revert: restore getSecrets stream formatting\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n\n* refactor(configservice): 优化访问密钥服务中的代码格式\n\n* refactor(configservice): 优化访问密钥缓存服务的并发性能\n\n* test(configservice): 优化访问密钥服务缓存测试的并发控制\n\n* refactor(test): 优化访问密钥服务缓存测试中的代码格式\n\n---------\n\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+  "difficulty": "M",
+  "prompt": "Concurrency bug in Config Service `AccessKeyServiceWithCache`. `getSecrets(appId, filter)` streams over the live list from the synchronized multimap `accessKeyCache` without holding its lock, so a concurrent cache refresh can throw ConcurrentModificationException. In addition, when an access key is updated the refresh puts the new key and removes the old one as two separate operations, so a reader can briefly see both versions of the same key (or neither). Make readers work on a snapshot copied under the multimap's lock, and make the old→new replacement a single mutation under the same lock.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/service/AccessKeyServiceWithCache.java",
-      "instruction": "TODO"
+      "instruction": "getSecrets: copy the list under synchronized(accessKeyCache) and filter the copy. Refresh: inside synchronized(accessKeyCache) remove the outdated key (if replaced) and put the new one."
     }
   ],
   "source_commit": "5d0755e1e",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.configservice.**,com.ctrip.framework.apollo.metaservice.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 115,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 30,
+      "implement": 20,
+      "test": 45,
+      "build_debug": 20
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

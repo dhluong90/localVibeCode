@@ -1,10 +1,10 @@
 {
   "id": "apollo-c01018384",
-  "category": "TODO",
+  "category": "Q3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: Merge commit from fork",
+  "difficulty": "S",
+  "prompt": "Security issue in Portal `NamespaceController`. Two endpoints check permission for the appId in the URL path but act on the appId from the request body: creating namespaces (POST /apps/{appId}/namespaces, a list of namespace creation models) and creating app namespaces (POST /apps/{appId}/appnamespaces). A user can therefore create namespaces for another application. In both endpoints, reject the request with a `BadRequestException` when any payload appId differs from the path appId.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/NamespaceController.java",
-      "instruction": "TODO"
+      "instruction": "Add a helper that throws BadRequestException when path and payload appId differ; call it for every model in createNamespace and for the AppNamespace in createAppNamespace, before any side effect."
     }
   ],
   "source_commit": "c01018384",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 60,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 15,
+      "implement": 10,
+      "test": 25,
+      "build_debug": 10
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

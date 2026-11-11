@@ -1,10 +1,10 @@
 {
   "id": "apollo-55fdcbb57",
-  "category": "TODO",
+  "category": "I1",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: fix: avoid accidentally deleting new appNamespaceCache of same appid and name with the old appNamespaceCache. (#5504)\nFixes #5502",
+  "difficulty": "M",
+  "prompt": "Bug in Config Service app-namespace cache (`AppNamespaceServiceWithCache`). When an app namespace is deleted and a new one is created with the same appId and name, the periodic scan of deleted records removes the cache entry for that appId+name — which by then is the NEW app namespace. Clients then stop seeing a namespace that exists. When handling deleted app namespaces, only evict the cache entry if the cached app namespace is the same record (same id) as the deleted one.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/service/AppNamespaceServiceWithCache.java",
-      "instruction": "TODO"
+      "instruction": "In the deleted-records handling, look up the cached entry by key and remove it only when its id equals the deleted id."
     }
   ],
   "source_commit": "55fdcbb57",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.configservice.**,com.ctrip.framework.apollo.metaservice.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 85,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 30,
+      "implement": 10,
+      "test": 30,
+      "build_debug": 15
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

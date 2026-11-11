@@ -1,10 +1,10 @@
 {
   "id": "apollo-bfc4e89e8",
-  "category": "TODO",
+  "category": "I3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: feat(portal): support configurable OIDC username claim for user identity (#5655)\n* feat(portal): support configurable OIDC username claim for user identity\n\nApollo used the OIDC/JWT subject (sub) as the Apollo user identity\n(Users.Username). Enterprise IdPs often carry an opaque UUID in sub and\nthe real login name in another claim such as preferred_username.\n\nAdd spring.security.oidc.user-id-claim-name (default: token subject) and\nresolve the user id through a shared OidcUserInfoUtil helper so both the\nauthentication success listener and the user info holder agree. When the\nconfigured claim is missing or blank, fall back to the subject so a user\nis never created with an empty id. Non-breaking: unset keeps sub behavior.\n\nCloses #5633\n\n* docs: add CHANGES entry for configurable OIDC username claim (#5655)\n\n* test: add class-level Javadoc to OidcUserInfoUtilTest\n\n* test: migrate OidcUserInfoUtilTest to JUnit 5 (Jupiter)\n\n* fix(portal): fail closed on missing OIDC id claim, document identity security contract\n\nAddress review on #5655:\n- Reject login (BadCredentialsException) when a configured user-id claim is\n  missing or blank, instead of falling back to sub, so the same principal is\n  not provisioned as two accounts across the OIDC and JWT paths.\n- Document the claim security contract (IdP-controlled, unique, immutable,\n  non-reassignable, non-user-editable), the 64-char Username limit, and the\n  conditional recommendation for preferred_username, in the EN and ZH guides.\n- Add cross-path and blank-JWT-claim test coverage.\n- Move the CHANGES entry to the bottom of the 3.0.0 section.\n\n* test: add JWT blank-claim rejection case for configurable OIDC username claim (#5655)",
+  "difficulty": "M",
+  "prompt": "Feature (Portal OIDC): Apollo uses the OIDC/JWT subject (`sub`) as the Apollo user id, but many enterprise IdPs put an opaque UUID in `sub` and the login name in another claim (e.g. `preferred_username`). Add the property `spring.security.oidc.user-id-claim-name` (field `userIdClaimName` in `OidcExtendProperties`, default: use the subject). Resolve the user id through `OidcUserInfoUtil` (e.g. `getOidcUserId(OidcUser, OidcExtendProperties)` and the JWT equivalent) and use it in both the OIDC login success listener and the user-info holder so both paths agree. If the configured claim is missing or blank in a token, reject the login (do not fall back to the subject).",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -19,19 +19,19 @@
   "oracle_plan": [
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/configuration/OidcExtendProperties.java",
-      "instruction": "TODO"
+      "instruction": "Add userIdClaimName with getter/setter."
     },
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcAuthenticationSuccessEventListener.java",
-      "instruction": "TODO"
+      "instruction": "Use the resolved user id instead of the subject."
     },
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoHolder.java",
-      "instruction": "TODO"
+      "instruction": "Use the resolved user id instead of the subject."
     },
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/oidc/OidcUserInfoUtil.java",
-      "instruction": "TODO"
+      "instruction": "Add user-id resolution for OIDC users and JWTs: subject when unset, configured claim otherwise, error when the claim is missing/blank."
     }
   ],
   "source_commit": "bfc4e89e8",
@@ -47,5 +47,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 150,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 40,
+      "implement": 35,
+      "test": 50,
+      "build_debug": 25
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

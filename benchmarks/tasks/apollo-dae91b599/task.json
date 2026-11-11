@@ -1,10 +1,10 @@
 {
   "id": "apollo-dae91b599",
-  "category": "TODO",
+  "category": "I1",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: fix: include super admin in hasAnyPermission semantics (#5568)\n* fix: include super admin in hasAnyPermission semantics\n\n* docs: add 5568 to changes log",
+  "difficulty": "S",
+  "prompt": "Bug in Portal permissions (`DefaultRolePermissionService#hasAnyPermission`). Super admins are granted everything by `userHasPermission`, but `hasAnyPermission(userId, permissions)` only looks at permissions explicitly assigned to the user, so super admins are denied on pages guarded by 'any of these permissions'. Make `hasAnyPermission` return true for super admins, and return false when the permission list is null or empty.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/defaultimpl/DefaultRolePermissionService.java",
-      "instruction": "TODO"
+      "instruction": "In hasAnyPermission: return false for empty permissions, true if isSuperAdmin(userId), otherwise the existing lookup."
     }
   ],
   "source_commit": "dae91b599",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 50,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 15,
+      "implement": 5,
+      "test": 20,
+      "build_debug": 10
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

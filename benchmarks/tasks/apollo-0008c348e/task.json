@@ -1,10 +1,10 @@
 {
   "id": "apollo-0008c348e",
-  "category": "TODO",
+  "category": "I2",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: fix(portal): require configured authentication on startup (#5704)\n* fix(portal): require configured authentication on startup\n\nReject the selected placeholder user before Portal finishes starting, including with lazy initialization. Preserve built-in authentication and custom SSO, give integration tests explicit identities, and document migration settings.\n\nFixes #5692\n\n* docs: record portal authentication startup fix in changelog",
+  "difficulty": "M",
+  "prompt": "Portal must refuse to start without real authentication. When no authentication profile (auth, ldap or oidc) is active and no custom SSO is configured, Portal falls back to the placeholder `DefaultUserInfoHolder` and every request runs as a fixed fake user. Add a startup check in `AuthConfiguration`: once all singletons are initialised (also when lazy initialisation is enabled), fail startup with an `IllegalStateException` explaining that authentication is not configured if the active `UserInfoHolder` is the `DefaultUserInfoHolder`. Built-in authentication and custom SSO implementations (a custom `UserInfoHolder` bean) must keep working.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/spi/configuration/AuthConfiguration.java",
-      "instruction": "TODO"
+      "instruction": "Add a non-lazy SmartInitializingSingleton @Bean that throws IllegalStateException when the injected UserInfoHolder is a DefaultUserInfoHolder."
     }
   ],
   "source_commit": "0008c348e",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 130,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 40,
+      "implement": 20,
+      "test": 45,
+      "build_debug": 25
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

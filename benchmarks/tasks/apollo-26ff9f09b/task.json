@@ -1,10 +1,10 @@
 {
   "id": "apollo-26ff9f09b",
-  "category": "TODO",
+  "category": "I3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: fix(portal): restore shared sessions after Boot 4 migration (#5706)\n* fix(portal): restore shared sessions after Boot 4 migration\n\n* docs: record shared Portal session fix in changelog\n\n* fix(portal): avoid implicit Redis connections and validate session stores\n\n* fix(portal): bootstrap Redis only when configured or selected\n\n* docs: preserve Apollo 3.1.0 changelog ordering",
+  "difficulty": "L",
+  "prompt": "Regression after the Spring Boot 4 migration: Portal no longer honours `spring.session.store-type` (jdbc | redis | none), so shared sessions across Portal instances stopped working and unused Redis connections may be bootstrapped. Restore it with a new `AutoConfigurationImportFilter` named `com.ctrip.framework.apollo.portal.component.config.SessionStoreAutoConfigurationImportFilter` (also `EnvironmentAware`): when `spring.session.store-type` is unset, keep every auto-configuration; when it is set it must be jdbc, redis or none (case-insensitive, otherwise fail with an IllegalArgumentException 'spring.session.store-type must be jdbc, redis or none'); only the selected session store's auto-configuration is kept (the JDBC session auto-configuration only for jdbc, the Redis session auto-configuration only for redis), and Redis data auto-configurations (`DataRedisAutoConfiguration`, `DataRedisRepositoriesAutoConfiguration`) are kept only when the store is redis or `spring.data.redis.*` is explicitly configured. Register the filter in `META-INF/spring.factories` under `org.springframework.boot.autoconfigure.AutoConfigurationImportFilter`.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/component/config/SessionStoreAutoConfigurationImportFilter.java",
-      "instruction": "TODO"
+      "instruction": "Implement match() as described (validate store type, keep only the selected session store, keep Redis data auto-config only when needed) and register it in spring.factories."
     }
   ],
   "source_commit": "26ff9f09b",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.openapi.**,com.ctrip.framework.apollo.portal.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 205,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 60,
+      "implement": 45,
+      "test": 60,
+      "build_debug": 40
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

@@ -1,10 +1,10 @@
 {
   "id": "apollo-b124f902d",
-  "category": "TODO",
+  "category": "Q3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: Merge commit from fork",
+  "difficulty": "M",
+  "prompt": "Security issue in Config Service access-key authentication (`AccessKeyUtil#extractAppIdFromRequest`). Config file requests come in two shapes: the generic `/configfiles/{appId}/{cluster}/{namespace}` and the format-specific `/configfiles/{json|raw}/{appId}/{cluster}/{namespace}`. The current prefix matching treats any path starting with `/configfiles/json/` or `/configfiles/raw/` as format-specific, so for an app whose id is literally `json` or `raw` the generic request `/configfiles/raw/default/application` is authenticated against app `default` instead of app `raw`. Determine the appId from the number of path segments: 4 segments with a leading `json`/`raw` → the second segment; otherwise (3 segments) → the first segment; fewer → no appId.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -16,7 +16,7 @@
   "oracle_plan": [
     {
       "file": "apollo-configservice/src/main/java/com/ctrip/framework/apollo/configservice/util/AccessKeyUtil.java",
-      "instruction": "TODO"
+      "instruction": "Replace the json/raw prefix branches with one /configfiles/ branch that splits the remaining path and picks the appId by segment count as described."
     }
   ],
   "source_commit": "b124f902d",
@@ -32,5 +32,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.configservice.**,com.ctrip.framework.apollo.metaservice.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 70,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 25,
+      "implement": 15,
+      "test": 20,
+      "build_debug": 10
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }

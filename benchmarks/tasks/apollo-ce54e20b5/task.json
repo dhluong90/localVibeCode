@@ -1,10 +1,10 @@
 {
   "id": "apollo-ce54e20b5",
-  "category": "TODO",
+  "category": "I3",
   "fixture": "apollo",
   "split": "draft",
-  "difficulty": "TODO",
-  "prompt": "TODO ticket. Commit: fix(audit): support open-ended date filters (#5684)\n* fix(audit): support open-ended date filters\n\nPreserve optional audit date bounds and pagination with real JPA regression coverage. Align the 160-check release handbook with supported UI behavior and authorized HTTP credential setup.\n\n* docs: add changelog for audit date filter fix",
+  "difficulty": "M",
+  "prompt": "Bug in the audit log query (apollo-audit). `ApolloAuditLogService.findByOpNameAndTime(opName, startDate, endDate, page, size)` always queries with both a lower and an upper date bound, so callers that pass `null` for startDate and/or endDate (open-ended filters from the UI) get no results or an error. Support open-ended filters: no dates → filter by opName only; only startDate → created time >= startDate; only endDate → created time <= endDate; both → between. Keep paging and newest-first sorting, and document the null semantics in `ApolloAuditLogQueryApi`.",
   "setup": [],
   "setup_patch": "setup.patch",
   "gold_files": [
@@ -19,15 +19,15 @@
   "oracle_plan": [
     {
       "file": "apollo-audit/apollo-audit-api/src/main/java/com/ctrip/framework/apollo/audit/api/ApolloAuditLogQueryApi.java",
-      "instruction": "TODO"
+      "instruction": "Document that startDate/endDate may be null meaning no lower/upper bound."
     },
     {
       "file": "apollo-audit/apollo-audit-impl/src/main/java/com/ctrip/framework/apollo/audit/repository/ApolloAuditLogRepository.java",
-      "instruction": "TODO"
+      "instruction": "Add derived queries findByOpNameAndDataChangeCreatedTimeGreaterThanEqual and ...LessThanEqual (with Pageable)."
     },
     {
       "file": "apollo-audit/apollo-audit-impl/src/main/java/com/ctrip/framework/apollo/audit/service/ApolloAuditLogService.java",
-      "instruction": "TODO"
+      "instruction": "In findByOpNameAndTime, dispatch to findByOpName / >= / <= / between depending on which dates are null."
     }
   ],
   "source_commit": "ce54e20b5",
@@ -43,5 +43,16 @@
     "-Dspotless.check.skip=true",
     "-Dsurefire.failIfNoSpecifiedTests=false",
     "-Dtest=com.ctrip.framework.apollo.audit.**"
-  ]
+  ],
+  "human_baseline": {
+    "minutes": 90,
+    "source": "proxy:claude-mid-dev",
+    "breakdown": {
+      "understand": 20,
+      "implement": 20,
+      "test": 35,
+      "build_debug": 15
+    },
+    "persona": "proxy:claude-mid-dev — mid-level Java/Spring developer, comfortable with Spring Boot/JPA/Mockito, NOT familiar with the Apollo codebase. Minutes include locating the code, reading it, implementing, writing/adjusting a unit test in the module's existing style, and 3-5 local Maven build/test cycles (~1-2 min each on this machine). Estimated from the reference change and its tests; not a measurement."
+  }
 }
