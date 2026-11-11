@@ -5,6 +5,7 @@ Test granularity is the test module (Python) / test class (Java).
 
 from __future__ import annotations
 
+import os
 import re
 import shutil
 import subprocess
@@ -17,6 +18,15 @@ from typing import Dict, List, Optional, Tuple
 from localvibecode.bench.tasks import Fixture, Task, apply_edits
 
 TEST_TIMEOUT_SEC = 300
+
+
+def install_file(src: Path, dst: Path) -> None:
+    """Copies a file into a workspace with a *fresh* mtime. shutil.copy2 keeps the source mtime, which
+    is older than classes compiled earlier in the same workspace, so Maven skipped recompiling the
+    copied test and ran the stale class (e.g. the agent's own version of a restored test)."""
+    Path(dst).parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(src, dst)
+    os.utime(dst, None)
 
 
 def run_cmd(cmd: List[str], cwd: Path, timeout: int = TEST_TIMEOUT_SEC) -> Tuple[int, str]:
@@ -130,7 +140,7 @@ def compute_baseline(task: Task, fixture: Fixture, base: Path) -> Dict[str, obje
         for rel, src in task.hidden_files().items():
             if not is_runnable_test(src):
                 (repo / rel).parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(src, repo / rel)
+                install_file(src, repo / rel)
         hidden = set(task.hidden_files())
         units = [u for u in base_test_units(fixture, base, task) if u not in hidden]
         res = run_units(fixture, repo, units, task)
@@ -175,10 +185,10 @@ def grade(task: Task, fixture: Fixture, ws: Path, base: Path, baseline: Dict[str
     # 2. Restore the base versions of pre-existing test files and run PASS_TO_PASS
     #    before adding hidden tests (a non-compiling hidden test must not count as a regression).
     for rel in baseline["base_units"]:
-        shutil.copy2(base / rel, ws / rel)
+        install_file(base / rel, ws / rel)
     for rel, src in test_patch_files(task, base).items():
         (ws / rel).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, ws / rel)
+        install_file(src, ws / rel)
     p2p = list(baseline["pass_to_pass"])
     p2p_res = run_units(fixture, ws, p2p, task) if p2p else {"compile_ok": True, "results": {}, "output": ""}
     result["pass_to_pass"] = {u: bool(p2p_res["results"].get(u, False)) for u in p2p}
@@ -188,7 +198,7 @@ def grade(task: Task, fixture: Fixture, ws: Path, base: Path, baseline: Dict[str
     # 3. Add hidden tests and run FAIL_TO_PASS.
     for rel, src in task.hidden_files().items():
         (ws / rel).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, ws / rel)
+        install_file(src, ws / rel)
     f2p = fail_to_pass_units(task, fixture, baseline["base_units"])
     f2p_res = run_units(fixture, ws, f2p, task) if f2p else {"compile_ok": True, "results": {}, "output": ""}
     result["compile_ok"] = f2p_res["compile_ok"]
@@ -221,7 +231,7 @@ def _grade_t1(task: Task, fixture: Fixture, ws: Path, base: Path) -> Dict[str, o
         repo = work / "repo"
         shutil.copytree(base, repo)
         (repo / test_rel).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(ws / test_rel, repo / test_rel)
+        install_file(ws / test_rel, repo / test_rel)
         passes, log = _run_single(fixture, repo, test_rel, task)
         out["t1_passes_on_base"] = passes
         out["t1_base_output"] = log[-2000:]

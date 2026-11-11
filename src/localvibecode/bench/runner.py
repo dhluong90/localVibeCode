@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from localvibecode.bench import grading
+from localvibecode.bench.grading import install_file
 from localvibecode.bench.tasks import Fixture, Task, load_fixtures, load_tasks
 from localvibecode.bench.workspace import clone_workspace, collect_changes, prepare_base
 
@@ -72,7 +73,7 @@ def validate_tasks(ctx: BenchContext, tasks: List[Task], log=None) -> List[Dict[
             ws = clone_workspace(base, work / "ref_ws")
             for rel, src in task.reference_files().items():
                 (ws / rel).parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(src, ws / rel)
+                install_file(src, ws / rel)
             changed, _ = collect_changes(ws)
             g_ref = grading.grade(task, fixture, ws, base, baseline)
             row["reference_resolved"] = g_ref["resolved"]
