@@ -19,7 +19,7 @@ from localvibecode.bench.workspace import clone_workspace, collect_changes, prep
 
 RUN_TIMEOUT_SEC = 900
 MAX_CONSECUTIVE_CRASHES = 3  # a broken checkout must not silently burn through the whole matrix
-CONFIGS = ("B0", "H", "O", "OC", "OCV")
+CONFIGS = ("B0", "H", "O", "OC", "OCV", "OCVG")
 
 
 def model_slug(model: str) -> str:
@@ -125,10 +125,11 @@ def run_one(ctx: BenchContext, task: Task, config: str, model: str, k: int, keep
                 agents.run_b0(task, fixture, ws, llm, trace)
             elif config == "O":
                 agents.run_oracle(task, fixture, ws, llm, trace)
-            elif config in ("OC", "OCV"):
+            elif config in ("OC", "OCV", "OCVG"):
                 budget = int((fixture.run_timeout_sec or RUN_TIMEOUT_SEC) * 0.75)  # leave time for grading
                 agents.run_opencode(task, fixture, ws, model, trace, timeout=budget,
-                                    verify_rounds=2 if config == "OCV" else 0)
+                                    verify_rounds=2 if config in ("OCV", "OCVG") else 0,
+                                    agent_guide=config == "OCVG")
             else:
                 raise ValueError(f"Unknown config {config}")
     except Exception as exc:  # the agent failing is a result, not a crash of the benchmark

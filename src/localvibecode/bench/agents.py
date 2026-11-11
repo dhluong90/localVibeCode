@@ -195,6 +195,7 @@ def opencode_config(model: str, base_url: str = "http://localhost:11434/v1", con
 
 
 PROXY_SCRIPT = Path(__file__).resolve().parents[3] / "local-ai" / "ollama_proxy.py"
+AGENT_GUIDES = Path(__file__).resolve().parents[3] / "benchmarks" / "fixtures" / "agent_guides"
 
 
 def _start_repair_proxy(run_dir: Path):
@@ -221,7 +222,7 @@ def _start_repair_proxy(run_dir: Path):
 
 def run_opencode(
     task: Task, fixture: Fixture, ws: Path, model: str, trace: Dict[str, Any], timeout: int,
-    verify_rounds: int = 0,
+    verify_rounds: int = 0, agent_guide: bool = False,
 ) -> None:
     """Gives the ticket to OpenCode (headless, auto-approved) and lets it work in the workspace.
 
@@ -243,6 +244,14 @@ def run_opencode(
     # OpenCode resolves its project from PWD, not the process cwd: pin both to the workspace.
     env = dict(os.environ, OPENCODE_CONFIG=str(config_file), PWD=str(ws))
     test_cmd = task.effective_test_cmd(fixture)
+    # agent_guide: append the fixture's navigation guide to AGENTS.md (environment config, not part of the
+    # task); the original file is restored before the diff is graded.
+    agents_md = ws / "AGENTS.md"
+    agents_md_before = agents_md.read_text(encoding="utf-8") if agents_md.exists() else None
+    guide = AGENT_GUIDES / f"{fixture.name}.md"
+    if agent_guide and guide.exists():
+        agents_md.write_text((agents_md_before or "") + "\n" + guide.read_text(encoding="utf-8"), encoding="utf-8")
+        trace["agent_guide"] = str(guide.name)
     prompt = (
         f"{task.prompt}\n\n"
         "Implement this in the repository. When you are done, make sure the code compiles and the relevant "
@@ -290,6 +299,11 @@ def run_opencode(
             ok = run_once(["-s", session], feedback)
     finally:
         proxy.terminate()
+        if agent_guide and guide.exists():
+            if agents_md_before is None:
+                agents_md.unlink(missing_ok=True)
+            else:
+                agents_md.write_text(agents_md_before, encoding="utf-8")
     trace["verify_rounds"] = rounds
 
     calls = []
