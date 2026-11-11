@@ -2,7 +2,7 @@
   "id": "apollo-dae91b599",
   "category": "I1",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "test",
   "difficulty": "S",
   "prompt": "Bug in Portal permissions (`DefaultRolePermissionService#hasAnyPermission`). Super admins are granted everything by `userHasPermission`, but `hasAnyPermission(userId, permissions)` only looks at permissions explicitly assigned to the user, so super admins are denied on pages guarded by 'any of these permissions'. Make `hasAnyPermission` return true for super admins, and return false when the permission list is null or empty.",
   "setup": [],

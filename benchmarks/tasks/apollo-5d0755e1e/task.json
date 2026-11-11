@@ -2,7 +2,7 @@
   "id": "apollo-5d0755e1e",
   "category": "I1",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "M",
   "prompt": "Concurrency bug in Config Service `AccessKeyServiceWithCache`. `getSecrets(appId, filter)` streams over the live list from the synchronized multimap `accessKeyCache` without holding its lock, so a concurrent cache refresh can throw ConcurrentModificationException. In addition, when an access key is updated the refresh puts the new key and removes the old one as two separate operations, so a reader can briefly see both versions of the same key (or neither). Make readers work on a snapshot copied under the multimap's lock, and make the old→new replacement a single mutation under the same lock.",
   "setup": [],

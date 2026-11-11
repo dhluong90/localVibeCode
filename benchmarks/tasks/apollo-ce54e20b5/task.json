@@ -2,7 +2,7 @@
   "id": "apollo-ce54e20b5",
   "category": "I3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "test",
   "difficulty": "M",
   "prompt": "Bug in the audit log query (apollo-audit). `ApolloAuditLogService.findByOpNameAndTime(opName, startDate, endDate, page, size)` always queries with both a lower and an upper date bound, so callers that pass `null` for startDate and/or endDate (open-ended filters from the UI) get no results or an error. Support open-ended filters: no dates → filter by opName only; only startDate → created time >= startDate; only endDate → created time <= endDate; both → between. Keep paging and newest-first sorting, and document the null semantics in `ApolloAuditLogQueryApi`.",
   "setup": [],

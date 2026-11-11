@@ -2,7 +2,7 @@
   "id": "apollo-e8384a520",
   "category": "I3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "test",
   "difficulty": "L",
   "prompt": "Performance: `NotificationControllerV2` keeps waiting long-poll clients in `Multimaps.synchronizedSetMultimap(TreeMultimap.create(String.CASE_INSENSITIVE_ORDER, ...))`; every access takes one global lock and the tree map is slow with many keys. Replace it with a new concurrent structure `com.ctrip.framework.apollo.configservice.wrapper.CaseInsensitiveMultimapWrapper<V>`: constructor `(Map<String, Set<V>> delegate, Supplier<Set<V>> setSupplier)` (used as `new CaseInsensitiveMultimapWrapper<>(Maps.newConcurrentMap(), Sets::newConcurrentHashSet)`), keys compared case-insensitively (normalise with Locale.ROOT lower case), and methods `boolean put(String key, V value)`, `boolean remove(String key, V value)` (drops the key when its set becomes empty), `Set<V> get(String key)` (empty set, never null, for unknown keys), `boolean containsKey(String key)` and `int size()` (total number of values). Use it for `deferredResults` in the controller.",
   "setup": [],

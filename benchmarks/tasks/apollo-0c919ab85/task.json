@@ -2,7 +2,7 @@
   "id": "apollo-0c919ab85",
   "category": "I3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "L",
   "prompt": "Performance: Config Service long-polling (`NotificationControllerV2`) serialises the same notification to JSON once per waiting client when a release message arrives, which burns CPU and memory with many clients. Serialise the notification payload once per release message and hand the pre-serialised response to every waiting client. Requirements: (1) `pollNotification` returns `DeferredResult<ResponseEntity<?>>`; (2) `DeferredResultWrapper` stores `DeferredResult<ResponseEntity<?>>` and gets a new method `setResult(String changedNamespace, ApolloConfigNotification notification, ResponseEntity<String> serializedResponse)` that reuses the pre-serialised body (a JSON string with content type `application/json;charset=UTF-8`) when the client watches the namespace under the same name, and falls back to the existing per-client path when the client's original namespace name must be restored; (3) the existing `setResult(ApolloConfigNotification)` keeps returning the notification object itself in a list (no copy) when no name restoration is needed.",
   "setup": [],

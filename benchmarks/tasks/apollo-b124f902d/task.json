@@ -2,7 +2,7 @@
   "id": "apollo-b124f902d",
   "category": "Q3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "test",
   "difficulty": "M",
   "prompt": "Security issue in Config Service access-key authentication (`AccessKeyUtil#extractAppIdFromRequest`). Config file requests come in two shapes: the generic `/configfiles/{appId}/{cluster}/{namespace}` and the format-specific `/configfiles/{json|raw}/{appId}/{cluster}/{namespace}`. The current prefix matching treats any path starting with `/configfiles/json/` or `/configfiles/raw/` as format-specific, so for an app whose id is literally `json` or `raw` the generic request `/configfiles/raw/default/application` is authenticated against app `default` instead of app `raw`. Determine the appId from the number of path segments: 4 segments with a leading `json`/`raw` → the second segment; otherwise (3 segments) → the first segment; fewer → no appId.",
   "setup": [],

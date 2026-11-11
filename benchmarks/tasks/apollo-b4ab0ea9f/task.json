@@ -2,7 +2,7 @@
   "id": "apollo-b4ab0ea9f",
   "category": "Q3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "M",
   "prompt": "Security issue in Portal `ReleaseController`. GET /envs/{env}/releases/{releaseId} checks that the current user may view the release's namespace, but the compare endpoint (GET /envs/{env}/releases/compare?baseReleaseId=..&toCompareReleaseId=..) returns the diff of any two releases without any permission check, leaking configuration of namespaces the user cannot see. Apply the same per-release permission check used by the single-release endpoint to both releases in compare (a release id of 0 means 'no release' and is not checked).",
   "setup": [],

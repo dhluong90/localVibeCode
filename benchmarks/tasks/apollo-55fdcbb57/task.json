@@ -2,7 +2,7 @@
   "id": "apollo-55fdcbb57",
   "category": "I1",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "M",
   "prompt": "Bug in Config Service app-namespace cache (`AppNamespaceServiceWithCache`). When an app namespace is deleted and a new one is created with the same appId and name, the periodic scan of deleted records removes the cache entry for that appId+name — which by then is the NEW app namespace. Clients then stop seeing a namespace that exists. When handling deleted app namespaces, only evict the cache entry if the cached app namespace is the same record (same id) as the deleted one.",
   "setup": [],

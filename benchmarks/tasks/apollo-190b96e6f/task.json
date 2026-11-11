@@ -2,7 +2,7 @@
   "id": "apollo-190b96e6f",
   "category": "Q3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "S",
   "prompt": "Security issue in release rollback (apollo-biz). `ReleaseService.rollbackTo(releaseId, toReleaseId, operator)` only authorises the namespace that owns `releaseId`; `toReleaseId` is taken from the caller as-is. If the target release belongs to another app, cluster or namespace, its configuration is used to publish the caller's own (gray) namespace, letting a user copy and read another application's configuration. Reject such requests: when the target release does not belong to the same appId, clusterName and namespaceName as the release being rolled back, throw a `BadRequestException` and change nothing.",
   "setup": [],

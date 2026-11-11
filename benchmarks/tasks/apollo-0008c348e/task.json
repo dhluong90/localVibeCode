@@ -2,7 +2,7 @@
   "id": "apollo-0008c348e",
   "category": "I2",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "M",
   "prompt": "Portal must refuse to start without real authentication. When no authentication profile (auth, ldap or oidc) is active and no custom SSO is configured, Portal falls back to the placeholder `DefaultUserInfoHolder` and every request runs as a fixed fake user. Add a startup check in `AuthConfiguration`: once all singletons are initialised (also when lazy initialisation is enabled), fail startup with an `IllegalStateException` explaining that authentication is not configured if the active `UserInfoHolder` is the `DefaultUserInfoHolder`. Built-in authentication and custom SSO implementations (a custom `UserInfoHolder` bean) must keep working.",
   "setup": [],

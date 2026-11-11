@@ -2,7 +2,7 @@
   "id": "apollo-c01018384",
   "category": "Q3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "S",
   "prompt": "Security issue in Portal `NamespaceController`. Two endpoints check permission for the appId in the URL path but act on the appId from the request body: creating namespaces (POST /apps/{appId}/namespaces, a list of namespace creation models) and creating app namespaces (POST /apps/{appId}/appnamespaces). A user can therefore create namespaces for another application. In both endpoints, reject the request with a `BadRequestException` when any payload appId differs from the path appId.",
   "setup": [],

@@ -2,7 +2,7 @@
   "id": "apollo-7daf30647",
   "category": "I3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "test",
   "difficulty": "L",
   "prompt": "Feature: auto-provision an access key when an application is created. Add a configuration switch (`BizConfig#isAccessKeyAutoProvisionEnabled()`) and, in the Admin Service app creation endpoint (`AppController#create`), when it is enabled create and enable a default access key for the new app via `AccessKeyService`, generated with the existing unique key generator and the default access key mode. A failure to provision the access key must be logged and must NOT fail the app creation.",
   "setup": [],

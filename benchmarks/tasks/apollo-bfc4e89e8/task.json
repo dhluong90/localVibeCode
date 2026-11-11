@@ -2,7 +2,7 @@
   "id": "apollo-bfc4e89e8",
   "category": "I3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "M",
   "prompt": "Feature (Portal OIDC): Apollo uses the OIDC/JWT subject (`sub`) as the Apollo user id, but many enterprise IdPs put an opaque UUID in `sub` and the login name in another claim (e.g. `preferred_username`). Add the property `spring.security.oidc.user-id-claim-name` (field `userIdClaimName` in `OidcExtendProperties`, default: use the subject). Resolve the user id through `OidcUserInfoUtil` (e.g. `getOidcUserId(OidcUser, OidcExtendProperties)` and the JWT equivalent) and use it in both the OIDC login success listener and the user-info holder so both paths agree. If the configured claim is missing or blank in a token, reject the login (do not fall back to the subject).",
   "setup": [],

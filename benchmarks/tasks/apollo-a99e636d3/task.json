@@ -2,7 +2,7 @@
   "id": "apollo-a99e636d3",
   "category": "Q3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "test",
   "difficulty": "S",
   "prompt": "Security issue in the legacy Portal API for creating clusters (`ClusterController#createCluster`, POST /apps/{appId}/envs/{env}/clusters). Permission is checked for the appId in the URL path, but the cluster is created with the appId from the request body, so a user can create clusters in another application. Reject the request with a `BadRequestException` when the appId in the path and the appId in the payload differ.",
   "setup": [],

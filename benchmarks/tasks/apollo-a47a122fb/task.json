@@ -2,7 +2,7 @@
   "id": "apollo-a47a122fb",
   "category": "I3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "test",
   "difficulty": "L",
   "prompt": "Release history retention does not actually free space: `ReleaseHistoryService` cleanup soft-deletes old `ReleaseHistory` rows and deletes releases by id even if they are still referenced. Change the retention cleanup to physically delete: add `ReleaseHistoryRepository.deletePhysicallyByIdIn(Collection<Long> ids)` (native DELETE by id) and `ReleaseRepository.deletePhysicallyIfUnreferencedByIdIn(Collection<Long> ids)` (native DELETE of the given releases only when no remaining ReleaseHistory references them as ReleaseId or PreviousReleaseId and no active gray release rule (IsDeleted = false, BranchStatus = 1) references them). In the cleanup loop, stop when a batch is empty, delete the batch's history rows physically, and then physically delete the referenced releases (both release ids and previous release ids, ignoring ids <= 0) that are no longer referenced.",
   "setup": [],

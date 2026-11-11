@@ -2,7 +2,7 @@
   "id": "apollo-40a25df02",
   "category": "I3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "S",
   "prompt": "Gray release rules break on MySQL with utf8mb4 and on empty rule payloads. (1) `GrayReleaseRule.rules` and `ReleaseHistory.operationContext` are mapped as plain strings and hit the 65,535-byte row-size limit; map both as large objects (`@Lob`) — the SQL migration is handled separately. (2) `GrayReleaseRuleItemTransformer.batchTransformFromJSON(content)` returns null for null/empty content or JSON `null`, which later causes NullPointerExceptions when gray rules are loaded (e.g. in `GrayReleaseRulesHolder`); it must return an empty set in those cases.",
   "setup": [],

@@ -2,7 +2,7 @@
   "id": "apollo-26ff9f09b",
   "category": "I3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "L",
   "prompt": "Regression after the Spring Boot 4 migration: Portal no longer honours `spring.session.store-type` (jdbc | redis | none), so shared sessions across Portal instances stopped working and unused Redis connections may be bootstrapped. Restore it with a new `AutoConfigurationImportFilter` named `com.ctrip.framework.apollo.portal.component.config.SessionStoreAutoConfigurationImportFilter` (also `EnvironmentAware`): when `spring.session.store-type` is unset, keep every auto-configuration; when it is set it must be jdbc, redis or none (case-insensitive, otherwise fail with an IllegalArgumentException 'spring.session.store-type must be jdbc, redis or none'); only the selected session store's auto-configuration is kept (the JDBC session auto-configuration only for jdbc, the Redis session auto-configuration only for redis), and Redis data auto-configurations (`DataRedisAutoConfiguration`, `DataRedisRepositoriesAutoConfiguration`) are kept only when the store is redis or `spring.data.redis.*` is explicitly configured. Register the filter in `META-INF/spring.factories` under `org.springframework.boot.autoconfigure.AutoConfigurationImportFilter`.",
   "setup": [],

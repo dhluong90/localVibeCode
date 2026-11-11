@@ -2,7 +2,7 @@
   "id": "apollo-42d4d827e",
   "category": "Q3",
   "fixture": "apollo",
-  "split": "draft",
+  "split": "dev",
   "difficulty": "S",
   "prompt": "Security issue in the Admin Service gray-release rule update (`NamespaceBranchController`, endpoint that updates a branch's gray release rules). The persisted `GrayReleaseRule` is built from the request body, so a body that carries a different appId / clusterName / namespaceName / branchName can redirect an update that the Portal authorised for one application to another application. The persisted rule must always use the app, cluster, namespace and branch from the request path (the identity that was checked), never the identity in the body.",
   "setup": [],
