@@ -105,7 +105,6 @@ class GraphAndSlicerTest(TempDirCase):
         self.assertIn("class OrderService", sl.rendered_context)
         self.assertIn("validators.py", sl.outbound_files)
 
-    @unittest.expectedFailure  # A5: the target file itself can be cut by the character cap
     def test_target_file_is_never_truncated(self) -> None:
         repo = self.copy_fixture(PY_FIXTURE)
         graph = DeterministicGraphBuilder(repo).build()
@@ -113,7 +112,6 @@ class GraphAndSlicerTest(TempDirCase):
         sl = BlastRadiusSlicer(repo, graph, max_chars=400).slice_for_file("services/order_service.py")
         self.assertIn(target.strip(), sl.rendered_context)
 
-    @unittest.expectedFailure  # A5: Java targets are presented to the model in a ```python fence
     def test_java_target_uses_java_fence(self) -> None:
         repo = self.copy_fixture(JAVA_FIXTURE)
         graph = DeterministicGraphBuilder(repo).build()

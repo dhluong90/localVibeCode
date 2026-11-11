@@ -101,7 +101,7 @@ class SingleModelOllamaClient:
             method="POST",
         )
         try:
-            with urllib.request.urlopen(req, timeout=90) as resp:
+            with urllib.request.urlopen(req, timeout=self.config.llm_timeout_sec) as resp:
                 raw = json.loads(resp.read().decode("utf-8"))
         except urllib.error.URLError as exc:
             raise RuntimeError(

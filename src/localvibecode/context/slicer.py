@@ -15,6 +15,16 @@ from typing import List
 
 from localvibecode.context.graph_builder import CodeKnowledgeGraph
 
+_FENCE_LANG = {".java": "java", ".py": "python", ".ts": "typescript", ".tsx": "tsx", ".js": "javascript",
+               ".jsx": "jsx", ".go": "go"}
+
+
+def normalize_path(path: str):
+    p = path.strip().replace("\\", "/")
+    while p.startswith("./"):
+        p = p[2:]
+    return p or None
+
 
 @dataclass
 class SurgicalContextSlice:
@@ -34,7 +44,7 @@ class BlastRadiusSlicer:
         self.max_chars = max_chars
 
     def slice_for_file(self, target_rel_path: str) -> SurgicalContextSlice:
-        target_rel_path = target_rel_path.strip().lstrip("./")
+        target_rel_path = normalize_path(target_rel_path) or target_rel_path.strip()
         full_path = self.repo_root / target_rel_path
         if full_path.exists():
             target_source = full_path.read_text(encoding="utf-8")
@@ -43,34 +53,36 @@ class BlastRadiusSlicer:
 
         outbound = self.graph.file_imports.get(target_rel_path, [])
         inbound = self.graph.inbound_files.get(target_rel_path, [])
+        lang = _FENCE_LANG.get(Path(target_rel_path).suffix, "")
 
-        sections: List[str] = []
-        sections.append(f"=== [1] TARGET FILE TO EDIT: `{target_rel_path}` ===")
-        sections.append(f"```python\n{target_source}\n```")
+        # The target file is always included in full; only neighbour signatures are cut to fit the cap.
+        head = f"=== [1] TARGET FILE TO EDIT: `{target_rel_path}` ===\n```{lang}\n{target_source}\n```"
+        budget = max(0, self.max_chars - len(head))
+        neighbour_sections: List[str] = []
+        truncated = False
 
-        # 1-Hop Outbound Signatures (What this file calls/imports)
-        sections.append(
-            "\n=== [2] 1-HOP OUTBOUND DEPENDENCIES (Signatures & Types ONLY - Bodies Stripped) ==="
-        )
-        if outbound:
-            for dep_file in outbound:
-                sections.append(self._render_file_signatures(dep_file))
-        else:
-            sections.append("(No internal module imports)")
+        def add(text: str) -> None:
+            nonlocal budget, truncated
+            if len(text) + 1 <= budget:
+                neighbour_sections.append(text)
+                budget -= len(text) + 1
+            else:
+                truncated = True
 
-        # 1-Hop Inbound Callers (Blast Radius / Who calls this file)
-        sections.append(
-            "\n=== [3] 1-HOP INBOUND BLAST RADIUS (Callers that depend on this file - DO NOT BREAK CONTRACTS) ==="
-        )
-        if inbound:
-            for caller_file in inbound:
-                sections.append(self._render_file_signatures(caller_file))
-        else:
-            sections.append("(No internal callers depend on this file yet)")
+        add("\n=== [2] 1-HOP OUTBOUND DEPENDENCIES (Signatures & Types ONLY - Bodies Stripped) ===")
+        for dep_file in outbound or []:
+            add(self._render_file_signatures(dep_file))
+        if not outbound:
+            add("(No internal module imports)")
+        add("\n=== [3] 1-HOP INBOUND BLAST RADIUS (Callers that depend on this file - DO NOT BREAK CONTRACTS) ===")
+        for caller_file in inbound or []:
+            add(self._render_file_signatures(caller_file))
+        if not inbound:
+            add("(No internal callers depend on this file yet)")
 
-        rendered = "\n".join(sections)
-        if len(rendered) > self.max_chars:
-            rendered = rendered[: self.max_chars] + "\n... [Truncated to fit Surgical Context Cap]"
+        rendered = "\n".join([head] + neighbour_sections)
+        if truncated:
+            rendered += "\n... [Truncated to fit Surgical Context Cap]"
 
         approx_tokens = max(1, len(rendered) // 4)
         return SurgicalContextSlice(

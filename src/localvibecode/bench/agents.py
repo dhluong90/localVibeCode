@@ -268,10 +268,13 @@ def run_harness(
         "workspace_tests_passed": bool(report.test_verification and report.test_verification.passed),
         "critic_verdict": report.critic_verdict,
     }
-    heal = [m for m in logs if "[Test Self-Healing]" in m]
-    if heal:
-        match = re.search(r"on `([^`]+)`", heal[0])
-        trace["h_report"]["heal_target"] = match.group(1) if match else None
+    heal_targets: List[str] = []
+    for line in (m for m in logs if "[Test Self-Healing" in m):
+        # Round 00 format: "... on `file`"; Round 01 format: "... Targeted fix on ['a', 'b']..."
+        heal_targets += re.findall(r"on `([^`]+)`", line) + re.findall(r"'([^']+)'", line)
+    if heal_targets:
+        trace["h_report"]["heal_target"] = heal_targets[0]
+        trace["h_report"]["heal_targets"] = heal_targets
 
 
 def _rel(ws: Path, path: Any) -> str:

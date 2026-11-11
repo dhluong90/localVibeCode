@@ -67,8 +67,9 @@ def tag_failure(
     if any(s.get("truncated") and s.get("target") in task.gold_files for s in trace.get("slices", [])):
         tags.append("H3")
     if config == "H":
-        heal = (trace.get("h_report") or {}).get("heal_target")
-        if heal and heal not in task.gold_files:
+        report = trace.get("h_report") or {}
+        heals = report.get("heal_targets") or ([report["heal_target"]] if report.get("heal_target") else [])
+        if heals and not set(heals) & set(task.gold_files):
             tags.append("H7")
         if any("Security Violation" in c.get("error", "") for c in trace.get("file_checks", [])):
             tags.append("H6")

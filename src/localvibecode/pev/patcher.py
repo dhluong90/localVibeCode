@@ -23,7 +23,7 @@ class SurgicalPatcher:
         r"<<<<<<<\s*SEARCH\s*\n(.*?)\n=======\s*\n(.*?)\n>>>>>>>\s*REPLACE",
         re.DOTALL,
     )
-    CODE_FENCE_PATTERN = re.compile(r"```(?:python|py|java)?\s*\n(.*?)```", re.DOTALL)
+    CODE_FENCE_PATTERN = re.compile(r"```[A-Za-z0-9_+-]*[ \t]*\n(.*?)```", re.DOTALL)
 
     @classmethod
     def apply_llm_output(cls, file_path: Path, llm_text: str) -> PatchOutcome:
@@ -36,7 +36,7 @@ class SurgicalPatcher:
                 code = str(parsed["updated_code"]).strip()
                 fences = cls.CODE_FENCE_PATTERN.findall(code)
                 if fences:
-                    code = fences[0].strip()
+                    code = max(fences, key=len).strip()
                 if code:
                     code = cls._sanitize_json_escaped_python(code)
                     file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -70,7 +70,7 @@ class SurgicalPatcher:
         # 3. Fallback: first Python code fence
         fences = cls.CODE_FENCE_PATTERN.findall(llm_text)
         if fences:
-            candidate = cls._sanitize_json_escaped_python(fences[0].strip()) + "\n"
+            candidate = cls._sanitize_json_escaped_python(max(fences, key=len).strip()) + "\n"
             file_path.parent.mkdir(parents=True, exist_ok=True)
             file_path.write_text(candidate, encoding="utf-8")
             return PatchOutcome(

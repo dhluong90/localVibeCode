@@ -20,6 +20,12 @@ class LocalVibeCodeConfig:
     temperature_verify: float = 0.1
     max_surgical_context_chars: int = 14000  # ~3,500 tokens
     max_self_healing_retries: int = 3
+    # Round 01: a hard 90 s HTTP timeout cut off 10/33 14B runs (≈14 tok/s on an M5 → ~110 s per long answer).
+    llm_timeout_sec: int = 900
+    test_timeout_sec: int = 600
+    max_plan_context_chars: int = 24000  # focused code view for the planner (the full graph does not fit)
+    max_heal_rounds: int = 2
+    large_repo_files: int = 300  # above this, the code graph is built once per run (33 s on Apollo)
     target_repo_path: str = "demo_enterprise_repo"
     graph_output_dir: str = "graphify-out"
     enterprise_rules_dir: str = "enterprise_rules"

@@ -33,7 +33,10 @@ class ZeroTokenVerifier:
         "System.exit(",
     )
 
-    def __init__(self, repo_root: Path, test_command: List[str] | None = None) -> None:
+    def __init__(
+        self, repo_root: Path, test_command: List[str] | None = None, test_timeout_sec: int | None = None
+    ) -> None:
+        self.test_timeout_sec = test_timeout_sec
         self.repo_root = repo_root.resolve()
         if test_command:
             self.test_command = test_command
@@ -185,7 +188,7 @@ class ZeroTokenVerifier:
 
         # Run test suite
         try:
-            timeout_sec = 90 if (self.repo_root / "pom.xml").exists() else 30
+            timeout_sec = self.test_timeout_sec or (90 if (self.repo_root / "pom.xml").exists() else 30)
             proc = subprocess.run(
                 self.test_command,
                 cwd=str(self.repo_root),
