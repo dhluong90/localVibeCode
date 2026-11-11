@@ -5,6 +5,7 @@ Test granularity is the test module (Python) / test class (Java).
 
 from __future__ import annotations
 
+import re
 import shutil
 import subprocess
 import tempfile
@@ -39,7 +40,15 @@ def base_test_units(fixture: Fixture, base: Path, task: Optional[Task] = None) -
     roots = [base / m / fixture.test_dir for m in task.test_modules] if task and task.test_modules \
         else [base / fixture.test_dir]
     pattern = "test_*.py" if fixture.language == "python" else "*Test.java"
-    return sorted(p.relative_to(base).as_posix() for root in roots if root.exists() for p in root.rglob(pattern))
+    return sorted(p.relative_to(base).as_posix() for root in roots if root.exists() for p in root.rglob(pattern)
+                  if is_runnable_test(p))
+
+
+def is_runnable_test(path: Path) -> bool:
+    """Abstract base classes (e.g. AbstractIntegrationTest) match *Test.java but produce no report."""
+    if path.suffix != ".java":
+        return True
+    return re.search(r"\babstract\s+class\b", path.read_text(encoding="utf-8", errors="ignore")) is None
 
 
 def _maven_scope(task: Optional[Task]) -> List[str]:
@@ -126,7 +135,7 @@ def compute_baseline(task: Task, fixture: Fixture, base: Path) -> Dict[str, obje
 
 
 def fail_to_pass_units(task: Task, fixture: Fixture, base_units: List[str]) -> List[str]:
-    units = list(task.hidden_files().keys())
+    units = [rel for rel, src in task.hidden_files().items() if is_runnable_test(src)]
     for name in task.fail_to_pass_base:
         units += [u for u in base_units if u == name or unit_name(fixture, u) == name]
     return units

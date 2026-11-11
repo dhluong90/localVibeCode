@@ -10,9 +10,9 @@ from typing import List, Tuple
 from localvibecode.bench.tasks import Fixture, Task, apply_edits
 
 WORKSPACE_GITIGNORE = "graphify-out/\ntarget/\n__pycache__/\n*.pyc\n"
-# gc.auto=0: background auto-gc would repack objects while workspaces are being copied.
+# Background auto-gc / auto-maintenance (git >= 2.29) would repack objects while workspaces are copied.
 _GIT = ["git", "-c", "user.name=bench", "-c", "user.email=bench@localhost", "-c", "commit.gpgsign=false",
-        "-c", "gc.auto=0"]
+        "-c", "gc.auto=0", "-c", "maintenance.auto=false"]
 
 
 def _git(ws: Path, *args: str) -> str:
@@ -33,6 +33,8 @@ def prepare_base(task: Task, fixture: Fixture, dest: Path) -> Path:
                        capture_output=True, text=True)
     (dest / ".gitignore").write_text(WORKSPACE_GITIGNORE, encoding="utf-8")
     _git(dest, "init", "-q")
+    _git(dest, "config", "gc.auto", "0")
+    _git(dest, "config", "maintenance.auto", "false")
     _git(dest, "add", "-A")
     _git(dest, "commit", "-q", "-m", "base")
     return dest
