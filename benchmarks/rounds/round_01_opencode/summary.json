@@ -1,0 +1,171 @@
+{
+  "k": 1,
+  "total_runs": 11,
+  "task_prefix": "java-",
+  "models": {
+    "qwen3:14b": {
+      "OC": {
+        "ALL": {
+          "instances": 11,
+          "runs": 11,
+          "resolve_at_1": 0.636,
+          "resolve_ci95": [
+            0.354,
+            0.848
+          ],
+          "pass_k": 0.636,
+          "pass_k_instances": 11,
+          "regression_rate": 0.091,
+          "scope_precision": 0.967,
+          "scope_recall": 0.909,
+          "mutation_score": 0.834,
+          "mean_agent_sec": 296.991,
+          "mean_prompt_tokens": 271953.273,
+          "mean_completion_tokens": 1826.545,
+          "failure_tags": {
+            "M1": 2,
+            "M2": 1,
+            "M4": 1
+          },
+          "harness_failure_share": 0.0,
+          "level": "L2"
+        },
+        "I1": {
+          "instances": 2,
+          "runs": 2,
+          "resolve_at_1": 1.0,
+          "resolve_ci95": [
+            0.342,
+            1.0
+          ],
+          "pass_k": 1.0,
+          "pass_k_instances": 2,
+          "regression_rate": 0.0,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 179.2,
+          "mean_prompt_tokens": 123453.0,
+          "mean_completion_tokens": 835.5,
+          "failure_tags": {},
+          "harness_failure_share": null,
+          "level": "L4"
+        },
+        "I2": {
+          "instances": 2,
+          "runs": 2,
+          "resolve_at_1": 0.5,
+          "resolve_ci95": [
+            0.095,
+            0.905
+          ],
+          "pass_k": 0.5,
+          "pass_k_instances": 2,
+          "regression_rate": 0.5,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 215.65,
+          "mean_prompt_tokens": 186979.0,
+          "mean_completion_tokens": 1201.5,
+          "failure_tags": {
+            "M2": 1
+          },
+          "harness_failure_share": 0.0,
+          "level": "<L2"
+        },
+        "I3": {
+          "instances": 2,
+          "runs": 2,
+          "resolve_at_1": 0.5,
+          "resolve_ci95": [
+            0.095,
+            0.905
+          ],
+          "pass_k": 0.5,
+          "pass_k_instances": 2,
+          "regression_rate": 0.0,
+          "scope_precision": 0.834,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 309.45,
+          "mean_prompt_tokens": 246246.0,
+          "mean_completion_tokens": 2072.0,
+          "failure_tags": {
+            "M1": 1
+          },
+          "harness_failure_share": 0.0,
+          "level": "L2"
+        },
+        "I6": {
+          "instances": 1,
+          "runs": 1,
+          "resolve_at_1": 1.0,
+          "resolve_ci95": [
+            0.207,
+            1.0
+          ],
+          "pass_k": 1.0,
+          "pass_k_instances": 1,
+          "regression_rate": 0.0,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": null,
+          "mean_agent_sec": 358.3,
+          "mean_prompt_tokens": 354144.0,
+          "mean_completion_tokens": 2420.0,
+          "failure_tags": {},
+          "harness_failure_share": null,
+          "level": "L4"
+        },
+        "M1": {
+          "instances": 2,
+          "runs": 2,
+          "resolve_at_1": 0.5,
+          "resolve_ci95": [
+            0.095,
+            0.905
+          ],
+          "pass_k": 0.5,
+          "pass_k_instances": 2,
+          "regression_rate": 0.0,
+          "scope_precision": 1.0,
+          "scope_recall": 0.5,
+          "mutation_score": null,
+          "mean_agent_sec": 440.35,
+          "mean_prompt_tokens": 590651.0,
+          "mean_completion_tokens": 2939.0,
+          "failure_tags": {
+            "M4": 1
+          },
+          "harness_failure_share": 0.0,
+          "level": "L2"
+        },
+        "T1": {
+          "instances": 2,
+          "runs": 2,
+          "resolve_at_1": 0.5,
+          "resolve_ci95": [
+            0.095,
+            0.905
+          ],
+          "pass_k": 0.5,
+          "pass_k_instances": 2,
+          "regression_rate": 0.0,
+          "scope_precision": 1.0,
+          "scope_recall": 1.0,
+          "mutation_score": 0.834,
+          "mean_agent_sec": 309.65,
+          "mean_prompt_tokens": 171342.0,
+          "mean_completion_tokens": 1788.0,
+          "failure_tags": {
+            "M1": 1
+          },
+          "harness_failure_share": 0.0,
+          "level": "L2"
+        }
+      },
+      "gaps": {}
+    }
+  }
+}

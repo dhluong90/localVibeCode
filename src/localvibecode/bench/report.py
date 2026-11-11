@@ -140,9 +140,11 @@ def render_markdown(summary: Dict[str, Any]) -> str:
         lines.append("| Category | Config | n | runs | resolve@1 (CI95) | pass^k | Regression | Scope P/R | "
                      "Mutation | Level | Primary failure tags | s/run |")
         lines.append("|---|---|---|---|---|---|---|---|---|---|---|---|")
-        cats = sorted({c for cfg in ("B0", "H", "O") for c in data.get(cfg, {})}, key=lambda c: (c == "ALL", c))
+        configs = [c for c in ("B0", "H", "O", "OC", "OCV") if c in data] + sorted(
+            c for c in data if c not in ("B0", "H", "O", "OC", "OCV", "gaps", "D1_plan_scope"))
+        cats = sorted({c for cfg in configs for c in data.get(cfg, {})}, key=lambda c: (c == "ALL", c))
         for cat in cats:
-            for cfg in ("B0", "H", "O"):
+            for cfg in configs:
                 m = data.get(cfg, {}).get(cat)
                 if not m:
                     continue
