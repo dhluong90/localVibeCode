@@ -43,6 +43,10 @@ Bộ 14 case (`benchmarks/sast_cases/`), chạy `ZeroTokenVerifier` hiện tại
 
 → Q2 hiện **chưa đạt** mức kỳ vọng L4. Action: A9.
 
+## Thay đổi phạm vi (2026-11-11 ~09:45)
+
+Máy mục tiêu của team là MacBook Pro **24 GB** → chỉ benchmark **`qwen2.5-coder:14b`** từ đây (k = 3). Kết quả 7B dừng ở **k1** (66 run) và giữ lại làm tham chiếu, không tính level cho 7B. Tổng còn 66 (7B) + 198 (14B) = 264 run.
+
 ## Kết quả giữa kỳ #2 (2026-11-11 09:20 — 76/396 run)
 
 **Tiến độ:** 7B đã xong lượt k1 (22 task × 3 cấu hình); 14B mới 10/66 run của k1. Máy khởi động lại lúc 18:16 ngày 10/11 nên runner dừng ~15 h; đã chạy tiếp lúc 09:00 ngày 11/11 (resume, không mất kết quả). Dự kiến xong khoảng 21:00 ngày 11/11.
