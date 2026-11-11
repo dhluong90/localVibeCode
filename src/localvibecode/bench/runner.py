@@ -203,11 +203,12 @@ def run_matrix(
                     if (out_dir / "result.json").exists():
                         continue
                     t0 = time.time()
+                    run_timeout = ctx.fixtures[task.fixture].run_timeout_sec or RUN_TIMEOUT_SEC
                     cmd = [sys.executable, "-m", "localvibecode.bench", "run-one", "--round", str(ctx.round_dir),
                            "--task", task.id, "--config", config, "--model", model, "--k", str(k)]
                     try:
                         proc = subprocess.run(cmd, cwd=str(ctx.project_root), capture_output=True, text=True,
-                                              timeout=RUN_TIMEOUT_SEC)
+                                              timeout=run_timeout)
                         status = "ok" if proc.returncode == 0 else f"crash rc={proc.returncode}"
                         if proc.returncode != 0:
                             out_dir.mkdir(parents=True, exist_ok=True)
@@ -220,7 +221,7 @@ def run_matrix(
                             consecutive_crashes = 0
                     except subprocess.TimeoutExpired:
                         status = "timeout"
-                        _write_timeout_result(out_dir, task, config, model, k)
+                        _write_timeout_result(out_dir, task, config, model, k, run_timeout)
                     res_file = out_dir / "result.json"
                     resolved = json.loads(res_file.read_text())["resolved"] if res_file.exists() else None
                     log(f"[{done}/{total}] {model} {config} {task.id} k{k}: {status} resolved={resolved} "
@@ -235,14 +236,15 @@ def model_available(ctx: BenchContext, model: str) -> bool:
     return model in SingleModelOllamaClient(LocalVibeCodeConfig.load(ctx.project_root)).list_local_models()
 
 
-def _write_timeout_result(out_dir: Path, task: Task, config: str, model: str, k: int) -> None:
+def _write_timeout_result(out_dir: Path, task: Task, config: str, model: str, k: int,
+                          timeout: int = RUN_TIMEOUT_SEC) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     shutil.rmtree(out_dir / "ws", ignore_errors=True)
     result = {"task": task.id, "category": task.category, "fixture": task.fixture, "difficulty": task.difficulty,
               "config": config, "model": model, "k": k, "resolved": False, "regression": False,
               "own_tests_pass": False, "compile_ok": False, "scope_precision": None, "scope_recall": None,
               "changed_files": [], "mutation_score": None, "tags": ["H8"], "primary_tag": "H8",
-              "exception": f"run timeout after {RUN_TIMEOUT_SEC}s", "agent_sec": RUN_TIMEOUT_SEC,
+              "exception": f"run timeout after {timeout}s", "agent_sec": timeout,
               "grading_sec": 0, "llm_calls": None, "prompt_tokens": None, "completion_tokens": None,
               "plan_files": None, "h_success": None, "fail_to_pass": {}, "pass_to_pass": {}}
     (out_dir / "result.json").write_text(json.dumps(result, indent=2), encoding="utf-8")

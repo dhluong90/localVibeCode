@@ -17,6 +17,7 @@ class Fixture:
     path: Path
     large: bool = False  # too big to put in a prompt; B0 gets only the task's relevant files
     num_ctx: Optional[int] = None  # context size used by every configuration on this fixture
+    run_timeout_sec: Optional[int] = None  # wall-clock limit per benchmark run (large repos need more)
 
     def is_test_file(self, rel: str) -> bool:
         # Multi-module repos keep tests under <module>/src/test/java/.
@@ -71,6 +72,7 @@ def load_fixtures(bench_root: Path) -> Dict[str, Fixture]:
             path=(bench_root / cfg.get("path", f"fixtures/{name}")).resolve(),
             large=bool(cfg.get("large", False)),
             num_ctx=cfg.get("num_ctx"),
+            run_timeout_sec=cfg.get("run_timeout_sec"),
         )
         for name, cfg in data.items()
     }
