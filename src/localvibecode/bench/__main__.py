@@ -51,14 +51,15 @@ def main() -> None:
     ids = [t for t in getattr(args, "tasks", "").split(",") if t] or None
 
     if args.cmd == "validate":
-        rows = validate_tasks(ctx, load_tasks(ctx.bench_root, ids=ids, split=args.split))
-        for r in rows:
+        def show(r) -> None:
             flag = "OK  " if r["valid"] else "FAIL"
             extra = f" mutation={r['reference_mutation_score']}" if "reference_mutation_score" in r else ""
             print(f"{flag} {r['task']}: base_resolved={r['base_resolved']} ref_resolved={r['reference_resolved']} "
-                  f"ref_regression={r['reference_regression']} p2p={len(r['pass_to_pass'])}{extra}")
+                  f"ref_regression={r['reference_regression']} p2p={len(r['pass_to_pass'])}{extra}", flush=True)
             if not r["valid"]:
-                print("     " + r.get("detail", "").replace("\n", "\n     ")[-1200:])
+                print("     " + r.get("detail", "").replace("\n", "\n     ")[-1200:], flush=True)
+
+        rows = validate_tasks(ctx, load_tasks(ctx.bench_root, ids=ids, split=args.split), log=show)
         sys.exit(0 if all(r["valid"] for r in rows) else 1)
 
     if args.cmd == "run":

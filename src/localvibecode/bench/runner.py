@@ -54,16 +54,18 @@ class BenchContext:
 # ----------------------------------------------------------------------------- validation
 
 
-def validate_tasks(ctx: BenchContext, tasks: List[Task]) -> List[Dict[str, Any]]:
+def validate_tasks(ctx: BenchContext, tasks: List[Task], log=None) -> List[Dict[str, Any]]:
     """Each task must: fail its hidden tests at base, and be resolved by its reference solution."""
     rows = []
     for task in tasks:
         fixture = ctx.fixtures[task.fixture]
-        baseline = ctx.ensure_base(task)
-        base = ctx.base_dir(task)
-        row: Dict[str, Any] = {"task": task.id, "pass_to_pass": baseline["pass_to_pass"]}
+        row: Dict[str, Any] = {"task": task.id, "pass_to_pass": [], "base_resolved": None,
+                               "reference_resolved": None, "reference_regression": None}
         work = Path(tempfile.mkdtemp(prefix="bench-validate-"))
         try:
+            baseline = ctx.ensure_base(task)
+            base = ctx.base_dir(task)
+            row["pass_to_pass"] = baseline["pass_to_pass"]
             ws = clone_workspace(base, work / "base_ws")
             g_base = grading.grade(task, fixture, ws, base, baseline)
             row["base_resolved"] = g_base["resolved"]
@@ -81,9 +83,13 @@ def validate_tasks(ctx: BenchContext, tasks: List[Task]) -> List[Dict[str, Any]]
             row["valid"] = (not g_base["resolved"]) and g_ref["resolved"] and not g_ref["regression"]
             if not row["valid"]:
                 row["detail"] = (g_ref.get("test_output", "") or "")[-1500:]
+        except Exception as exc:  # one broken task must not stop the validation of the others
+            row.update({"valid": False, "detail": f"validation error: {type(exc).__name__}: {exc}"[:1500]})
         finally:
             shutil.rmtree(work, ignore_errors=True)
         rows.append(row)
+        if log:
+            log(row)
     return rows
 
 
